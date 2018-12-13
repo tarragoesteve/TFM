@@ -1,2 +1,45 @@
-\section{Mechanical study}
-Hello
+\section{Mechanical analysis}
+\subsection{Reference frames}
+In order to study the behaviour of the robot we will use the following frames:
+\begin{itemize}
+    \item Absolute frame: From a fix object in the room. 
+    \item Body frame: From the body of our robot.
+\end{itemize}
+\subsection{Inclination control}
+In order to keep the inclination at a certain angle we must be able to compensate all the torque beeing applied to the body.
+
+Assuming that the body is well balanced, the sum of all the torques in the motor axis applied to the body is equal to the sum of the torque applied by the motors:
+
+\[\tau_{body} = \sum \tau_{motors}\]
+
+The torque of the motors produce a reaction in the body oposite to the torque that the motors deliver to the wheels and the flywheel.
+
+\[\tau_{body} = -\tau_{right-wheel} -\tau_{left-wheel} -\tau_{flywheel} \]
+
+If we want to control the inclination $\theta$, we must be able to control $\tau_{body}$ in a range $\tau_{body} \in (-\epsilon, \epsilon)$. Observe that the angular acceleration of the body is liniarly dependent with the torque it recieves. In the limit case $\epsilon = 0$. In order to simplify the calculations we will assume $\epsilon = 0$.
+
+\[0 = -\tau_{right-wheel} -\tau_{left-wheel} -\tau_{flywheel} \Rightarrow \tau_{right-wheel} +\tau_{left-wheel} = -\tau_{flywheel} \]
+
+In other words, we must compensate the torque of the wheels with the torque of the flywheel.
+
+\subsection{Flywheel torque}
+The flywheel torque is only limeted by the motor specifications. Note that at max speed the torque is zero.
+
+\[\tau_{motor} (w) \]
+
+Here we have the factory specifications of our motors: 
+\begin{itemize}
+    \item Operating voltage: between 3 V and 9 V
+    \item Nominal voltage: 6 V
+    \item Free-run speed at 6 V: 176 RPM
+    \item Free-run current at 6 V: 80 mA
+    \item Stall current at 6V: 900 mA
+    \item Stall torque at 6V: 5 kg·cm
+    \item Gear ratio: 1:35
+    \item Reductor size: 21 mm
+    \item Weight: 85 g
+\end{itemize}
+
+
+\subsection{Hypothesis}
+Assuming that the body is well balanced
