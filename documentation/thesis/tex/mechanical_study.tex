@@ -32,8 +32,9 @@ The torque of the motors produce a reaction in the body opposite to the torque t
 
 If we want to control the inclination $\theta$, we must be able to control $\tau_{body}$ in a range $\tau_{body} \in (-\epsilon, \epsilon)$. Observe that the angular acceleration of the body is linearly dependent with the torque it receives. In the limit case $\epsilon = 0$. In order to simplify the calculations we will assume $\epsilon = 0$.
 
-\[0 = -\tau_{right-wheel} -\tau_{left-wheel} -\tau_{flywheel} \Rightarrow \tau_{right-wheel} +\tau_{left-wheel} = -\tau_{flywheel} \]
-
+\begin{equation} \label{eq:control equation}
+0 = -\tau_{right-wheel} -\tau_{left-wheel} -\tau_{flywheel} \Rightarrow \tau_{right-wheel} +\tau_{left-wheel} = -\tau_{flywheel}
+\end{equation}
 In other words, we must compensate the torque of the wheels with the torque of the flywheel.
 
 \subsection{Wheels torque}
@@ -46,7 +47,11 @@ We assume that the wheels just roll and do no slip.
 The robot is pushed by the wheels that make a force $F_{drag}$ against the ground in the contact point. See figure \ref{fig:Wheel force diagram}.
 
 We can express the torque of the wheel as:
-\[ \tau_{wheel} =min(\tau_{motor} (w_{wheel}), I_{wheel} * \dot{w}_{wheel} - F_{drag} * r_{wheel})\]
+\[\tau_{wheel} - F_{drag} * r_{wheel} = I_{wheel} * \dot{w}_{wheel} \]
+
+\begin{equation} \label{wheel torque equation}
+\tau_{wheel} = min(\tau_{motor} (w_{wheel}),I_{wheel} * \dot{w}_{wheel} + F_{drag} * r_{wheel})
+\end{equation}
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=10cm]{img/wheel_diagram.jpg}
@@ -68,8 +73,56 @@ The flywheel torque we can induce is also limited by the motor specifications.
 
 Assuming that a general configuration of the flywheel, see figure \ref{fig:Flywheel force diagram}. we formulate its torque the following way:
 
+\begin{equation}\label{flywheel equation}
+    \tau_{flywheel} = min(\tau_{motor} (w), \ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r - r_{max}) * \sin{\theta})  
+\end{equation}
 
-\[\tau_{flywheel} = min(\tau_{motor} (w), \ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r - r_{max}) * \sin{\theta}) \]
+\subsection{Maximum speed and acceleration}
+\subsubsection{Forward movement}
+\begin{figure}
+	\centering
+	\includegraphics[width=10cm]{img/wheel_diagram_drag.jpg}
+	\caption{Wheel force diagram}
+	\label{fig:Wheel forward force diagram}
+\end{figure}
+Both wheels turn at the same speed:
+\[ w_{wheel-left} = w_{wheel-right} = w \]
+
+Applying Newton's first law in the y axis, see figure \ref{fig:Wheel forward force diagram}
+\[\ddot{y}*m_{total} = 2 * F_{drag} - m_{total} * g * sin(\alpha)\]
+
+Substituting $F_{drag}$ taking in to account equation \ref{wheel torque equation}:
+\[\ddot{y}*m_{total} = 2 * \frac{\tau_{wheel} - I_{wheel} * \dot{w}_{wheel}}{r_{wheel}} - m_{total} * g * sin(\alpha)\]
+
+Using equation \ref{eq:control equation}:
+\[\Rightarrow  \ddot{y}*m_{total} = - \frac{\tau_{flywheel}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}} - m_{total} * g * sin(\alpha)\]
+
+Using equation \ref{flywheel equation}:
+\begin{equation}\label{rectilinium equation}
+    \ddot{y}*m_{total} = - \frac{\ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r - r_{max})}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}} - m_{total} * g * sin(\alpha)  
+\end{equation}
+
+Taking in two account the following relation:
+\[w_{wheel} * r_{wheel} = \dot{y} \Rightarrow  \dot{w}_{wheel} * r_{wheel} = \ddot{y} \]
+
+
+\begin{equation}\label{rectilinium equation 2}
+    \ddot{y}*m_{total} = - \frac{\ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r - r_{max})}{r_{wheel}} - \frac{I_{wheel} * \ddot{y}}{r_{wheel}^2} - m_{total} * g * sin(\alpha)  
+\end{equation}
+
+The moment of inertia are:
+\[I_{wheel} = \frac{1}{2} *m_{wheel} * r_{wheel}^2\]
+\[I_{flywheel} \approx 5 * m_{cylinder} * r_{max}^2 + m_{cylinder} * r^2 = m_{cylinder} * (5*r_{max}^2 + r^2)\] \footnote{We are neglecting the plastic part}
+
+
+And substituting them on equation \ref{rectilinium equation 2}
+\begin{equation}\label{rectilinium equation 3}
+    \ddot{y}*m_{total} = - \frac{m_{cylinder}*(\ddot{\theta}*(5*r_{max}^2 + r^2) + g*(r - r_{max}))}{r_{wheel}} - \frac{\ddot{y}*m_{wheel}}{2} - m_{total}*g*sin(\alpha)  
+\end{equation}
+
+\begin{equation}\label{rectilinium equation 4}
+    \ddot{y}*m_{total} = - \frac{m_{cylinder}*(\ddot{\theta}*(5*r_{max}^2 + r^2) + g*(r - r_{max}))}{r_{wheel}} - \frac{\ddot{y}*m_{wheel}}{2} - m_{total}*g*sin(\alpha)  
+\end{equation}
 
 \subsection{Motor specifications}
 
