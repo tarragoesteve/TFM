@@ -98,20 +98,51 @@ Using equation \ref{eq:control equation}:
 
 
 We will now study different cases to better understand this equation.
-\[\ddot{y}*m_{total} = - \frac{\tau_{flywheel}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}\]
 \subsubsection{No terrain inclination ($\alpha = 0$)}
 The equation we get is substituting $\alpha = 0$ in equation X:
+\[\ddot{y}*m_{total} = - \frac{\tau_{flywheel}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}\]
+
+Substituting equation \ref{flywheel equation}
+
+\[\ddot{y}*m_{total} = - \frac{\ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r - r_{max}) * \sin{\theta}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}\]
+
+We will now split the study in  three cases:
+\begin{enumerate}
+    \item Flywheel case: $r$ is fixed to $r = r_{max}$ 
+    
+    Then:  
+    \[\ddot{y}*m_{total} = - \frac{\ddot{\theta}*I_{flywheel}(r_{max})}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}\]
+
+    Taking in two account the following relation:
+    \[w_{wheel} * r_{wheel} = \dot{y} \Rightarrow  \dot{w}_{wheel} * r_{wheel} = \ddot{y} \]
+
+    The moment of inertia are:
+    \[I_{wheel} = \frac{1}{2} *m_{wheel} * r_{wheel}^2\]
+    \[I_{flywheel} \approx 6 * m_{cylinder} * r_{max}^2\]
+
+    Let's go for it:
+    \[\dot{w}_{wheel} * r_{wheel}*m_{total} = - \frac{\ddot{\theta}*6 * m_{cylinder} * r_{max}^2}{r_{wheel}} - \frac{1}{2} *m_{wheel} * r_{wheel} * \dot{w}_{wheel} \]
+
+    \[\dot{w}_{wheel} * r_{wheel}*(m_{total}+\frac{1}{2} *m_{wheel}) = - \frac{\ddot{\theta}*6 * m_{cylinder} * r_{max}^2}{r_{wheel}}\]
 
 
+    We define R as the quotient between $\dot{w}_{wheel}$ and $-\ddot{\theta}$
+
+    \[R = \frac{\dot{w}_{wheel}}{-\ddot{\theta}} = \frac{6 * m_{cylinder} * r_{max}^2}{(m_{total} + \frac{1}{2} *m_{wheel}) * r_{wheel}^2} \]
+
+    We can see that R will always be smaller than 1 because $6 * m_{cylinder} < m_{total} $ and $r_{max} < r_{wheel}$. This means that we will be limited by the acceleration of the flywheel.
+
+    The maximum acceleration is:
+    \[\ddot{y}_{max} = \dot{w}_{wheel} * r_{wheel} = - R * \]
 
 
-Using equation \ref{flywheel equation}:
-\begin{equation}\label{rectilinium equation}
-    \ddot{y}*m_{total} = - \frac{\ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r - r_{max})}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}} - m_{total} * g * sin(\alpha)  
-\end{equation}
+    \item Pendulum: $\dot{\theta} = 0$, and $r$ is fixed to $r = r_{min}$
+    \item We leave the weight free:
+    
+    TO DO: ODE    
+\end{enumerate}
 
-Taking in two account the following relation:
-\[w_{wheel} * r_{wheel} = \dot{y} \Rightarrow  \dot{w}_{wheel} * r_{wheel} = \ddot{y} \]
+
 
 
 \begin{equation}\label{rectilinium equation 2}
