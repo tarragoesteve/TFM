@@ -103,8 +103,10 @@ The equation we get is substituting $\alpha = 0$ in equation X:
 \[\ddot{y}*m_{total} = - \frac{\tau_{flywheel}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}\]
 
 Substituting equation \ref{flywheel equation}
+\begin{equation}\label{no inclintation eq}
+    \ddot{y}*m_{total} = - \frac{\ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r - r_{max}) * \sin{\theta}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}
+\end{equation}
 
-\[\ddot{y}*m_{total} = - \frac{\ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r - r_{max}) * \sin{\theta}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}\]
 
 We will now split the study in  three cases:
 \begin{enumerate}
@@ -132,36 +134,60 @@ We will now split the study in  three cases:
 
     We can see that R will always be smaller than 1 because $6 * m_{cylinder} < m_{total} $ and $r_{max} < r_{wheel}$. This means that we will be limited by the acceleration of the flywheel.
 
-    The maximum acceleration is:
-    \[\ddot{y}_{max} = \dot{w}_{wheel} * r_{wheel} = - R * \]
+    The forward acceleration is:
+    \[\ddot{y} = \dot{w}_{wheel} * r_{wheel} = - R * \ddot{\theta} * r_{wheel}\]
+
+    And using equation \ref{flywheel equation} we get that the maximum is:
+
+    \[\tau_{motor} (w) = \ddot{\theta}*I_{flywheel}(r) \Rightarrow \ddot{\theta} = \frac{\tau_{motor} (\dot{\theta})}{I_{flywheel}(r)} \]
+
+    \[\ddot{y}_{max} = - R * \frac{\tau_{motor} (\dot{\theta})}{I_{flywheel}(r)} * r_{wheel}\]
+
+    \[\Rightarrow \ddot{y}_{max} = -\frac{6 * m_{cylinder} * r_{max}^2}{(m_{total} + \frac{1}{2} *m_{wheel}) * r_{wheel}^2} * \frac{\tau_{motor} (\dot{\theta})}{I_{flywheel}(r)} * r_{wheel}\]
+
+    \[\Rightarrow \ddot{y}_{max} = -\frac{\tau_{motor} (\dot{\theta})}{(m_{total} + \frac{1}{2} *m_{wheel}) * r_{wheel}} \]
+
+    In order to compute the maximum speed we will assume that the initial conditions are $\dot{\theta} = 0$ and $w_{wheel-max}=0$
+
+    \[w_{wheel-max} = \int_{w_{wheel-0}}^{w_{wheel-max}} \dot{w}_{wheel} dt\]
+
+    Now we will proceed to do a change of variables in the integral.
+    
+    \[\ddot{\theta} = -\frac{\dot{w}_{wheel}}{R}\]
+    \[\Rightarrow \dot{w}_{wheel} = - \ddot{\theta} * R \] 
+
+    \[w_{wheel-max} = -R * \int_{\dot{\theta}_0}^{\dot{\theta}_{max}} \ddot{\theta} *   dt = -R * \dot{\theta}_{max}\]
+
+    \[\dot{y}_{max} = - r_{wheel} * R * \dot{\theta}_{max}\]
+
+    And $\dot{\theta}_{max}$ is a limitation imposed by the motor specifications.
+
+
 
 
     \item Pendulum: $\dot{\theta} = 0$, and $r$ is fixed to $r = r_{min}$
+    
+    Using equation \ref{no inclintation eq} and $\ddot{\theta} = 0$
+    \[\ddot{y}*m_{total} = - \frac{m_{cylinder} * g * (r - r_{max}) * \sin{\theta}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}\]
+    \[\ddot{y}*m_{total} * r_{wheel} = - m_{cylinder} * g * (r - r_{max}) * \sin{\theta} - I_{wheel} * \dot{w}_{wheel}\]
+    And $\dot{w}_{wheel} = \frac{\ddot{y}}{r_{wheel}}$
+    \[\ddot{y}*m_{total} * r_{wheel} + I_{wheel} * \frac{\ddot{y}}{r_{wheel}} = - m_{cylinder} * g * (r - r_{max}) * \sin{\theta} \]
+
+    \[\ddot{y}  = -\frac{m_{cylinder} * g * (r - r_{max}) * \sin{\theta}}{m_{total} * r_{wheel} + \frac{I_{wheel}}{r_{wheel}} }  \]
+    Replacing $I_{wheel}$ and $r=r_{min}$
+    \[\ddot{y}  = -\frac{m_{cylinder} * g * (r_{min} - r_{max}) * \sin{\theta}}{ r_{wheel} * (m_{total} + \frac{1}{2} * m_{wheel}) }  \]
+
+    Which is maximum when $\sin{\theta}=1$
+    \[\ddot{y}_{max}  = \frac{m_{cylinder} * g * (r_{max}- r_{min})}{ r_{wheel} * (m_{total} + \frac{1}{2} * m_{wheel}) }  \]
+    
+    And there is no limitation on the maximum speed.
+    
     \item We leave the weight free:
     
     TO DO: ODE    
 \end{enumerate}
+\subsection{Shear stress}
 
-
-
-
-\begin{equation}\label{rectilinium equation 2}
-    \ddot{y}*m_{total} = - \frac{\ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r - r_{max})}{r_{wheel}} - \frac{I_{wheel} * \ddot{y}}{r_{wheel}^2} - m_{total} * g * sin(\alpha)  
-\end{equation}
-
-The moment of inertia are:
-\[I_{wheel} = \frac{1}{2} *m_{wheel} * r_{wheel}^2\]
-\[I_{flywheel} \approx 5 * m_{cylinder} * r_{max}^2 + m_{cylinder} * r^2 = m_{cylinder} * (5*r_{max}^2 + r^2)\] \footnote{We are neglecting the plastic part}
-
-
-And substituting them on equation \ref{rectilinium equation 2}
-\begin{equation}\label{rectilinium equation 3}
-    \ddot{y}*m_{total} = - \frac{m_{cylinder}*(\ddot{\theta}*(5*r_{max}^2 + r^2) + g*(r - r_{max}))}{r_{wheel}} - \frac{\ddot{y}*m_{wheel}}{2} - m_{total}*g*sin(\alpha)  
-\end{equation}
-
-\begin{equation}\label{rectilinium equation 4}
-    \ddot{y}*m_{total} = - \frac{m_{cylinder}*(\ddot{\theta}*(5*r_{max}^2 + r^2) + g*(r - r_{max}))}{r_{wheel}} - \frac{\ddot{y}*m_{wheel}}{2} - m_{total}*g*sin(\alpha)  
-\end{equation}
 
 \subsection{Motor specifications}
 
