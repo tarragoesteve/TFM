@@ -94,12 +94,14 @@ Substituting $F_{drag}$ taking in to account equation \ref{wheel torque equation
 \[\ddot{y}*m_{total} = 2 * \frac{\tau_{wheel} - I_{wheel} * \dot{w}_{wheel}}{r_{wheel}} - m_{total} * g * sin(\alpha)\]
 
 Using equation \ref{eq:control equation}:
-\[\Rightarrow  \ddot{y}*m_{total} = - \frac{\tau_{flywheel}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}} - m_{total} * g * sin(\alpha)\]
+\begin{equation}\label{eq of acceleration}
+    \Rightarrow  \ddot{y}*m_{total} = - \frac{\tau_{flywheel}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}} - m_{total} * g * sin(\alpha)
+\end{equation}
 
 
 We will now study different cases to better understand this equation.
 \subsubsection{No terrain inclination ($\alpha = 0$)}
-The equation we get is substituting $\alpha = 0$ in equation X:
+The equation we get is substituting $\alpha = 0$ in equation \ref{eq of acceleration}:
 \[\ddot{y}*m_{total} = - \frac{\tau_{flywheel}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}\]
 
 Substituting equation \ref{flywheel equation}
@@ -181,11 +183,16 @@ We will now split the study in  three cases:
     \[\ddot{y}_{max}  = \frac{m_{cylinder} * g * (r_{max}- r_{min})}{ r_{wheel} * (m_{total} + \frac{1}{2} * m_{wheel}) }  \]
     
     And there is no limitation on the maximum speed.
-    
+
     \item We leave the weight free:
     
     TO DO: ODE    
 \end{enumerate}
+
+\subsubsection{No acceleration, just inclination ($\alpha > 0$)}
+Substituting $\ddot{y}=0$ in equation \ref{eq of acceleration}
+\[m_{total} * g * sin(\alpha) = - \frac{\tau_{flywheel}}{r_{wheel}} \]
+\[sin(\alpha) = - \frac{\tau_{flywheel}}{m_{total} * g * r_{wheel}} \]
 \subsection{Shear stress}
 
 
