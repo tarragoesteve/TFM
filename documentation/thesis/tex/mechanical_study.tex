@@ -258,9 +258,22 @@ $\dot{\theta}_{max}$ will be given by the motor specifications and we won't opti
 The mass will be a constant + the mass of the flywheel which will depend linearly on $w$.
 \[g= r_{wheel} * \frac{I_{flywheel}(r)^2}{m_{total} * g * r_{wheel}*(m_{total} + \frac{1}{2} *m_{wheel}) * r_{wheel}^2}\]
 \[g= \frac{I_{flywheel}(r)^2}{m_{total} * g * (m_{total} + \frac{1}{2} *m_{wheel}) * r_{wheel}^2}\]
+\[g= \frac{I_{flywheel}(r)^2}{m_{total} * g * (m_{total} + \frac{1}{2} *m_{wheel}) * r_{wheel}^2}\]
+\[g= \frac{(6 * m_{cylinder} * r_{max}^2)^2}{m_{total} * g * (m_{total} + \frac{1}{2} *m_{wheel}) * r_{wheel}^2}\]
+\[g= \frac{(6 * \rho * w * \pi * r_c^2* r_{max}^2)^2}{m_{total} * g * (m_{total} + \frac{1}{2} *m_{wheel}) * r_{wheel}^2}\]
+\[g= \frac{(6 * \rho * w * \pi * (\frac{r_{flywheel}}{3})^2* (\frac{2*r_{flywheel}}{3})^2)^2}{m_{total} * g * (m_{total} + \frac{1}{2} *m_{wheel}) * r_{wheel}^2}\]
+\[g= \frac{(\frac{8}{3} * \rho * w * \pi * r_{flywheel}^4)^2}{m_{total} * g * (m_{total} + \frac{1}{2} *m_{wheel}) * ((r_{flywheel} + b)^2+\frac{h}{2}^2)} + 2*\epsilon\]
+\[m_{total} =6* m_{cylinder}+m_{rest} = 6 * \rho * w * \pi * r_c^2 + m_{rest} = 6 * \rho * w * \pi * (\frac{r_{flywheel}}{3})^2 + m_{rest} \]
+\[m_{total} =\frac{1}{3} * \rho * w * \pi * r_{flywheel}^2 + m_{rest} \]
+\[0.25 = r_{wheel}^2 + L/2\]
+\[0.25 - r_{wheel}^2 =  + L/2 \Rightarrow L=2*(0.25-r_{wheel}^2) = .5-r_{wheel}^2\]
+\[ L = .5-(r_{flywheel} + b)^2+\frac{h}{2}^2 \]
+\[w = L - 0.3m = .5-(r_{flywheel} + b)^2+\frac{h}{2}^2 -0.3 = .2-(r_{flywheel} + b)^2+\frac{h}{2}^2\]
+
+This plot shows how g varies when we change $R_{flywheel}$ between 0 and .5:
+
 
 The maximum will be find on the border of all the restrictions?
-
 
 
 
