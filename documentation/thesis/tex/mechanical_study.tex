@@ -245,14 +245,23 @@ We will use b=5mm and h=10mm from now on. Which is far more than what we need.
  
 \subsection{Restrictions}
 Not crashing with the ground at any inclination can be translated as:
-\[R_{e}> \sqrt{(R_{i} + b)^2+\frac{h}{2}^2} + 2*\epsilon\]
+\[r_{wheel}> \sqrt{(r_{flywheel} + b)^2+\frac{h}{2}^2} + 2*\epsilon\]
 We want to inserted the robot in to a 0.5m wheel so::
-\[0.5m > \sqrt{R_e^2 + L/2}\]
+\[0.5m > \sqrt{r_{wheel}^2 + L/2}\]
 We can place all the devices:
 \[L > 0.3m + w \]
 
 \subsection{Optimizing the design}
-The function we want to maximize is:
+The function we want to maximize is the maxim height we can reach supposing we where travelling at the maximum velocity in plane:
+\[h_{max}= - r_{wheel} * R * \dot{\theta}_{max} * (\dot{\theta}_0-\dot{\theta}_{max}) * \frac{I_{flywheel}(r)}{m_{total} * g * r_{wheel}}\]
+$\dot{\theta}_{max}$ will be given by the motor specifications and we won't optimize this parameter so we can remove it.
+The mass will be a constant + the mass of the flywheel which will depend linearly on $w$.
+\[g= r_{wheel} * \frac{I_{flywheel}(r)^2}{m_{total} * g * r_{wheel}*(m_{total} + \frac{1}{2} *m_{wheel}) * r_{wheel}^2}\]
+\[g= \frac{I_{flywheel}(r)^2}{m_{total} * g * (m_{total} + \frac{1}{2} *m_{wheel}) * r_{wheel}^2}\]
+
+The maximum will be find on the border of all the restrictions?
+
+
 
 
 \subsection{Motor specifications}
