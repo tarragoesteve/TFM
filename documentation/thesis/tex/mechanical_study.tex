@@ -244,15 +244,21 @@ Therefore:
 We will use b=5mm and h=10mm from now on. Which is far more than what we need.
  
 \subsection{Restrictions}
-Not crashing with the ground at any inclination can be translated as:
+As a reminder: L is the length of the robot, and w the width of the flywheel cylinders.
+\begin{enumerate}
+\item Not crashing with the ground at any inclination can be translated as:
 \[r_{wheel}> \sqrt{(r_{flywheel} + b)^2+\frac{h}{2}^2} + 2*\epsilon\]
-We want to inserted the robot in to a 0.5m wheel so::
-\[0.5m > \sqrt{r_{wheel}^2 + L/2}\]
-We can place all the devices:
+\item We want to inserted the robot in to a bicycle wheel of diameter 0.5m so:
+\[0.25^2 m > \sqrt{r_{wheel}^2 + L/2}\]
+\item We can place all the devices:
 \[L > 0.3m + w \]
+\end{enumerate}
 
 \subsection{Optimizing the design}
-The function we want to maximize is the maxim height we can reach supposing we where travelling at the maximum velocity in plane:
+The function we want to maximize is the maxim height we can reach because it has into account the maximum speed and the maximum resistance we can face.
+Our hypothesis is that we start our resistance at maximum speed $\dot{y}_max$.
+
+supposing we where travelling at the maximum velocity in plane:
 \[h_{max}= - r_{wheel} * R * \dot{\theta}_{max} * (\dot{\theta}_0-\dot{\theta}_{max}) * \frac{I_{flywheel}(r)}{m_{total} * g * r_{wheel}}\]
 $\dot{\theta}_{max}$ will be given by the motor specifications and we won't optimize this parameter so we can remove it.
 The mass will be a constant + the mass of the flywheel which will depend linearly on $w$.

@@ -2,5 +2,6 @@
     "cSpell.words": [
         "Reductor",
         "mises"
-    ]
+    ],
+    "python.linting.pylintEnabled": false
 }
