@@ -1,7 +1,9 @@
 \section{Design}
-The design of the robot is done with the 3D design software \href{https://www.freecadweb.org/}{Free-cad}. All part files are uploaded to the GitHub repository \url{https://github.com/tarragoesteve/TFM} under the hardware folder. You can see the main views on Figure \ref{fig:Isometric render view}, \ref{fig:Front render view}, \ref{fig:Top render view} and \ref{fig:Side render view}
+The design of the robot is done with the 3D design software \href{https://www.freecadweb.org/}{Free-cad}. All part files are uploaded to the GitHub repository \url{https://github.com/tarragoesteve/TFM} under the hardware folder.
 
-We included three actuators in the robot because we want to control three degrees of freedom (inclination and speed of both wheels). Furthermore we introduced a fly-wheel to control the inclination of the body. 
+You can see the main views on Figure \ref{fig:Isometric render view}, \ref{fig:Front render view}, \ref{fig:Top render view} and \ref{fig:Side render view}.
+
+We included three actuators in the robot because we want to control three degrees of freedom (inclination and speed of both wheels). Furthermore we introduced a fly-wheel and a pendulum so we can control the inclination of the body. 
 
 We ensured symmetry along the axis formed by all motors in order to have an equilibrium in all possible inclinations without the need of external forces. We also took in consideration that the reinforcement learning algorithm starts being clumsy so none of the configurations should intersect with the ground. Figure \ref{fig:Side render view} illustrates this restriction.   
 
@@ -38,7 +40,7 @@ We ensured symmetry along the axis formed by all motors in order to have an equi
 	\label{fig:Fly wheel side render view}
 \end{figure}
 
-To control the inclination of the body two strategies where taken in to account. Creating torque by a pendulum or accelerating the flywheel. In order to experiment with both of them we designed a part to allow both configuration by placing weights in different spots, see figure \ref{fig:Fly wheel side render view}.
+To control the inclination of the body two strategies are taken in to account. Creating torque by a pendulum or accelerating the flywheel. In order to experiment with both of them we designed a part to allow both configuration by placing weights in different spots, see figure \ref{fig:Fly wheel side render view}.
 
 In order to create a configuration with maximum gravitational torque we have done the following computation. We denote the torque pendulum torque $\tau$, consider the masses are cylinders of mass $m_{cylinder}$ with radius $r_c$ and that the radius of the flywheel is $r_f$.
 
@@ -53,7 +55,7 @@ The maximum torque takes place when these two masses are aligned horizontal with
 
 \[ \tau _{max} (r_c) =  m_{cylinder} * g * r_{max} -  m_{cylinder} * g * r_{min} =  m_{cylinder}* g * (r_f - 2 * r_c) \]
 
-In order to maximize it we first compute the derivative:
+In order to maximize $\tau$ it we first compute the derivative:
 \[\frac{\partial \tau _{max} (r_c)}{\partial r_c} = g *(\frac{\partial m}{\partial r_c} * (r_f - 2 * r_c) -  m_{cylinder} * 2)\]
 
 \[ \frac{\partial  m_{cylinder}}{\partial r_c} = 2 * \rho * w * \pi *  r_c\]
