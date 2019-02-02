@@ -3,7 +3,7 @@ The design of the robot is done with the 3D design software \href{https://www.fr
 
 You can see the main views on Figure \ref{fig:Isometric render view}, \ref{fig:Front render view}, \ref{fig:Top render view} and \ref{fig:Side render view}.
 
-We included three actuators in the robot because we want to control three degrees of freedom (inclination and speed of both wheels). Furthermore we introduced a fly-wheel and a pendulum so we can control the inclination of the body. 
+We included three actuators in the robot because we want to control three degrees of freedom (inclination and speed of both wheels). Furthermore we introduced a fly-wheel/pendulum so we can control the inclination of the body. 
 
 We ensured symmetry along the axis formed by all motors in order to have an equilibrium in all possible inclinations without the need of external forces. We also took in consideration that the reinforcement learning algorithm starts being clumsy so none of the configurations should intersect with the ground. Figure \ref{fig:Side render view} illustrates this restriction.   
 
@@ -42,7 +42,7 @@ We ensured symmetry along the axis formed by all motors in order to have an equi
 
 To control the inclination of the body two strategies are taken in to account. Creating torque by a pendulum or accelerating the flywheel. In order to experiment with both of them we designed a part to allow both configuration by placing weights in different spots, see figure \ref{fig:Fly wheel side render view}.
 
-In order to create a configuration with maximum gravitational torque we have done the following computation. We denote the torque pendulum torque $\tau$, consider the masses are cylinders of mass $m_{cylinder}$ with radius $r_c$ and that the radius of the flywheel is $r_f$.
+In order to create a configuration with maximum gravitational torque we have done the following computation. We denote the torque pendulum torque $\tau$, consider the masses are cylinders of mass $m_{cylinder}$ with radius $r_c$ and width $w$ and the radius of the flywheel is $r_f$.
 
 Each mass weights:
 \[ m_{cylinder} = \rho * w * \pi * r_c^2 \]
@@ -68,7 +68,7 @@ Substituting and simplifying we get:
 
 \[\frac{\partial m}{\partial r_c} * (r_f - 2 * r_c) =   m_{cylinder} * 2 \Rightarrow 2 * \rho * w * \pi *  r_c\ * (r_f - 2 * r_c) = \rho * w * \pi * r_c^2 * 2 \]
 
-\[ \Rightarrow r_c\ * (r_f - 2 * r_c) =  r_c^2 \Rightarrow (r_f - 2 * r_c) =  r_c \Rightarrow r_f = 3 * r_c\]
+\[ \Rightarrow r_c\ * (r_f - 2 * r_c) =  r_c^2 \Rightarrow (r_f - 2 * r_c) =  r_c \Rightarrow \boxed{r_f = 3 * r_c}\]
 
 
 The circumradius $R$ from the center of a regular polygon to one of the vertices is related to the side length $s$ by:
