@@ -2,19 +2,17 @@
 \subsection{Reference frames}
 In order to study the behavior of the robot we will use the following frames:
 \begin{itemize}
-    \item Absolute frame: From a fix object in the room. 
-    \item Body frame: From the body of our robot.
+    \item Absolute frame. 
+    \item Inclination frame.
 \end{itemize}
-TO DO: Diagrams of the frames in tikz. 
+Both frames are orthonormal frames that have the $x$ axis in the same direction that the axis of the motors.
 
-\begin{tikzpicture}[]
-    \node (left_wheel) [cylinder, shape border rotate=0, draw, minimum height=1mm, minimum width=15mm] {};
-
-    \node (right_wheel) [cylinder, shape border rotate=0, draw, minimum height=1mm, minimum width=15mm] {};
-
-    \coordinate (left_wheel 0 0);
-    \coordinate (right_wheel 10 0);
-\end{tikzpicture}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=10cm]{img/reference_frames.jpg}
+	\caption{Reference frames diagram}
+	\label{fig:Reference frames diagram}
+\end{figure}
 
 
 \subsection{Inclination control}
@@ -203,16 +201,19 @@ We are going to distinguish the same three cases as in the previous section:
     Substituting equation \ref{flywheel equation}
     \[sin(\alpha) = - \frac{min(\tau_{motor} (w), \ddot{\theta}*I_{flywheel}(r))}{m_{total} * g * r_{wheel}} \]
     The maximum inclination at a certain moment:
-    \[sin(\alpha_{max}) = - \frac{\tau_{motor} (w)}{m_{total} * g * r_{wheel}} \]
+    \begin{equation}\label{Maximum angle using flywheel system}
+        sin(\alpha_{max}) = - \frac{\tau_{motor} (w)}{m_{total} * g * r_{wheel}}
+    \end{equation}
     Maximum height can that the robot can achieve under the initial conditions $\dot{y}=\dot{y}_0$ and $\dot{\theta}=\dot{\theta}_0$:
     \[h_{max}=\int_{\dot{\theta}_0}^{\dot{\theta}_{max}} \dot{y}_0*sin(\alpha) * dt  = \dot{y}_0* \int_{\dot{\theta}_0}^{\dot{\theta}_{max}} - \frac{\ddot{\theta}*I_{flywheel}(r)}{m_{total} * g * r_{wheel}} * dt\]
     \[\boxed{\Rightarrow h_{max}= \dot{y}_0* (\dot{\theta}_0-\dot{\theta}_{max}) * \frac{I_{flywheel}(r)}{m_{total} * g * r_{wheel}}}\]
 
     \item Pendulum: $\dot{\theta} = 0$, and $r$ is fixed to $r = r_{min}$
-    \[\tau_{flywheel} = m_{cylinder} * g * (r - r_{max}) * \sin{\theta}\]
-    \[sin(\alpha) = - \frac{m_{cylinder} * g * (r - r_{max}) * \sin{\theta}}{m_{total} * g * r_{wheel}} = \frac{m_{cylinder} * (r_{max}- r_{min}) * \sin{\theta}}{m_{total} * r_{wheel}} \]
-    \[sin(\alpha_{max}) = - \frac{m_{cylinder} * g * (r - r_{max}) * \sin{\theta}}{m_{total} * g * r_{wheel}}\]
-    \[\boxed{sin(\alpha_{max}) = \frac{m_{cylinder} * (r_{max}- r_{min}) * \sin{\theta}}{m_{total} * r_{wheel}}} \]
+    \[\tau_{flywheel} = m_{cylinder} * g * (r_{min} - r_{max}) * \sin{\theta}\]
+    \[sin(\alpha) = \frac{m_{cylinder} * (r_{max}- r_{min}) * \sin{\theta}}{m_{total} * r_{wheel}} \]
+    \begin{equation}\label{Maximum angle using pendulum system}
+        sin(\alpha_{max}) = \frac{m_{cylinder} * (r_{max}- r_{min})}{m_{total} * r_{wheel}}
+    \end{equation}
     
     \item We leave the weight free:
     ODE

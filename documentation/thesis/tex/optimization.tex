@@ -4,8 +4,20 @@
 As a reminder: $L$ is the length of the robot, and $w$ the width of the flywheel cylinders.
 \begin{enumerate}
 \item Not crashing with the ground at any inclination can be translated as:
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=5cm]{img/flywheel_hole.jpg}
+	\caption{Flywheel hole diagram}
+	\label{fig:Flywheel hole diagram}
+\end{figure}
 \[r_{wheel}> \sqrt{(r_{flywheel} + b)^2+\frac{h}{2}^2} + 2*\epsilon\]
-\item We want to inserted the robot in to a bicycle wheel of diameter 0.5m so:
+\item We want to inserted the robot in to a external of diameter 0.5m so:
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=5cm]{img/external_diameter.jpg}
+	\caption{External diameter diagram}
+	\label{fig:External diameter diagram}
+\end{figure}
 \[0.25^2 m > \sqrt{r_{wheel}^2 + L/2}\]
 \item We can place all the devices:
 \[L > 0.3m + w \]
@@ -27,8 +39,19 @@ Here we have the factory specifications of our motors:
 \end{itemize}
 
 \subsection{Optimizing the design}
+There are two different function we would like to maximize:
+\begin{itemize}
+    \item Equation \ref{Maximum angle using pendulum system}, that indicates the maximum force we can deliver at permanent state and so which is the maximum speed we can get:
+     \[sin(\alpha_{max}) = \frac{m_{cylinder} * (r_{max}- r_{min})}{m_{total} * r_{wheel}}\]
+     \item Equation \ref{Maximum angle using flywheel system}, that indicates the maximum force we can deliver at any given moment.
+     \[sin(\alpha_{max}) = - \frac{\tau_{motor} (w)}{m_{total} * g * r_{wheel}} \]
+\end{itemize}
+
+If we fix $r_{wheel}$, it's clear that we will want the maximum possible $r_flywheel$ 
+\iffalse
 The function we want to maximize is the maxim height we can reach because it has into account the maximum speed and the maximum resistance we can face.
 Our hypothesis is that we start our resistance at maximum speed $\dot{y}_max$.
+
 
 supposing we where travelling at the maximum velocity in plane:
 \[h_{max}= - r_{wheel} * R * \dot{\theta}_{max} * (\dot{\theta}_0-\dot{\theta}_{max}) * \frac{I_{flywheel}(r)}{m_{total} * g * r_{wheel}}\]
@@ -52,7 +75,7 @@ This plot shows how g varies when we change $R_{flywheel}$ between 0 and .5:
 
 
 The maximum will be find on the border of all the restrictions?
-
+\fi
 
 
 
