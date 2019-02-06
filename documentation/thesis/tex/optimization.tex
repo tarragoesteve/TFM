@@ -54,9 +54,23 @@ By design we have that
 \[r_{max} = r_{flywheel} - r_{cylinder}\]
 \[r_{min} = r_{cylinder}\]
 
+
 Rewriting equation \ref{Maximum angle using pendulum system} we get:
 \[sin(\alpha_{max}) = \frac{\rho * w * \pi * r_{cylinder}^2 * (r_{flywheel} - 2 * r_{cylinder})}{m_{total} * r_{wheel}}\]
 \[\Rightarrow \frac{\rho * w * \pi * (\frac{1}{3} r_{flywheel})^2 * (\frac{1}{3} r_{flywheel})}{m_{total} * r_{wheel}} \]
+\[\Rightarrow \frac{\rho * w * \pi * r_{flywheel}^3}{27 * m_{total} * r_{wheel}}\]
+
+\[m_{total} = m_{rest} + N * m_{cylinder}\]
+
+
+\[\Rightarrow \frac{\rho * w * \pi * r_{flywheel}^3}{(m_{rest} + N * m_{cylinder}) * 27 * r_{wheel}}\]
+
+\[\Rightarrow \frac{\rho * w * \pi * r_{flywheel}^3}{(m_{rest} + 2 * \rho * w * \pi * r_{cylinder}^2) * 27 * r_{wheel}}\]
+
+\[\Rightarrow \frac{\rho * w * \pi * r_{flywheel}^3}{(m_{rest} + \frac{2}{9} * \rho * w * \pi * r_{flywheel}^2) * 27 * r_{wheel}}\]
+
+We can conclude from this equation that given a fixed $r_{flywheel}$ we want to chose the smallest $r_{flywheel}$ possible.
+
 
 %%Fix $r_{wheel}$ and $r_{flywheel}$, it's clear that we will want the maximum possible 
 \iffalse
