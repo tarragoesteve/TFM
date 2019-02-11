@@ -1,4 +1,4 @@
-\section{Optimizing}
+\section{Optimization}
 
 \subsection{Restrictions}
 As a reminder: $L$ is the length of the robot, and $w$ the width of the flywheel cylinders.
@@ -38,18 +38,41 @@ Here we have the factory specifications of our motors:
     \item Weight: 85 g
 \end{itemize}
 
-\subsection{Optimizing the design}
-There are is a function we would like to maximize:
+\subsection{Cost function}
+There function we would like to maximize:
 \begin{itemize}
     \item Equation \ref{Maximum angle using pendulum system}, that indicates the maximum force we can deliver at permanent state, and so limit the maximum speed:
      \[sin(\alpha_{max}) = \frac{m_{cylinder} * (r_{max}- r_{min})}{m_{total} * r_{wheel}}\]
 \end{itemize}
 
-This is also 
+\subsection{Results}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=10cm]{img/optimization/sin.png}
+	\caption{Plot of the sinus of the maximum inclination in which the robot can keep his speed.}
+	\label{fig:Sinus plot}
+\end{figure}
 
 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=10cm]{img/optimization/speed.png}
+	\caption{Plot of the maximum speed that the robot can achieve.}
+	\label{fig:Speed plot}
+\end{figure}
 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=10cm]{img/optimization/parameters.png}
+	\caption{Plot of the parameters that maximize the cost function.}
+	\label{fig:Parameters plot}
+\end{figure}
 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=10cm]{img/optimization/mass.png}
+	\caption{Plot of the mass for each configuration.}
+	\label{fig:Mass plot}
+\end{figure}
 
-\subsection{Hypothesis}
-Assuming that the body is well balanced
