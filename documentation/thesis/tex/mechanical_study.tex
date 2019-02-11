@@ -214,8 +214,16 @@ We are going to distinguish the same three cases as in the previous section:
     \begin{equation}\label{Maximum angle using pendulum system}
         sin(\alpha_{max}) = \frac{m_{cylinder} * (r_{max}- r_{min})}{m_{total} * r_{wheel}}
     \end{equation}
-    
-    \item We leave the weight free:
-    ODE
-
 \end{enumerate}
+
+\subsubsection{No acceleration, no inclination, just keeping speed $v$}
+We need to take into consideration air friction.
+\[F_{drag} = \frac{1}{2}*\rho*C_D * A * v^2 \]
+
+We will pick $C_D=1$, $\rho=1.2 kg/m^3$ and $A=0.01 m^2$
+\[\tau_{flywheel} = m_{cylinder} * g * (r_{min} - r_{max})\]
+\[F_{drag} = \tau_{flywheel} * r_flywheel\]
+
+\[\frac{1}{2}*\rho*C_D * A * v^2 = m_{cylinder} * g * (r_{min} - r_{max}) * r_flywheel \]
+
+\[v = \sqrt{\frac{2*m_{cylinder} * g * (r_{min} - r_{max}) * r_flywheel}{\rho*C_D * A} } \]

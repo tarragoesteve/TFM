@@ -28,6 +28,11 @@ class Robot:
   rho_flywheel=7850
   h=.01
   b=.005
+
+  A_drag = .01
+  rho = 1.2
+  C_D = 1
+
   
   motor_max_speed = 19.0
   motor_max_torque = 5 * 9.8 / 100.0
@@ -71,7 +76,12 @@ class Robot:
     if(not self.valid_configuration):
       return 0
     return self.motor_max_speed * self.get_R() * self.r_wheel
-  
+
+  def max_speed_horizontal_pendulum(self):
+    if(not self.valid_configuration):
+      return 0
+    return math.sqrt((2*self.m_cylinder() * self.g *(self.r_flywheel/3)* self.r_flywheel )/(self.rho * self.C_D * self.A_drag))
+
   def max_height_flywheel(self):
     if(not self.valid_configuration):
       return 0
@@ -103,7 +113,7 @@ class Robot:
     return self.motor_max_torque /(self.r_wheel *self.m_total()* self.g)
 
 my_robot = Robot()
-resolution = 100
+resolution = 300
 
 
 r_flywheel_array=numpy.linspace(0.00,my_robot.r_external,resolution)
@@ -113,6 +123,9 @@ m_total_array = []
 w_array = []
 r_wheel_array = []
 height_array = []
+speed_horizontal_flywheel_array = []
+speed_horizontal_pendulum_array = []
+
 
 
 from tqdm import tqdm
@@ -123,6 +136,8 @@ for r_f in tqdm(r_flywheel_array):
   aux_w = 0
   aux_r_wheel = 0 
   aux_height = 0
+  aux_speed_horizontal_flywheel = 0
+  aux_speed_horizontal_pendulum = 0
   for w in numpy.linspace(0.0, 2*my_robot.r_external - 0.3, resolution):
     for r_w in numpy.linspace(r_f, my_robot.r_external, resolution):
       my_robot.set_r_flywheel_r_wheel_w(r_f,r_w,w)
@@ -133,6 +148,9 @@ for r_f in tqdm(r_flywheel_array):
         aux_w = w
         aux_r_wheel = r_w
         aux_height = my_robot.max_height_flywheel()
+        aux_speed_horizontal_flywheel = my_robot.max_speed_horizontal_flywheel()
+        aux_speed_horizontal_pendulum = my_robot.max_speed_horizontal_pendulum()
+
     
   max_sin_pendulum_array = numpy.append(max_sin_pendulum_array,aux_sin_pendulum)
   max_sin_flywheel_array = numpy.append(max_sin_flywheel_array,aux_sin_flywheel)
@@ -140,6 +158,9 @@ for r_f in tqdm(r_flywheel_array):
   w_array = numpy.append(w_array, aux_w)
   r_wheel_array = numpy.append(r_wheel_array, aux_r_wheel)
   height_array = numpy.append(height_array, aux_height)
+  speed_horizontal_flywheel_array = numpy.append(speed_horizontal_flywheel_array, aux_speed_horizontal_flywheel)
+  speed_horizontal_pendulum_array = numpy.append(speed_horizontal_pendulum_array, aux_speed_horizontal_pendulum)
+
 
 import matplotlib.pyplot as plt
 plt.figure()
@@ -163,7 +184,7 @@ plt.xlabel('r flywheel [m]')
 plt.ylabel('[m]')
 plt.plot(r_flywheel_array,r_wheel_array)
 plt.plot(r_flywheel_array,w_array)
-plt.legend(['r flywheel','w'])
+plt.legend(['r wheel','w'])
 
 
 plt.figure()
@@ -173,76 +194,12 @@ plt.ylabel('height [m]')
 plt.plot(r_flywheel_array,height_array)
 plt.legend(['height'])
 
+plt.figure()
+plt.title('speed flywheel, speed pendulum vs flywheel radius')
+plt.xlabel('r flywheel [m]')
+plt.ylabel('speed [m/s]')
+plt.plot(r_flywheel_array,speed_horizontal_pendulum_array)
+plt.plot(r_flywheel_array,speed_horizontal_flywheel_array)
+plt.legend(['pendulum','flywheel'])
+
 plt.show()
-
-
-max_heights = []
-for r in r_flywheel_array:
-  my_robot.set_r_flywheel(r)
-  max_heights = numpy.append(max_heights, my_robot.max_height_flywheel())
-import matplotlib.pyplot as plt
-plt.figure()
-plt.title('height vs flywheel radius')
-
-plt.xlabel('r flywheel [m]')
-plt.ylabel('height [m]')
-plt.plot(r_flywheel_array,max_heights)
-plt.legend(['height'])
-
-max_acceletarion_flywheel = []
-for r in r_flywheel_array:
-  my_robot.set_r_flywheel(r)
-  max_acceletarion_flywheel = numpy.append(max_acceletarion_flywheel, my_robot.max_acceleration_horizontal_flywheel())
-import matplotlib.pyplot as plt
-plt.figure()
-plt.title('flywheel acceletarion vs flywheel radius')
-
-plt.xlabel('r flywheel [m]')
-plt.ylabel('acceleration [m/s^2]')
-plt.plot(r_flywheel_array,max_acceletarion_flywheel)
-plt.legend(['flywheel acceleration'])
-
-max_acceletarion_pendulum = []
-for r in r_flywheel_array:
-  my_robot.set_r_flywheel(r)
-  max_acceletarion_pendulum = numpy.append(max_acceletarion_pendulum, my_robot.max_acceleration_horizontal_pendulum())
-import matplotlib.pyplot as plt
-plt.figure()
-plt.title('pendulum acceletarion vs flywheel acceleration')
-
-plt.xlabel('r flywheel [m]')
-plt.ylabel('acceleration [m/s^2]')
-plt.plot(r_flywheel_array,max_acceletarion_flywheel)
-plt.plot(r_flywheel_array,max_acceletarion_pendulum)
-plt.legend(['flywheel acceleration','pendulum acceletarion'])
-plt.ylim(0,1)
-
-x = numpy.linspace(0.00,my_robot.r_external,1000)
-y = numpy.linspace(0,my_robot.r_external,1000)
-xv, yv = numpy.meshgrid(x, y)
-
-max_value = 0
-max_argument = (0,0)
-zv = numpy.zeros((1000,1000))
-for i in range(1000):
-  for j in range(1000):
-    my_robot.set_r_flywheel_r_wheel(x[i],y[j])
-    zv[i][j]= my_robot.max_acceleration_horizontal_pendulum()
-    if(zv[i][j] > max_value):
-      max_value = zv[i][j]
-      max_argument = (x[i],y[j])
-
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import cm
-
-print(max_value,max_argument)
-
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-surf = ax.plot_surface(xv,yv,zv,cmap=cm.coolwarm)
-fig.colorbar(surf, shrink=0.5, aspect=5)
-#ax.set_zlim3d(0,2)
-r_fly, r_wheel = max_argument
-my_robot.set_r_flywheel_r_wheel(r_fly,r_wheel)
-print(my_robot.L_robot, my_robot.w)
