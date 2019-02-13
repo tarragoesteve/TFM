@@ -73,7 +73,7 @@ The flywheel torque we can induce is also limited by the motor specifications.
 Assuming a general configuration of the flywheel where the moving mass is at distance $r$ and angle $\theta$, see figure \ref{fig:Flywheel force diagram}. we formulate its torque the following way:
 
 \begin{equation}\label{flywheel equation}
-    \tau_{flywheel} = min(\tau_{motor} (w), \ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r - r_{max}) * \sin{\theta})  
+    \tau_{flywheel} = min(\tau_{motor} (w), -\ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r - r_{max}) * \sin{\theta})  
 \end{equation}
 
 \subsection{Maximum speed and acceleration}
