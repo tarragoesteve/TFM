@@ -1,5 +1,10 @@
 \section{Flywheel study}
 
+This section aims to study a possible way to break the flywheel without applying torque to the platform. The idea is the following: we will leave the moving weight free.
+
+This way, when the weight is going upward will have a larger radius than when is going downward and will produce a mean moment against the movement of the flywheel.
+
+From an energetic point of view we are transforming the rotation energy of the flywheel in to translation of the free cylinder and then realising it trough collisions.
 \subsection{System of differential equations}
 As described in figure \ref{fig:Flywheel force diagram} we will use two variables to describe the flywheel position: $r$, $\theta$ 
 
@@ -18,6 +23,7 @@ As seen in figure \ref{fig:Cylinder force diagram}, we can deduce newtons equati
 
 The variables we will be using for our ODE system are: $r$,$\dot{r}$,$\theta$,$\dot{\theta}$
 
+Note that we impose $\tau_{flywheel} = 0$ so the motor is not applying any torque.
 
 \[
 \begin{cases}
@@ -28,7 +34,8 @@ The variables we will be using for our ODE system are: $r$,$\dot{r}$,$\theta$,$\
 \end{cases}
 \]
 
-Our initial conditions will be the the free cylinder lying on the bottom of the flywheel and the flywheel turning at a speed $\theta_0$:
+
+Our initial conditions will be the free cylinder mass lying on the bottom of the flywheel and the flywheel turning at a speed $\theta_0$:
 \[
     \begin{cases}
         r = r_{max} \\
@@ -41,6 +48,8 @@ Our initial conditions will be the the free cylinder lying on the bottom of the 
 We will use a poincare map to simulate the bounce with the end of the guides at $r=r_{min}$ and $r=r_{max}$. At each bounce we will reduce its kinetic energy by a percentage $bounce\_percentage$ .
 
 \subsection{Results}
+
+As we can see in figure \ref{fig:d theta t diagram} the flywheel is breaking until it becomes a pendulum and starts oscillating.
 
 \begin{figure}[ht]
 	\centering
