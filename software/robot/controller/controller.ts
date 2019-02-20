@@ -1,9 +1,9 @@
 import configuration from './hardware_config.json'
+import {Motor} from "./components/motor";
+import { Component } from './component';
 
 
+for(let component_configuration of configuration.components){
 
-let components = []
-
-for(let component of configuration.components){
-    console.log(component.name);
+    console.log(component_configuration.name);
 }

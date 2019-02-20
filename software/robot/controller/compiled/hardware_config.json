@@ -4,7 +4,7 @@
     "components": [
         {
             "name": "motor_0",
-            "type": ["actuator", "sensor"],
+            "class": "Motor",
             "parameters": {
                 "pins": [1, 2, 3, 4]
             }
