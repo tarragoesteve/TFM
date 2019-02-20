@@ -1,0 +1,16 @@
+{
+  "name": "controller",
+  "version": "1.0.0",
+  "description": "this pkg will be used to control the motors and the sensors of the robot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && node ./compiled/controller.js"
+  },
+  "author": "tarragoesteve@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "@types/socket.io": "2.1.0",
+    "socket.io": "2.1.0"
+  }
+}
