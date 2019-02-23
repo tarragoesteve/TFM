@@ -8,6 +8,13 @@
             "parameters": {
                 "pins": [1,2,3,4]
             }
+        },
+        {
+            "name": "motor_1",
+            "class": "Motor",
+            "parameters": {
+                "pins": [1,2,3,4]
+            }
         }
     ]
 }

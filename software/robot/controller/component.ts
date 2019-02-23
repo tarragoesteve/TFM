@@ -1,10 +1,19 @@
-import {Socket} from "socket.io";
-
 export abstract class Component {
 
-    socket: Socket;
+    name: String;
 
-    constructor(socket: Socket) {
-        this.socket = socket;        
+
+    constructor(name: String) {
+        this.name = name;
+    }
+
+    loop(): Promise<boolean>
+    {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                console.log(this.name);
+                this.loop();                
+            }, 2000);
+          });
     }
 }
