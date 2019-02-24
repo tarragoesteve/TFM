@@ -1,6 +1,6 @@
 {
-    "planner_address": "tarragoesteve.com",
-    "running_on_robot": true,
+    "planner_uri": "http://localhost:3000",
+    "is_simulation": false,
     "components": [
         {
             "name": "motor_0",

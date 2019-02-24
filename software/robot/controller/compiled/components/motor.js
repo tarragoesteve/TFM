@@ -16,8 +16,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../component");
 var Motor = /** @class */ (function (_super) {
     __extends(Motor, _super);
-    function Motor(name) {
-        return _super.call(this, name) || this;
+    function Motor(name, planner_uri, is_simulation, parameters) {
+        return _super.call(this, name, planner_uri, is_simulation, parameters) || this;
     }
     return Motor;
 }(component_1.Component));
