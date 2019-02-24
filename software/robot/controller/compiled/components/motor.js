@@ -19,6 +19,9 @@ var Motor = /** @class */ (function (_super) {
     function Motor(name, planner_uri, is_simulation, parameters) {
         var _this = _super.call(this, name, planner_uri, is_simulation, parameters) || this;
         _this.position = _this.speed = _this.acceleration = 0.0;
+        _this.socket.on('message', function (msg) {
+            console.log(msg);
+        });
         return _this;
     }
     Motor.prototype.loop = function () {

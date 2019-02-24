@@ -8,7 +8,10 @@ export class Motor extends Component {
 
     constructor(name: string, planner_uri: string, is_simulation : boolean, parameters: any){
         super(name, planner_uri, is_simulation, parameters);
-        this.position = this.speed = this.acceleration =  0.0;
+        this.position = this.speed = this.acceleration =  0.0;     
+        this.socket.on('message',(msg: any)=>{
+            console.log(msg);
+        })   
     }
 
     loop(): Promise<boolean>
@@ -16,6 +19,7 @@ export class Motor extends Component {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 this.socket.emit('message',this.name)
+                
                 console.log(this.name);
                 return this.loop();                
             }, 2000);
