@@ -13,7 +13,7 @@ var Component = /** @class */ (function () {
         this.name = name;
         this.planner_uri = planner_uri;
         this.is_simulation = is_simulation;
-        this.socket = socketio.connect(planner_uri);
+        this.socket = socketio.connect(planner_uri + '?name=' + this.name);
         this.parameters = parameters;
     }
     Component.prototype.loop = function () {

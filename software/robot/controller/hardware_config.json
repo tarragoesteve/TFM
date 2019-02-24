@@ -6,6 +6,10 @@
             "name": "motor_0",
             "class": "Motor",
             "parameters": {
+                "k_p": 1.0,
+                "k_i": 1.0,
+                "k_d": 1.0,
+                "reference_parameter": "speed",
                 "pins": [1,2,3,4]
             }
         },
@@ -13,6 +17,10 @@
             "name": "motor_1",
             "class": "Motor",
             "parameters": {
+                "k_p": 1.0,
+                "k_i": 1.0,
+                "k_d": 1.0,
+                "reference_parameter": "speed",
                 "pins": [1,2,3,4]
             }
         }
