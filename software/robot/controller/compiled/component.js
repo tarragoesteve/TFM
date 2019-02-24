@@ -18,11 +18,9 @@ var Component = /** @class */ (function () {
     }
     Component.prototype.loop = function () {
         var _this = this;
-        return new Promise(function (resolve) {
-            setTimeout(function () {
-                console.log(_this.name);
-                _this.loop();
-            }, 2000);
+        return new Promise(function (resolve, reject) {
+            console.log(_this.name, ": Loop not implemented");
+            resolve(true);
         });
     };
     return Component;

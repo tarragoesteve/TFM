@@ -21,11 +21,9 @@ export abstract class Component {
 
     loop(): Promise<boolean>
     {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                console.log(this.name);
-                this.loop();                
-            }, 2000);
+        return new Promise((resolve, reject) => {
+            console.log(this.name,": Loop not implemented");
+            resolve(true);
           });
     }
 }

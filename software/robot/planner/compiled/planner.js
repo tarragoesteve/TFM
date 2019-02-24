@@ -10,5 +10,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var socket = __importStar(require("socket.io"));
 var server = socket.listen(3000);
 server.on('connection', function (socket) {
+    socket.on('message', function (msg) {
+        console.log(msg);
+    });
     console.log('a user connected');
 });
