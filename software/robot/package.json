@@ -1,0 +1,13 @@
+{
+  "name": "robot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "cd ./planner && npm i && cd .. && cd ./controller && npm i",
+    "start": "(cd ./planner && npm run start) || (cd .. && cd ./controller && npm run start)"
+  },
+  "author": "",
+  "license": "ISC"
+}
