@@ -1,4 +1,6 @@
 import {Component} from "../component";
+import {PID} from "./utils/PID";
+
 
 export class Motor extends Component {
     position: number;
@@ -10,59 +12,52 @@ export class Motor extends Component {
     acceleration_reference: number;
     reference_parameter: string;
 
-    k_p: number;
-    k_i: number;
-    k_d: number;
-    PID_previous_error: number;
-    PID_accumulated_error: number;
-    PID_previous_error_time: number; 
+    PID: PID;
 
     constructor(name: string, planner_uri: string, is_simulation : boolean, parameters: any){
         super(name, planner_uri, is_simulation, parameters);
         //Initialize variables to 0
         this.position = this.speed = this.acceleration =  0.0;
         this.position_reference = this.speed_reference = this.acceleration_reference = 0.0;
-        this.PID_previous_error = this.PID_accumulated_error = 0.0;
         //Load PID Configuration;
-        this.k_p = parameters.k_p;
-        this.k_i = parameters.k_i;
-        this.k_d = parameters.k_d;
+        this.PID = new PID(parameters.k_p,parameters.k_i,parameters.k_d)
         this.reference_parameter = parameters.reference_parameter;
-        this.PID_previous_error_time = Date.now()
 
+        //Update the reference when we get a msg
         this.socket.on('message',(msg: any)=>{
-            this.position_reference = msg.position_reference;
-            this.speed_reference = msg.speed_reference;
-            this.acceleration_reference = msg.acceleration_reference;
+            if(msg.position_reference){
+                this.reference_parameter = 'position';
+                this.position_reference = msg.position_reference;
+            } 
+            if(msg.speed_reference){
+                this.reference_parameter = 'speed';
+                this.speed_reference = msg.speed_reference;
+            } 
+            if(msg.acceleration_reference){
+                this.reference_parameter = 'acceleration'
+                this.acceleration_reference = msg.acceleration_reference;
+            } 
         })
     }
 
     loop(): Promise<boolean>
     {
         return new Promise((resolve, reject) => {
-            //Get current state of the motor
-            //Send state to the planner
-            this.socket.emit('state',{"motor": this.name,"position": this.position,
-             "speed": this.speed, "acceleration": this.acceleration})
+            setInterval(() => {
+                //Get current state of the motor
+                //Send state to the planner
+                this.socket.emit('state',{"motor": this.name,"position": this.position,
+                "speed": this.speed, "acceleration": this.acceleration})
 
-            //Compute output
-            let next_error = this.compute_error();
-            let time_window = Date.now() - this.PID_previous_error_time;
-            this.PID_previous_error_time = Date.now();
-            this.PID_accumulated_error += next_error * time_window;
-            let output = next_error * this.k_p
-                + this.PID_accumulated_error * this.k_i 
-                + (next_error - this.PID_previous_error) / time_window;
-
-            
-            //Apply output to the motor
-            
-            this.speed = this.speed_reference*0.9;
-
-            
-            //Repeat loop after it ends
-            setTimeout(() => {
-                return this.loop();                
+                //Compute output
+                let error = this.compute_error();
+                let output = this.PID.output(error);
+                
+                //Apply output to the motor
+                if(this.is_simulation){
+                    console.log(output);                
+                    this.speed = this.speed_reference*0.9;
+                }
             }, 100);
           });
     }
