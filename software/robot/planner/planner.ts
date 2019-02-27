@@ -9,6 +9,10 @@ server.on('connection', function(socket: socket.Socket){
     socket.on('state',(msg)=>{
         console.log(msg);
     })
+
+    socket.on('input',(msg)=>{
+        console.log(msg);
+    })
 });
 
 setInterval(()=>{

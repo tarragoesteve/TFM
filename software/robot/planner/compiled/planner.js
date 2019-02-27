@@ -15,6 +15,9 @@ server.on('connection', function (socket) {
     socket.on('state', function (msg) {
         console.log(msg);
     });
+    socket.on('input', function (msg) {
+        console.log(msg);
+    });
 });
 setInterval(function () {
     for (var component_name in component_sockets) {

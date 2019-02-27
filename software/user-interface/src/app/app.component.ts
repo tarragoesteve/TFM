@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Injectable } from '@angular/core';
+import * as socketio from "socket.io-client";
+
 
 @Component({
   selector: 'app-root',
@@ -7,7 +10,19 @@ import { Component } from '@angular/core';
 })
 
 export class AppComponent {
-  title = 'user-interface';
-  value = 0;
+  left_value = 0;
+  right_value = 0;
+  socket: SocketIOClient.Socket;
+
+  constructor() {
+    this.socket = socketio.connect('http://localhost:3000')
+   }
+
+
+  onChange(value,id){
+    console.log(value,id);
+    this.socket.emit("input", {"value":value, "id": id});
+  }
+
 
 }
