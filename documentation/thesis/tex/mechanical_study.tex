@@ -267,7 +267,7 @@ Substituting equation \ref{flywheel equation}
 \[sin(\alpha) = min(1,\frac{\ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r_{max} - r) * \sin{\theta}}{m_{total} * g * r_{wheel}}) \]
 
 
-We are going to distinguish the same three cases as in the previous section:
+We are going to distinguish the same two cases as in the previous section:
 \begin{enumerate}
     \item Flywheel case: $r$ is fixed to $r = r_{max}$
     The maximum inclination at a certain moment:
@@ -298,10 +298,6 @@ We are going to distinguish the same three cases as in the previous section:
 We need to take into consideration air friction to see the speed limitation in the pendulum case.
 \[F_{drag} = \frac{1}{2}*\rho*C_D * A * v^2 \]
 
-
-
-\[\tau_{motor-flywheel} = m_{cylinder} * g * (r_{max}-r_{min})\]
-\[F_{drag} = \tau_{motor-flywheel} * r_{flywheel}\]
 Adding this term to equation \ref{eq of acceleration} we get:
 \[  \ddot{y}*m_{total} = \frac{2*I_{wheel} * \dot{w}_{wheel}}{r_{wheel}} + \frac{\tau_{motor-flywheel}}{r_{wheel}} - m_{total} * g * sin(\alpha) - F_{drag} \]
 And making $\ddot{y} = 0$ and $\alpha = 0$.
@@ -311,4 +307,4 @@ And making $\ddot{y} = 0$ and $\alpha = 0$.
 The maximum v is then:
 \[v_{max} = \sqrt{\frac{2*m_{cylinder} * g * (r_{max} - r_{min})}{\rho*C_D * A * r_{wheel}} } \]
 
-We will pick $C_D=1$, $\rho=1.2 kg/m^3$ and $A=0.01 m^2$
+We will pick $C_D=1$, $\rho=1.2 kg/m^3$ and $A=0.01 m^2$ for our computations.
