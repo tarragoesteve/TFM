@@ -51,18 +51,20 @@ We can express the torque at the center of the of the wheel as:
 \[\tau_{motor-wheel} + F_{friction} * r_{wheel} = I_{wheel} * \dot{w}_{wheel} \]
 
 \begin{equation} \label{wheel torque equation}
-\tau_{wheel} = min(\tau_{motor} (w_{wheel}),I_{wheel} * \dot{w}_{wheel} + F_{drag} * r_{wheel})
+\tau_{motor-wheel} = I_{wheel} * \dot{w}_{wheel} - F_{friction} * r_{wheel}
 \end{equation}
 \begin{figure}[ht]
 	\centering
 	\begin{tikzpicture}
-        \path[rotate=30] node[circle,draw] (center) at (2,2) {};
+        \path[rotate=30] node (center) at (2,2) {};
         \draw (center) circle (2);
         \draw[rotate=30] (0,0) -- (4,0);
         \draw[dashed] (0,0) -- (4,0);
+        \path node[above] (right) at ([shift=({2,0})]center) {};
+        \draw[<->] (center.center) -- (right.center)  node[below, midway] {$r_{wheel}$};;
     %Arcs
         \draw[rotate=30, ->] (4.5,2) arc (0:30:2.5) node[above]{$w_{wheel}$};
-        \draw[rotate=30, ->] (2.5,2) arc (0:60:.5) node[above]{$\tau_{motor-wheel}$};
+        \draw[rotate=30, ->, thick] (2.5,2) arc (0:60:.5) node[above]{$\tau_{motor-wheel}$};
 
         \draw[->] (1,0) arc (0:30:1) node[right]{$\alpha$};
     %Forces
@@ -70,8 +72,8 @@ We can express the torque at the center of the of the wheel as:
         \draw[rotate=30,->,thick] (2,0) -- (2,1) node[above]{$N$};
         \path node[above] (below) at ([shift=({0,-1})]center) {};
     
-        \draw[->,thick] (center) -- (below) node[below]{$m*g$};
-        \draw[rotate=30,->,thick] (center) -- (1,1.5) node[below]{$F_{body}$};
+        \draw[->,thick] (center.center) -- (below.center) node[below]{$m*g$};
+        \draw[rotate=30,->,thick] (center.center) -- (1,2) node[below]{$F_{body}$};
     \end{tikzpicture}
 	\caption{Wheel force diagram}
 	\label{fig:Wheel force diagram}
@@ -79,78 +81,128 @@ We can express the torque at the center of the of the wheel as:
 
 
 \subsection{Flywheel torque}
-
 \begin{figure}
 	\centering
-	\includegraphics[width=10cm]{img/flywheel_diagram.jpg}
-	\caption{Flywheel force diagram}
+    \begin{tikzpicture}
+        %Circle
+            \path node (center) at (0,0) {};
+            \draw (center) circle (3);
+        %Arcs
+            \draw[->] (0,3.5) arc (90:120:3.5) node[above, midway]{$\theta$};
+        %Movable mass
+            \draw[rotate=120,fill=gray] (1.5,0) circle (.9) node (moving) [draw,circle]{};
+        %Guide
+            \draw[dashed,rotate=120] (.9,0) -- (2.1,0);
+        %Other masses
+            \foreach \i in {0,...,4}
+            {
+                \draw[rotate=60-60*\i,fill=gray] (3-.9,0) circle (.9) node[draw,circle]{};
+            }
+        %Radius
+            \draw[<->] (0,0) -- (moving.center) node[near end, below] {$r$};
+            \draw[<->] (0,0) -- (2.1,0) node[near start, below] {$r_{max}$};
+        %Axis
+            \draw[->,thin] (center.center) -- (0,3.5) node[above] {$z$};
+            \draw[->,thin] (center.center) -- (3.5,0) node[right] {$y$};
+        %Motor torque
+        \draw[->, thick] (0.5,0) arc (0:60:.5) node[right]{$\tau_{motor-flywheel}$};    
+    \end{tikzpicture}
+            \caption{Flywheel diagram}
 	\label{fig:Flywheel force diagram}
 \end{figure}
 
 The flywheel torque we can induce is also limited by the motor specifications. 
 
 Assuming a general configuration of the flywheel where the moving mass is at distance $r$ and angle $\theta$, see figure \ref{fig:Flywheel force diagram}. we formulate its torque the following way:
-
-\begin{equation}\label{flywheel equation}
-    \tau_{flywheel} = min(\tau_{motor} (w), -\ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r - r_{max}) * \sin{\theta})  
+\[
+    \tau_{motor-flywheel} + m_{cylinder} * g * (r - r_{max}) * \sin{\theta} = \ddot{\theta}*I_{flywheel}(r)  
+\]
+\begin{equation}\label{flywheel equation}    
+    \tau_{motor-flywheel} = \ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r_{max} - r) * \sin{\theta}  
 \end{equation}
 
 \subsection{Maximum speed and acceleration}
+We will assume both wheels turn at the same speed, have the same $F_{friction}$ and the same $\tau_{wheel}$:
+\[ w_{wheel-left} = w_{wheel-right} = w_{wheel} \]
+
 \begin{figure}
 	\centering
-	\includegraphics[width=10cm]{img/wheel_diagram_drag.jpg}
-	\caption{Wheel force diagram}
-	\label{fig:Wheel forward force diagram}
+	\begin{tikzpicture}
+        \path[rotate=30] node (center) at (2,2) {};
+        \draw (center) circle (2);
+        \draw[rotate=30] (0,0) -- (4,0);
+        \draw[dashed] (0,0) -- (4,0);
+        \path node[above] (right) at ([shift=({2,0})]center) {};
+        \draw[<->] (center.center) -- (right.center)  node[below, midway] {$r_{wheel}$};;
+    %Arcs
+        \draw[rotate=30, ->] (4.5,2) arc (0:30:2.5) node[above]{$w_{wheel}$};
+        \draw[rotate=30, ->, thick] (2.5,2) arc (0:60:.5) node[above]{$\tau_{motor-wheel}$};
+
+        \draw[->] (1,0) arc (0:30:1) node[right]{$\alpha$};
+        \draw[rotate=30,->] (2,.5) arc (270:240:1.5) node[below, midway]{$\alpha$};
+    %Forces
+        \draw[rotate=30,->,thick] (2,0) -- (3.5,0) node[above]{$F_{friction}$};
+        \draw[rotate=30,->,thick] (2,0) -- (2,1) node[above]{$N$};
+        \path node[above] (below) at ([shift=({0,-1})]center) {};
+    
+        \draw[->,thick] (center.center) -- (below.center) node[below]{$m*g$};
+        \draw[rotate=30,->,thick] (center.center) -- (1,2) node[below]{$F_{body}$};
+    %Axis
+        \draw[->,thin][rotate=30] (center.center) -- (2,5) node[above] {$z$};
+        \draw[->,thin][rotate=30] (center.center) -- (5,2) node[right] {$y$};
+        \draw[dashed][rotate=30] (center.center) -- (2,1);
+
+    \end{tikzpicture}
+    \caption{Wheel forward force diagram}
+    \label{fig:Wheel forward force diagram}
 \end{figure}
-We will assume both wheels turn at the same speed, have the same $F_{drag}$ and the same $\tau_{wheel}$:
-\[ w_{wheel-left} = w_{wheel-right} = w \]
 
-Applying Newton's first law in the y axis of figure \ref{fig:Wheel forward force diagram}
-\[\ddot{y}*m_{total} = 2 * F_{drag} - m_{total} * g * sin(\alpha)\]
+Applying Newton's first law in the y axis of figure \ref{fig:Wheel forward force diagram}:
+\[\ddot{y}*m_{total} = 2 * F_{friction} - m_{total} * g * sin(\alpha)\]
 
-Substituting $F_{drag}$ taking in to account equation \ref{wheel torque equation}:
-\[\ddot{y}*m_{total} = 2 * \frac{\tau_{wheel} - I_{wheel} * \dot{w}_{wheel}}{r_{wheel}} - m_{total} * g * sin(\alpha)\]
+Substituting $F_{friction}$ taking in to account equation \ref{wheel torque equation}:
+\[\ddot{y}*m_{total} = 2 * \frac{I_{wheel} * \dot{w}_{wheel}-\tau_{motor-wheel}}{r_{wheel}} - m_{total} * g * sin(\alpha)\]
 
 Using equation \ref{eq:control equation}:
 \begin{equation}\label{eq of acceleration}
-    \Rightarrow  \ddot{y}*m_{total} = - \frac{\tau_{flywheel}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}} - m_{total} * g * sin(\alpha)
+    \Rightarrow  \ddot{y}*m_{total} = \frac{2*I_{wheel} * \dot{w}_{wheel}}{r_{wheel}} + \frac{\tau_{motor-flywheel}}{r_{wheel}} - m_{total} * g * sin(\alpha)
 \end{equation}
 
 
 We will now study different cases to better understand this equation.
 \subsubsection{No terrain inclination ($\alpha = 0$)}
 The equation we get by substituting $\alpha = 0$ in equation \ref{eq of acceleration}:
-\[\ddot{y}*m_{total} = - \frac{\tau_{flywheel}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}\]
+\[\ddot{y}*m_{total} = \frac{\tau_{motor-flywheel}}{r_{wheel}} +\frac{2*I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}\]
 
 Substituting equation \ref{flywheel equation}
 \begin{equation}\label{no inclintation eq}
-    \ddot{y}*m_{total} = - \frac{\ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r - r_{max}) * \sin{\theta}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}
+    \ddot{y}*m_{total} = \frac{\ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r_{max} - r) * \sin{\theta}}{r_{wheel}} +\frac{2*I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}
 \end{equation}
 
 
-We will now split the study in  three cases:
+We will now split the study in two cases:
 \begin{enumerate}
     \item Flywheel case: $r$ is fixed to $r = r_{max}$ 
     
     Then:  
-    \[\ddot{y}*m_{total} = - \frac{\ddot{\theta}*I_{flywheel}(r_{max})}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}\]
+    \[\ddot{y}*m_{total} = - \frac{\ddot{\theta}*I_{flywheel}(r_{max})}{r_{wheel}} + \frac{2*I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}\]
 
     Taking in two account the following relation:
-    \[w_{wheel} * r_{wheel} = \dot{y} \Rightarrow  \dot{w}_{wheel} * r_{wheel} = \ddot{y} \]
+    \[-w_{wheel} * r_{wheel} = \dot{y} \Rightarrow  -\dot{w}_{wheel} * r_{wheel} = \ddot{y} \]
 
-    The moment of inertia are:
+    The moments of inertia are:
     \[I_{wheel} = \frac{1}{2} *m_{wheel} * r_{wheel}^2\]
     \[I_{flywheel} \approx 6 * m_{cylinder} * r_{max}^2\]
 
     Let's go for it:
-    \[\dot{w}_{wheel} * r_{wheel}*m_{total} = - \frac{\ddot{\theta}*6 * m_{cylinder} * r_{max}^2}{r_{wheel}} - \frac{1}{2} *m_{wheel} * r_{wheel} * \dot{w}_{wheel} \]
+    \[-\dot{w}_{wheel} * r_{wheel}*m_{total} = \frac{\ddot{\theta}*6 * m_{cylinder} * r_{max}^2}{r_{wheel}} + m_{wheel} * r_{wheel} * \dot{w}_{wheel} \]
 
-    \[\dot{w}_{wheel} * r_{wheel}*(m_{total}+\frac{1}{2} *m_{wheel}) = - \frac{\ddot{\theta}*6 * m_{cylinder} * r_{max}^2}{r_{wheel}}\]
+    \[-\dot{w}_{wheel} * r_{wheel}*(m_{total} + m_{wheel}) = \frac{\ddot{\theta}*6 * m_{cylinder} * r_{max}^2}{r_{wheel}}\]
 
 
     We define R as the quotient between $\dot{w}_{wheel}$ and $-\ddot{\theta}$
 
-    \[R = \frac{\dot{w}_{wheel}}{-\ddot{\theta}} = \frac{6 * m_{cylinder} * r_{max}^2}{(m_{total} + \frac{1}{2} *m_{wheel}) * r_{wheel}^2} \]
+    \[R = \frac{\dot{w}_{wheel}}{-\ddot{\theta}} = \frac{6 * m_{cylinder} * r_{max}^2}{(m_{total} + m_{wheel}) * r_{wheel}^2} \]
 
     We can see that R will always be smaller than 1 because $6 * m_{cylinder} < m_{total} $ and $r_{max} < r_{wheel}$. This means that we will be limited by the acceleration of the flywheel.
 
@@ -163,86 +215,100 @@ We will now split the study in  three cases:
 
     \[\ddot{y}_{max} = - R * \frac{\tau_{motor} (\dot{\theta})}{I_{flywheel}(r)} * r_{wheel}\]
 
-    \[\Rightarrow \ddot{y}_{max} = -\frac{6 * m_{cylinder} * r_{max}^2}{(m_{total} + \frac{1}{2} *m_{wheel}) * r_{wheel}^2} * \frac{\tau_{motor} (\dot{\theta})}{I_{flywheel}(r)} * r_{wheel}\]
+    \[\Rightarrow \ddot{y}_{max} = -\frac{6 * m_{cylinder} * r_{max}^2}{(m_{total} + m_{wheel}) * r_{wheel}^2} * \frac{\tau_{motor} (\dot{\theta})}{I_{flywheel}(r)} * r_{wheel}\]
     
-    \[\boxed{\Rightarrow \ddot{y}_{max} = -\frac{\tau_{motor} (\dot{\theta})}{(m_{total} + \frac{1}{2} *m_{wheel}) * r_{wheel}}} \]
+    \[\boxed{\Rightarrow \ddot{y}_{max} = -\frac{\tau_{motor} (\dot{\theta})}{(m_{total} +m_{wheel}) * r_{wheel}}} \]
     
-    In order to compute the maximum speed we will assume that the initial conditions are $\dot{\theta} = 0$ and $w_{wheel-max}=0$
+    In order to compute the maximum speed we will assume that the initial conditions are $\dot{\theta} = 0$ and $w_{wheel-0}=0$
 
-    \[w_{wheel-max} = \int_{w_{wheel-0}}^{w_{wheel-max}} \dot{w}_{wheel} dt\]
+    \[w_{wheel-max} = \int_{t=0}^{t=t_{max}} \dot{w}_{wheel} * dt\]
 
     Now we will proceed to do a change of variables in the integral.
+
+    \[
+    \frac{\partial \dot{\theta}}{\partial t} = \ddot{\theta} \Rightarrow dt = \frac{d\dot{\theta}}{\ddot{\theta}}
+    \]
     
-    \[\ddot{\theta} = -\frac{\dot{w}_{wheel}}{R}\]
-    \[\Rightarrow \dot{w}_{wheel} = - \ddot{\theta} * R \] 
-
-    \[w_{wheel-max} = -R * \int_{\dot{\theta}_0}^{\dot{\theta}_{max}} \ddot{\theta} *   dt = -R * \dot{\theta}_{max}\]
-
+    \[w_{wheel-max} = \int_{\dot{\theta}=0}^{\dot{\theta}=\dot{\theta}_{max}} \frac{\dot{w}_{wheel}}{\ddot{\theta}} * d\dot{\theta} = 
+    \int_{\dot{\theta}=0}^{\dot{\theta}=\dot{\theta}_{max}} -R * d\dot{\theta} = - R * \dot{\theta}_{max}
+    \]
+    
     \[\boxed{\dot{y}_{max} = - r_{wheel} * R * \dot{\theta}_{max}}\]
 
     And $\dot{\theta}_{max}$ is a limitation imposed by the motor specifications.
 
 
-
-
     \item Pendulum: $\dot{\theta} = 0$, and $r$ is fixed to $r = r_{min}$
     
     Using equation \ref{no inclintation eq} and $\ddot{\theta} = 0$
-    \[\ddot{y}*m_{total} = - \frac{m_{cylinder} * g * (r - r_{max}) * \sin{\theta}}{r_{wheel}} - \frac{I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}\]
+    \[\ddot{y}*m_{total} = \frac{m_{cylinder} * g * (r_{max} - r) * \sin{\theta}}{r_{wheel}} +\frac{2*I_{wheel} * \dot{w}_{wheel}}{r_{wheel}}\]
     Multiplying by $r_{wheel}$ both sides of the equation we get:
-    \[\ddot{y}*m_{total} * r_{wheel} = - m_{cylinder} * g * (r - r_{max}) * \sin{\theta} - I_{wheel} * \dot{w}_{wheel}\]
-    And using $\dot{w}_{wheel} = \frac{\ddot{y}}{r_{wheel}}$
-    \[\ddot{y}*m_{total} * r_{wheel} + I_{wheel} * \frac{\ddot{y}}{r_{wheel}} = - m_{cylinder} * g * (r - r_{max}) * \sin{\theta} \]
+    \[\ddot{y}*m_{total} * r_{wheel} = m_{cylinder} * g * (r_{max}-r) * \sin{\theta} + 2*I_{wheel} * \dot{w}_{wheel}\]
+    And using $\dot{w}_{wheel} = -\frac{\ddot{y}}{r_{wheel}}$
+    \[\ddot{y}*m_{total} * r_{wheel} + 2* I_{wheel} * \frac{\ddot{y}}{r_{wheel}} = m_{cylinder} * g * (r_{max}-r) * \sin{\theta} \]
 
-    \[\ddot{y}  = -\frac{m_{cylinder} * g * (r - r_{max}) * \sin{\theta}}{m_{total} * r_{wheel} + \frac{I_{wheel}}{r_{wheel}} }  \]
+    \[\ddot{y}  = \frac{m_{cylinder} * g * (r_{max}-r) * \sin{\theta}}{m_{total} * r_{wheel} + \frac{2*I_{wheel}}{r_{wheel}} }  \]
     Replacing $I_{wheel}$ and $r=r_{min}$
-    \[\ddot{y}  = -\frac{m_{cylinder} * g * (r_{min} - r_{max}) * \sin{\theta}}{ r_{wheel} * (m_{total} + \frac{1}{2} * m_{wheel}) }  \]
+    \[\ddot{y}  = \frac{m_{cylinder} * g * (r_{max}- r_{min}) * \sin{\theta}}{ r_{wheel} * (m_{total} + m_{wheel}) }  \]
 
     Which is maximum when $\sin{\theta}=1$
-    \[\boxed{\ddot{y}_{max}  = \frac{m_{cylinder} * g * (r_{max}- r_{min})}{ r_{wheel} * (m_{total} + \frac{1}{2} * m_{wheel}) } } \]
+    \[\boxed{\ddot{y}_{max}  = \frac{m_{cylinder} * g * (r_{max}- r_{min})}{ r_{wheel} * (m_{total} + m_{wheel}) } } \]
     
-    And there is no limitation on the maximum speed.
-
-    \item We leave the weight free:
-    
-    TO DO: ODE    
+    And there is no limitation on the maximum speed without considering air friction.
 \end{enumerate}
 
 \subsubsection{No acceleration, just inclination ($\alpha > 0$)}
 Substituting $\ddot{y}=0$ in equation \ref{eq of acceleration}
-\[m_{total} * g * sin(\alpha) = - \frac{\tau_{flywheel}}{r_{wheel}} \]
-\[sin(\alpha) = - \frac{\tau_{flywheel}}{m_{total} * g * r_{wheel}} \]
+\[0 = \frac{\tau_{motor-flywheel}}{r_{wheel}} - m_{total} * g * sin(\alpha)\]
+\[m_{total} * g * sin(\alpha) = \frac{\tau_{motor-flywheel}}{r_{wheel}} \]
+\[sin(\alpha) = min(1,\frac{\tau_{motor-flywheel}}{m_{total} * g * r_{wheel}}) \]
+
+Substituting equation \ref{flywheel equation}
+\[sin(\alpha) = min(1,\frac{\ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * (r_{max} - r) * \sin{\theta}}{m_{total} * g * r_{wheel}}) \]
+
 
 We are going to distinguish the same three cases as in the previous section:
 \begin{enumerate}
     \item Flywheel case: $r$ is fixed to $r = r_{max}$
-    
-    Substituting equation \ref{flywheel equation}
-    \[sin(\alpha) = - \frac{min(\tau_{motor} (w), \ddot{\theta}*I_{flywheel}(r))}{m_{total} * g * r_{wheel}} \]
     The maximum inclination at a certain moment:
     \begin{equation}\label{Maximum angle using flywheel system}
-        sin(\alpha_{max}) = - \frac{\tau_{motor} (w)}{m_{total} * g * r_{wheel}}
+        sin(\alpha_{max}) = min(1,\frac{\ddot{\theta}*I_{flywheel}(r_{max})}{m_{total} * g * r_{wheel}}) = min(1,\frac{\tau_{motor-flywheel}(w_{wheel})}{m_{total} * g * r_{wheel}})
     \end{equation}
-    Maximum height can that the robot can achieve under the initial conditions $\dot{y}=\dot{y}_0$ and $\dot{\theta}=\dot{\theta}_0$:
-    \[h_{max}=\int_{\dot{\theta}_0}^{\dot{\theta}_{max}} \dot{y}_0*sin(\alpha) * dt  = \dot{y}_0* \int_{\dot{\theta}_0}^{\dot{\theta}_{max}} - \frac{\ddot{\theta}*I_{flywheel}(r)}{m_{total} * g * r_{wheel}} * dt\]
-    \[\boxed{\Rightarrow h_{max}= \dot{y}_0* (\dot{\theta}_0-\dot{\theta}_{max}) * \frac{I_{flywheel}(r)}{m_{total} * g * r_{wheel}}}\]
+    Maximum height can that the robot can achieve keeping its speed constant under the initial conditions $\dot{y}=\dot{y}_0$ and $\dot{\theta}=\dot{\theta}_0$:
+    \[h_{max}=\int_{t=0}^{t=t_{max}} \dot{y}_0*sin(\alpha) * dt  = \dot{y}_0* \int_{t=0}^{t=t_{max}} sin(\alpha) * dt\]
+
+    Using the same change of variables as in previous section:    
+    \[
+    \frac{\partial \dot{\theta}}{\partial t} = \ddot{\theta} \Rightarrow dt = \frac{d\dot{\theta}}{\ddot{\theta}}
+    \]
+
+    \[h_{max}= \dot{y}_0* \int_{\dot{\theta}=\dot{\theta}_0}^{\dot{\theta}=\dot{\theta}_{max}} \frac{sin(\alpha)}{\ddot{\theta}} * d\dot{\theta} = \dot{y}_0* \int_{\dot{\theta}=\dot{\theta}_0}^{\dot{\theta}=\dot{\theta}_{max}} \frac{I_{flywheel}(r_{max})}{m_{total} * g * r_{wheel}} * d\dot{\theta}\]
+
+
+    \[\boxed{\Rightarrow h_{max}= \dot{y}_0* (\dot{\theta}_{max}- \dot{\theta}_0) * \frac{I_{flywheel}(r_{max})}{m_{total} * g * r_{wheel}}}\]
 
     \item Pendulum: $\dot{\theta} = 0$, and $r$ is fixed to $r = r_{min}$
-    \[\tau_{flywheel} = m_{cylinder} * g * (r_{min} - r_{max}) * \sin{\theta}\]
-    \[sin(\alpha) = \frac{m_{cylinder} * (r_{max}- r_{min}) * \sin{\theta}}{m_{total} * r_{wheel}} \]
+    \[sin(\alpha) = min(1,\frac{m_{cylinder} * g * (r_{max} - r_{min}) * \sin{\theta}}{m_{total} * g * r_{wheel}}) \]
     \begin{equation}\label{Maximum angle using pendulum system}
         sin(\alpha_{max}) = \frac{m_{cylinder} * (r_{max}- r_{min})}{m_{total} * r_{wheel}}
     \end{equation}
 \end{enumerate}
 
 \subsubsection{No acceleration, no inclination, just keeping speed $v$}
-We need to take into consideration air friction.
+We need to take into consideration air friction to see the speed limitation in the pendulum case.
 \[F_{drag} = \frac{1}{2}*\rho*C_D * A * v^2 \]
 
+
+
+\[\tau_{motor-flywheel} = m_{cylinder} * g * (r_{max}-r_{min})\]
+\[F_{drag} = \tau_{motor-flywheel} * r_{flywheel}\]
+Adding this term to equation \ref{eq of acceleration} we get:
+\[  \ddot{y}*m_{total} = \frac{2*I_{wheel} * \dot{w}_{wheel}}{r_{wheel}} + \frac{\tau_{motor-flywheel}}{r_{wheel}} - m_{total} * g * sin(\alpha) - F_{drag} \]
+And making $\ddot{y} = 0$ and $\alpha = 0$.
+\[  F_{drag} = \frac{\tau_{motor-flywheel}}{r_{wheel}}\]
+
+\[\frac{1}{2}*\rho*C_D * A * v^2 = m_{cylinder} * g * (r_{max} - r_{min})*sin(\theta) / r_{wheel} \]
+The maximum v is then:
+\[v_{max} = \sqrt{\frac{2*m_{cylinder} * g * (r_{max} - r_{min})}{\rho*C_D * A * r_{wheel}} } \]
+
 We will pick $C_D=1$, $\rho=1.2 kg/m^3$ and $A=0.01 m^2$
-\[\tau_{flywheel} = m_{cylinder} * g * (r_{min} - r_{max})\]
-\[F_{drag} = \tau_{flywheel} * r_flywheel\]
-
-\[\frac{1}{2}*\rho*C_D * A * v^2 = m_{cylinder} * g * (r_{min} - r_{max}) * r_flywheel \]
-
-\[v = \sqrt{\frac{2*m_{cylinder} * g * (r_{min} - r_{max}) * r_flywheel}{\rho*C_D * A} } \]
