@@ -12,10 +12,11 @@ import numpy
 from robot import Robot 
 
 my_robot = Robot()
-resolution = 100
+resolution = 500
 
 
 r_flywheel_array=numpy.linspace(0.00,my_robot.r_external,resolution)
+cost_array = []
 max_sin_pendulum_array = []
 max_sin_flywheel_array = []
 m_total_array = []
@@ -25,10 +26,14 @@ height_array = []
 speed_horizontal_flywheel_array = []
 speed_horizontal_pendulum_array = []
 
+def cost_function(robot: Robot):
+  return robot.max_sin_pendulum()
+  return (robot.max_sin_flywheel()+robot.max_sin_pendulum()) *20* robot.motor_max_speed*robot.r_wheel*math.pi*2 + (robot.max_speed_horizontal_flywheel()+ robot.max_speed_horizontal_pendulum())
 
 
 from tqdm import tqdm
 for r_f in tqdm(r_flywheel_array):
+  aux_cost = 0
   aux_sin_pendulum = 0
   aux_sin_flywheel = 0
   aux_m_total = 0
@@ -40,8 +45,9 @@ for r_f in tqdm(r_flywheel_array):
   for w in numpy.linspace(0.0, 2*my_robot.r_external - 0.3, resolution):
     for r_w in numpy.linspace(r_f, my_robot.r_external, resolution):
       my_robot.set_r_flywheel_r_wheel_w(r_f,r_w,w)
-      if (my_robot.max_sin_pendulum()>aux_sin_pendulum):
-        aux_sin_pendulum = my_robot.max_sin_pendulum()/my_robot.m_total()
+      if (cost_function(my_robot) > aux_cost):
+        aux_cost = cost_function(my_robot)
+        aux_sin_pendulum = my_robot.max_sin_pendulum()
         aux_sin_flywheel = my_robot.max_sin_flywheel()
         aux_m_total = my_robot.m_total()
         aux_w = w
@@ -59,6 +65,7 @@ for r_f in tqdm(r_flywheel_array):
   height_array = numpy.append(height_array, aux_height)
   speed_horizontal_flywheel_array = numpy.append(speed_horizontal_flywheel_array, aux_speed_horizontal_flywheel)
   speed_horizontal_pendulum_array = numpy.append(speed_horizontal_pendulum_array, aux_speed_horizontal_pendulum)
+  cost_array = numpy.append(cost_array, aux_cost)
 
 
 import matplotlib.pyplot as plt
@@ -69,6 +76,13 @@ plt.ylabel('sin(alpha)')
 plt.plot(r_flywheel_array,max_sin_pendulum_array)
 plt.plot(r_flywheel_array,max_sin_flywheel_array)
 plt.legend(['max_sin_pendulum','max_sin_flywheel','m_total'])
+
+plt.figure()
+plt.title('cost vs flywheel radius')
+plt.xlabel('r flywheel [m]')
+plt.ylabel('cost')
+plt.plot(r_flywheel_array,cost_array)
+plt.legend(['cost'])
 
 plt.figure()
 plt.title('total mass vs flywheel radius')

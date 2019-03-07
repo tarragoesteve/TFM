@@ -19,11 +19,11 @@ class Robot:
   
   m_battery = .2#.15
   m_motor = .175
-  m_wheel = .1
-  m_rest = 4 * m_battery + 4 * m_motor + 2 * m_wheel
+  m_wheel = .15
+  m_rest = 4 * m_battery + 3 * m_motor + 2 * m_wheel
 
-  L_rest = 0.35
-  r_external=0.59/2.0
+  L_rest = 0.30
+  r_external=0.5/2.0
   g = 9.81
   rho_flywheel=7850
   h=.01
@@ -44,13 +44,13 @@ class Robot:
     return  self.w * (self.r_flywheel/3.0)**2 * self.rho_flywheel
   
   def m_flywheel(self):
-    return 6 * self.m_cylinder()
+    return 2 * self.m_cylinder()
   
   def I_flywheel(self, radius=0):
     if radius == 0:
-      return 6 * self.m_cylinder() * (self.r_flywheel*2.0/3.0)**2
+      return 2 * self.m_cylinder() * (self.r_flywheel*2.0/3.0)**2
     else:
-      return 5 * self.m_cylinder() * (self.r_flywheel*2.0/3.0)**2 + self.m_cylinder() * (radius)**2
+      return 1 * self.m_cylinder() * (self.r_flywheel*2.0/3.0)**2 + self.m_cylinder() * (radius)**2
     
   def m_total(self):
     return self.m_rest + self.m_flywheel() 
@@ -69,7 +69,7 @@ class Robot:
       self.valid_configuration = False
     elif(self.r_external < math.sqrt(self.r_wheel**2+(self.get_L()/2)**2)):
       self.valid_configuration = False
-    elif(self.m_total()>5):
+    elif(self.m_total()>7):
       self.valid_configuration = False
     else:
       self.valid_configuration = True
@@ -82,7 +82,7 @@ class Robot:
   def max_speed_horizontal_pendulum(self):
     if(not self.valid_configuration):
       return 0
-    return math.sqrt((2*self.m_cylinder() * self.g *(self.r_flywheel/3) )/(self.rho * self.C_D * self.A_drag* self.r_wheel))
+    return min(math.sqrt((2*self.m_cylinder() * self.g *(self.r_flywheel/3) )/(self.rho * self.C_D * self.A_drag* self.r_wheel)),self.motor_max_speed*self.r_wheel*math.pi*2)
 
   def max_height_flywheel(self):
     if(not self.valid_configuration):
