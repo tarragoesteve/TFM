@@ -15,7 +15,7 @@ my_robot = Robot()
 resolution = 500
 
 
-r_flywheel_array=numpy.linspace(0.00,my_robot.r_external,resolution)
+r_flywheel_array=numpy.linspace(0.00,0.15,resolution)
 cost_array = []
 max_sin_pendulum_array = []
 max_sin_flywheel_array = []
@@ -27,6 +27,8 @@ speed_horizontal_flywheel_array = []
 speed_horizontal_pendulum_array = []
 
 def cost_function(robot: Robot):
+  if(max(robot.max_sin_pendulum(),robot.max_sin_flywheel())< 0.3):
+    return 0
   return robot.max_sin_pendulum()
   return (robot.max_sin_flywheel()+robot.max_sin_pendulum()) *20* robot.motor_max_speed*robot.r_wheel*math.pi*2 + (robot.max_speed_horizontal_flywheel()+ robot.max_speed_horizontal_pendulum())
 

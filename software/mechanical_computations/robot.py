@@ -17,12 +17,12 @@ class Robot:
   w = 0
   valid_configuration=True
   
-  m_battery = .2#.15
+  m_battery = .210#.15
   m_motor = .175
   m_wheel = .15
-  m_rest = 4 * m_battery + 3 * m_motor + 2 * m_wheel
+  m_rest = 2 * m_battery + 3 * m_motor + 2 * m_wheel
 
-  L_rest = 0.30
+  L_rest = 0.4
   r_external=0.5/2.0
   g = 9.81
   rho_flywheel=7850
@@ -107,7 +107,7 @@ class Robot:
   def max_sin_pendulum(self):
     if(not self.valid_configuration):
       return 0
-    return self.m_cylinder() * (self.r_flywheel/3)/(self.r_wheel *  self.m_total())
+    return min(1,min(self.m_cylinder() * self.g * (self.r_flywheel/3) ,self.motor_max_torque)/(self.r_wheel *  self.m_total()*self.g))
 
   def max_sin_flywheel(self):
     if(not self.valid_configuration):

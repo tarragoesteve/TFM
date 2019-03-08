@@ -288,9 +288,9 @@ We are going to distinguish the same two cases as in the previous section:
     \[\boxed{\Rightarrow h_{max}= \dot{y}_0* (\dot{\theta}_{max}- \dot{\theta}_0) * \frac{I_{flywheel}(r_{max})}{m_{total} * g * r_{wheel}}}\]
 
     \item Pendulum: $\dot{\theta} = 0$, and $r$ is fixed to $r = r_{min}$
-    \[sin(\alpha) = min(1,\frac{m_{cylinder} * g * (r_{max} - r_{min}) * \sin{\theta}}{m_{total} * g * r_{wheel}}) \]
+    \[sin(\alpha) = min(1,\frac{min(\tau_{motor-flywheel},m_{cylinder} * g * (r_{max} - r_{min}) * \sin{\theta})}{m_{total} * g * r_{wheel}}) \]
     \begin{equation}\label{Maximum angle using pendulum system}
-        sin(\alpha_{max}) = \frac{m_{cylinder} * (r_{max}- r_{min})}{m_{total} * r_{wheel}}
+        sin(\alpha_{max}) = min(1,\frac{min(\tau_{motor-flywheel},m_{cylinder} * g * (r_{max} - r_{min}))}{m_{total} * g * r_{wheel}})
     \end{equation}
 \end{enumerate}
 
