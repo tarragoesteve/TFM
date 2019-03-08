@@ -16,7 +16,7 @@ Both frames are orthonormal frames that have the $x$ axis in the same direction 
 
 
 \subsection{Inclination control}
-In order to keep the inclination of the platform at a certain angle $\phi$ we must be able to compensate all the torque being to the body.
+In order to keep the inclination of the platform at a certain angle $\phi$ we must be able to compensate all the torque being applied to the body.
 
 \[\ddot{\phi} * I_{body} = \tau_{body} \]
 
@@ -107,7 +107,7 @@ We can express the torque at the center of the of the wheel as:
         %Motor torque
         \draw[->, thick] (0.5,0) arc (0:60:.5) node[right]{$\tau_{motor-flywheel}$};    
     \end{tikzpicture}
-            \caption{Flywheel diagram}
+            \caption{Flywheel diagram for $N$ = 2}
 	\label{fig:Flywheel force diagram}
 \end{figure}
 
@@ -192,19 +192,19 @@ We will now split the study in two cases:
 
     The moments of inertia are:
     \[I_{wheel} = \frac{1}{2} *m_{wheel} * r_{wheel}^2\]
-    \[I_{flywheel} \approx 6 * m_{cylinder} * r_{max}^2\]
+    \[I_{flywheel} \approx N * m_{cylinder} * r_{max}^2\]
 
     Let's go for it:
-    \[-\dot{w}_{wheel} * r_{wheel}*m_{total} = \frac{\ddot{\theta}*6 * m_{cylinder} * r_{max}^2}{r_{wheel}} + m_{wheel} * r_{wheel} * \dot{w}_{wheel} \]
+    \[-\dot{w}_{wheel} * r_{wheel}*m_{total} = \frac{\ddot{\theta}* N * m_{cylinder} * r_{max}^2}{r_{wheel}} + m_{wheel} * r_{wheel} * \dot{w}_{wheel} \]
 
-    \[-\dot{w}_{wheel} * r_{wheel}*(m_{total} + m_{wheel}) = \frac{\ddot{\theta}*6 * m_{cylinder} * r_{max}^2}{r_{wheel}}\]
+    \[-\dot{w}_{wheel} * r_{wheel}*(m_{total} + m_{wheel}) = \frac{\ddot{\theta}*N * m_{cylinder} * r_{max}^2}{r_{wheel}}\]
 
 
     We define R as the quotient between $\dot{w}_{wheel}$ and $-\ddot{\theta}$
 
-    \[R = \frac{\dot{w}_{wheel}}{-\ddot{\theta}} = \frac{6 * m_{cylinder} * r_{max}^2}{(m_{total} + m_{wheel}) * r_{wheel}^2} \]
+    \[R = \frac{\dot{w}_{wheel}}{-\ddot{\theta}} = \frac{N * m_{cylinder} * r_{max}^2}{(m_{total} + m_{wheel}) * r_{wheel}^2} \]
 
-    We can see that R will always be smaller than 1 because $6 * m_{cylinder} < m_{total} $ and $r_{max} < r_{wheel}$. This means that we will be limited by the acceleration of the flywheel.
+    We can see that R will always be smaller than 1 because $N * m_{cylinder} < m_{total} $ and $r_{max} < r_{wheel}$. This means that we will be limited by the acceleration of the flywheel.
 
     The forward acceleration is:
     \[\ddot{y} = \dot{w}_{wheel} * r_{wheel} = - R * \ddot{\theta} * r_{wheel}\]
@@ -215,7 +215,7 @@ We will now split the study in two cases:
 
     \[\ddot{y}_{max} = - R * \frac{\tau_{motor} (\dot{\theta})}{I_{flywheel}(r)} * r_{wheel}\]
 
-    \[\Rightarrow \ddot{y}_{max} = -\frac{6 * m_{cylinder} * r_{max}^2}{(m_{total} + m_{wheel}) * r_{wheel}^2} * \frac{\tau_{motor} (\dot{\theta})}{I_{flywheel}(r)} * r_{wheel}\]
+    \[\Rightarrow \ddot{y}_{max} = -\frac{N * m_{cylinder} * r_{max}^2}{(m_{total} + m_{wheel}) * r_{wheel}^2} * \frac{\tau_{motor} (\dot{\theta})}{I_{flywheel}(r)} * r_{wheel}\]
     
     \[\boxed{\Rightarrow \ddot{y}_{max} = -\frac{\tau_{motor} (\dot{\theta})}{(m_{total} +m_{wheel}) * r_{wheel}}} \]
     
