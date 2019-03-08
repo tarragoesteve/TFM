@@ -94,13 +94,13 @@ We can express the torque at the center of the of the wheel as:
         %Guide
             \draw[dashed,rotate=120] (.9,0) -- (2.1,0);
         %Other masses
-            \foreach \i in {0,...,4}
+            \foreach \i in {2}
             {
                 \draw[rotate=60-60*\i,fill=gray] (3-.9,0) circle (.9) node[draw,circle]{};
             }
         %Radius
             \draw[<->] (0,0) -- (moving.center) node[near end, below] {$r$};
-            \draw[<->] (0,0) -- (2.1,0) node[near start, below] {$r_{max}$};
+            \draw[rotate=-60,<->] (0,0) -- (2.1,0) node[midway, above] {$r_{max}$};
         %Axis
             \draw[->,thin] (center.center) -- (0,3.5) node[above] {$z$};
             \draw[->,thin] (center.center) -- (3.5,0) node[right] {$y$};

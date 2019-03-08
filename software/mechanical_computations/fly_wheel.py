@@ -14,7 +14,7 @@ def system_function(robot):
             #r = r_min
             #print('r_min')
             return [max(0,x[1]),
-            max(0,-robot.g * math.sin(math.pi/2 -x[2]) + x[0] * x[3]*x[3]),
+            max(0,-robot.g * math.cos(x[2]) + x[0] * x[3]*x[3]),
             x[3],
             + robot.m_cylinder() * robot.g * (x[0] - robot.r_flywheel*2/3) * math.sin(x[2]) / robot.I_flywheel(x[0])
             ]
@@ -22,19 +22,19 @@ def system_function(robot):
             #r = r_max
             #print('r_max')
             return [min(0,x[1]),
-            min(0,-robot.g * math.sin(math.pi/2 -x[2]) + x[0] * x[3]*x[3]),
+            min(0,-robot.g * math.cos(x[2]) + x[0] * x[3]*x[3]),
             x[3],
             + robot.m_cylinder() * robot.g * (x[0] - robot.r_flywheel*2/3) * math.sin(x[2]) / robot.I_flywheel(x[0])
             ]
         return [x[1],
-        -robot.g * math.sin(math.pi/2 -x[2]) + x[0] * x[3]*x[3],
+        -robot.g * math.cos(x[2]) + x[0] * x[3]*x[3],
         x[3],
         + robot.m_cylinder() * robot.g * (x[0] - robot.r_flywheel*2/3) * math.sin(x[2]) / robot.I_flywheel(x[0])
         ]
     return lambda t,x: aux_function(t,x)
 
 my_robot = Robot()
-my_robot.set_r_flywheel_r_wheel_w(.05,.07,.02)
+my_robot.set_r_flywheel_r_wheel_w(.08,.09,.07)
 
 system = system_function(my_robot)
 
@@ -53,14 +53,14 @@ r_max_event.direction = 1
 r_min_event.terminal = True
 r_min_event.direction = -1
 
-bounce_percentage = 0.1 #totally inelastic
+bounce_percentage = 0.0 #totally inelastic
 
 def next_initial(final_condition):
     if(abs(- bounce_percentage *final_condition[1])<0.001):
         final_condition[1] = 0
     return [min(max(final_condition[0],my_robot.r_flywheel/3.0),my_robot.r_flywheel*2.0/3.0), - bounce_percentage *final_condition[1],final_condition[2],final_condition[3]]
 
-initial_contition = [my_robot.r_flywheel*2/3.0,0.0,math.pi,5*math.pi]
+initial_contition = [my_robot.r_flywheel*2/3.0,0.0,math.pi,4.2*math.pi]
 total_t= 6
 accumulated_t=0.0
 results = [initial_contition]
