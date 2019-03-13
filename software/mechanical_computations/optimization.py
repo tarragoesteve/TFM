@@ -12,8 +12,7 @@ import numpy
 from robot import Robot 
 
 my_robot = Robot()
-resolution = 500
-
+resolution = 1000
 
 r_flywheel_array=numpy.linspace(0.00,0.15,resolution)
 cost_array = []
@@ -26,16 +25,37 @@ height_array = []
 speed_horizontal_flywheel_array = []
 speed_horizontal_pendulum_array = []
 
-def cost_function(robot: Robot):
-  if(max(robot.max_sin_pendulum(),robot.max_sin_flywheel())< 0.3):
-    return 0
-  return robot.max_sin_pendulum()
-  return (robot.max_sin_flywheel()+robot.max_sin_pendulum()) *20* robot.motor_max_speed*robot.r_wheel*math.pi*2 + (robot.max_speed_horizontal_flywheel()+ robot.max_speed_horizontal_pendulum())
+def requirements(robot: Robot):
+  if(robot.max_speed_horizontal_flywheel()<0.1):
+    return False
+  if(robot.max_acceleration_horizontal_flywheel()<0.01):
+    return False
+  if(robot.max_height_flywheel()<0.001):
+   #r_flywheel (7.5,14)
+    return False
+  if(robot.max_sin_flywheel()<0.2):
+    #r_flywheel (1,13)
+    return False
+  if(robot.max_speed_horizontal_pendulum()<1):
+    #r_flywheel (1,14)
+    return False
+  if(robot.max_acceleration_horizontal_pendulum()<0.1):
+    #r_flywheel (2.2,14)
+    return False
+  if(robot.max_sin_pendulum()<0.02):
+    #r_flywheel (6.5,13)
+    return False
+  return True
 
+
+def cost_function(robot: Robot):
+  if(requirements(robot)):
+    return robot.m_total()
+  return 100.0
 
 from tqdm import tqdm
 for r_f in tqdm(r_flywheel_array):
-  aux_cost = 0
+  aux_cost = 100.0
   aux_sin_pendulum = 0
   aux_sin_flywheel = 0
   aux_m_total = 0
@@ -47,7 +67,7 @@ for r_f in tqdm(r_flywheel_array):
   for w in numpy.linspace(0.0, 2*my_robot.r_external - 0.3, resolution):
     for r_w in numpy.linspace(r_f, my_robot.r_external, resolution):
       my_robot.set_r_flywheel_r_wheel_w(r_f,r_w,w)
-      if (cost_function(my_robot) > aux_cost):
+      if (cost_function(my_robot) < aux_cost):
         aux_cost = cost_function(my_robot)
         aux_sin_pendulum = my_robot.max_sin_pendulum()
         aux_sin_flywheel = my_robot.max_sin_flywheel()
