@@ -10,7 +10,7 @@ As a reminder: $L$ is the length of the robot, and $w$ the width of the flywheel
 	\caption{Flywheel hole diagram}
 	\label{fig:Flywheel hole diagram}
 \end{figure}
-\[r_{wheel}> \sqrt{(r_{flywheel} + b)^2+\frac{h}{2}^2}\]
+\[r_{wheel}> \sqrt{(r_{flywheel} + b)^2+(\frac{h}{2})^2}\]
 \item We want to inserted the robot in to a external of diameter 0.5m so:
 \begin{figure}[ht]
 	\centering
@@ -24,6 +24,13 @@ As a reminder: $L$ is the length of the robot, and $w$ the width of the flywheel
 \item Maximum weight of the robot: 5kg
 \end{enumerate}
 
+\subsection{Requirements}
+\begin{enumerate}
+	\item $sin(\alpha_{max})$ (equation \ref{Maximum angle using flywheel system}) $> 0.3$
+	\item $h_{max}$ (equation \ref{Maximum height}) $> 0.1m$
+\end{enumerate}
+	
+
 
 \subsection{Cost function}
 The function we would like to maximize is the maximum angle we can keep our speed using the pendulum system.
@@ -31,27 +38,29 @@ It's described in equation \ref{Maximum angle using pendulum system}:
 \[sin(\alpha_{max}) = \frac{m_{cylinder} * (r_{max}- r_{min})}{m_{total} * r_{wheel}}\]
 We have set $N$ = 2 (Number of cylinders) in order to maximize this function.
 
-Also we have imposed a minimum $sin(\alpha_{max})$ for the flywheel system which was set to $0.3$.
+Also we have imposed a minimum $sin(\alpha_{max})$ as a requirement for the flywheel system which was set to $0.3$.
+
 
 \subsection{Results}
-Our procedure has been making a grid of the three parameters of the robot design: $w$ (width of the cylinders),$r_{wheel}$ and $r_{flywheel}$.
+Our procedure has been making a grid with the three parameters of the robot design: $w$ (width of the cylinders), $r_{wheel}$ and $r_{flywheel}$.
 We have fixed $r_{flywheel}$, iterated over the other two variables and keeped the best parameters for our cost function.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=10cm]{img/optimization/sin.png}
-	\caption{Plot of the sinus of the maximum inclination in which the robot can keep his speed.}
+	\caption{Plot of the equations \ref{Maximum angle using flywheel system} and \ref{Maximum angle using pendulum system} at the parameters that maximize the cost function and fullfil the requirements and restrictions}
 	\label{fig:Sinus plot}
 \end{figure}
-In figure \ref{fig:Sinus plot} we can see how the sinus of the flywheel is saturated to 1 and as long as it's possible it does not go below $0.3$.
+In figure \ref{fig:Sinus plot} we can see the evolution of our cost function (equation \ref{Maximum angle using pendulum system}) that has a maximum near $r_{flywheel} = 8cm$.
+We can also check that we are fulfilling the requirements as long as $r_{flywheel}<13cm$ 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=10cm]{img/optimization/speed.png}
-	\caption{Plot of the maximum speed that the robot can achieve.}
+	\caption{Plot of the equations \ref{Maximum speed flywheel} and \ref{maximum speed pendulum} at the parameters that maximize the cost function and fullfil the requirements and restrictions}
 	\label{fig:Speed plot}
 \end{figure}
-In figure \ref{fig:Speed plot} we can observe that the pendulum systems allows as to get a much higher speed than the flywheel.
+In figure \ref{fig:Speed plot} we can observe that the pendulum systems allows us to get a much higher speed than the flywheel.
 
 \begin{figure}[H]
 	\centering
@@ -67,7 +76,6 @@ Just for reference this plot in figure \ref{fig:Parameters plot} shows which par
 	\caption{Plot of the mass for each configuration.}
 	\label{fig:Mass plot}
 \end{figure}
-This plot in figure \ref{fig:Mass plot} shows us which is the total mass of the robot in each of the configurations.
 
 Our selected parameters are:
 \begin{center}
