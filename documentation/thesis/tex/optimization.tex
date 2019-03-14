@@ -32,10 +32,10 @@ As a reminder: $L$ is the length of the robot, and $w$ the width of the flywheel
 	\item $h_{max}$ (equation \ref{Maximum height}) $> 0.001m$
 	\item $sin(\alpha_{max})$ (equation \ref{Maximum angle using flywheel system}) $> 0.2$
 \end{enumerate}
-\textbf{pendulum mode}
+\textbf{Pendulum mode}
 \begin{enumerate}
 	\item $\dot{y}_{max}$ (equation \ref{maximum speed pendulum}) $> 1m/s$
-	\item $\ddot{y}_{max}$ (equation \ref{maximum acceleration pendulum}) $0.1m/s^2$
+	\item $\ddot{y}_{max}$ (equation \ref{maximum acceleration pendulum}) $>0.1m/s^2$
 	\item $sin(\alpha_{max})$ (equation \ref{Maximum angle using pendulum system}) $> 0.02$
 \end{enumerate}
 	
@@ -44,40 +44,69 @@ As a reminder: $L$ is the length of the robot, and $w$ the width of the flywheel
 \subsection{Cost function}
 We will minimize the total mass minus the pendulum max speed (eq \ref{Maximum speed flywheel})
 minus the flywheel acceleration (eq \ref{maximum acceleration flywheel}).
-\[cost = mass - \dot{y}_{max} -\ddot{y}_{max}\]
+\begin{equation}
+	cost = mass - \dot{y}_{max} -\ddot{y}_{max}
+	\label{eq: cost}
+\end{equation}
 \subsection{Results}
-Our procedure has been making a grid with the three parameters of the robot design: $w$ (width of the cylinders), $r_{wheel}$ and $r_{flywheel}$.
+Our procedure has been making a grid with the four parameters of the robot 
+design: $w$ (width of the cylinders),$N$ (number of cylinders), $r_{wheel}$ and $r_{flywheel}$.
 We have fixed $r_{flywheel}$, iterated over the other two variables and keeped the best parameters for our cost function.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{img/optimization/sin.png}
-	\caption{Plot of the equations \ref{Maximum angle using flywheel system} and \ref{Maximum angle using pendulum system} at the parameters that maximize the cost function and fullfil the requirements and restrictions}
-	\label{fig:Sinus plot}
-\end{figure}
-In figure \ref{fig:Sinus plot} we can see the evolution of our cost function (equation \ref{Maximum angle using pendulum system}) that has a maximum near $r_{flywheel} = 8cm$.
-We can also check that we are fulfilling the requirements as long as $r_{flywheel}<13cm$ 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=10cm]{img/optimization/speed.png}
-	\caption{Plot of the equations \ref{Maximum speed flywheel} and \ref{maximum speed pendulum} at the parameters that maximize the cost function and fullfil the requirements and restrictions}
+	\caption{Plot of the equations \ref{Maximum speed flywheel} and \ref{maximum speed pendulum} at the parameters that minimize the cost function and fullfil the requirements and restrictions}
 	\label{fig:Speed plot}
 \end{figure}
-In figure \ref{fig:Speed plot} we can observe that the pendulum systems allows us to get a much higher speed than the flywheel.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{img/optimization/acceleration.png}
+	\caption{Plot of the equations \ref{maximum acceleration flywheel} and \ref{maximum acceleration pendulum} at the parameters that minimize the cost and fullfil the requirements and restrictions}
+	\label{fig:Speed plot}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{img/optimization/sin.png}
+	\caption{Plot of the equations \ref{Maximum angle using flywheel system} and \ref{Maximum angle using pendulum system} at the parameters that minimize the cost and fullfil the requirements and restrictions}
+	\label{fig:Sinus plot}
+\end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=10cm]{img/optimization/parameters.png}
-	\caption{Plot of the parameters that maximize the cost function.}
+	\caption{Plot of the parameters that minimize the cost function.}
 	\label{fig:Parameters plot}
 \end{figure}
-Just for reference this plot in figure \ref{fig:Parameters plot} shows which parameters maximize the cost function so we can then design the robot accordingly.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{img/optimization/N.png}
+	\caption{Plot of the N that minimize the cost function.}
+	\label{fig:Parameters plot}
+\end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=10cm]{img/optimization/mass.png}
 	\caption{Plot of the mass for each configuration.}
+	\label{fig:Mass plot}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{img/optimization/height.png}
+	\caption{Plot of the equation \ref{Maximum height} for each configuration.}
+	\label{fig:Mass plot}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{img/optimization/cost.png}
+	\caption{Plot of the equation \ref{eq: cost} for each configuration.}
 	\label{fig:Mass plot}
 \end{figure}
 
@@ -87,7 +116,7 @@ Our selected parameters are:
 	 \hline
 	 $r_{flywheel}$ & $r_{wheel}$ & $w$ \\
 	 \hline 
-	 8cm & 9cm & 7cm \\ 
+	 8cm & 9cm & 3cm \\ 
 	 \hline
 	\end{tabular}
 	\end{center}
