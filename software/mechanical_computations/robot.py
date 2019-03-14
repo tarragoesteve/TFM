@@ -11,17 +11,17 @@ import math
 import numpy
 
 class Robot:
-  r_flywheel = 0
-  r_wheel = 0
-  L_robot = 0
-  w = 0
-  valid_configuration=True
+  r_flywheel = 1
+  r_wheel = 1
+  L_robot = 1
+  w = 1
+  valid_configuration=False
   
   N = 2
-  m_battery = .210#.15
+  m_battery = .150#.15
   m_motor = .175
   m_wheel = .15
-  m_rest = 2 * m_battery + 3 * m_motor + 2 * m_wheel
+  m_rest = 4 * m_battery + 3 * m_motor + 2 * m_wheel
 
   L_rest = 0.4
   r_external=0.5/2.0
@@ -74,6 +74,13 @@ class Robot:
       self.valid_configuration = False
     else:
       self.valid_configuration = True
+
+  def set_r_flywheel_r_wheel_w_N(self,r_flywheel,r_wheel,w,N):
+    self.N = N
+    self.set_r_flywheel_r_wheel_w(r_flywheel,r_wheel,w)
+
+  def get_values(self):
+    return {}
     
   def max_speed_horizontal_flywheel(self):
     if(not self.valid_configuration):
