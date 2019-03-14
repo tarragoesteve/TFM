@@ -25,21 +25,24 @@ As a reminder: $L$ is the length of the robot, and $w$ the width of the flywheel
 \end{enumerate}
 
 \subsection{Requirements}
+\textbf{Flywheel mode}
 \begin{enumerate}
-	\item $sin(\alpha_{max})$ (equation \ref{Maximum angle using flywheel system}) $> 0.3$
-	\item $h_{max}$ (equation \ref{Maximum height}) $> 0.1m$
+	\item $\dot{y}_{max}$ (equation \ref{Maximum speed flywheel}) $> 0.1m/s$
+	\item $\ddot{y}_{max}$ (equation \ref{maximum acceleration flywheel}) $0.01m/s^2$
+	\item $h_{max}$ (equation \ref{Maximum height}) $> 0.001m$
+	\item $sin(\alpha_{max})$ (equation \ref{Maximum angle using flywheel system}) $> 0.2$
+\end{enumerate}
+\textbf{pendulum mode}
+\begin{enumerate}
+	\item $\dot{y}_{max}$ (equation \ref{maximum speed pendulum}) $> 1m/s$
+	\item $\ddot{y}_{max}$ (equation \ref{maximum acceleration pendulum}) $0.1m/s^2$
+	\item $sin(\alpha_{max})$ (equation \ref{Maximum angle using pendulum system}) $> 0.02$
 \end{enumerate}
 	
 
 
 \subsection{Cost function}
-The function we would like to maximize is the maximum angle we can keep our speed using the pendulum system.
-It's described in equation \ref{Maximum angle using pendulum system}:
-\[sin(\alpha_{max}) = \frac{m_{cylinder} * (r_{max}- r_{min})}{m_{total} * r_{wheel}}\]
-We have set $N$ = 2 (Number of cylinders) in order to maximize this function.
-
-Also we have imposed a minimum $sin(\alpha_{max})$ as a requirement for the flywheel system which was set to $0.3$.
-
+We will minimize the total mass.
 
 \subsection{Results}
 Our procedure has been making a grid with the three parameters of the robot design: $w$ (width of the cylinders), $r_{wheel}$ and $r_{flywheel}$.
