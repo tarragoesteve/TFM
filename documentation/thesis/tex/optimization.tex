@@ -42,8 +42,9 @@ As a reminder: $L$ is the length of the robot, and $w$ the width of the flywheel
 
 
 \subsection{Cost function}
-We will minimize the total mass.
-
+We will minimize the total mass minus the pendulum max speed (eq \ref{Maximum speed flywheel})
+minus the flywheel acceleration (eq \ref{maximum acceleration flywheel}).
+\[cost = mass - \dot{y}_{max} -\ddot{y}_{max}\]
 \subsection{Results}
 Our procedure has been making a grid with the three parameters of the robot design: $w$ (width of the cylinders), $r_{wheel}$ and $r_{flywheel}$.
 We have fixed $r_{flywheel}$, iterated over the other two variables and keeped the best parameters for our cost function.

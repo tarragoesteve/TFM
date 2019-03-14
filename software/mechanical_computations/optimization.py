@@ -40,7 +40,7 @@ def cost_function(robot: Robot):
     return robot.m_total() - robot.max_speed_horizontal_pendulum() - robot.max_acceleration_horizontal_flywheel()
   return 300.0
 
-resolution = 300
+resolution = 700
 r_flywheel_array=numpy.linspace(0.00,0.15,resolution)
 best_robots :[Robot] = []
 my_robot = Robot()
@@ -61,15 +61,14 @@ for r_f in tqdm(r_flywheel_array):
   if(to_save):
     best_robots.append(copy.deepcopy(aux_robot))
 
-print(best_robots)
 import matplotlib.pyplot as plt
 plt.figure()
-plt.title('max_sin_pendulum,max_sin_flywheel vs flywheel radius')
+plt.title('sin(alpha) vs flywheel radius')
 plt.xlabel('r flywheel [m]')
 plt.ylabel('sin(alpha)')
 plt.plot([robot.r_flywheel for robot in best_robots], [robot.max_sin_pendulum() for robot in best_robots])
 plt.plot([robot.r_flywheel for robot in best_robots], [robot.max_sin_flywheel() for robot in best_robots])
-plt.legend(['max_sin_pendulum','max_sin_flywheel','m_total'])
+plt.legend(['pendulum','flywheel','m_total'])
 
 plt.figure()
 plt.title('cost vs flywheel radius')
@@ -83,20 +82,20 @@ plt.title('total mass vs flywheel radius')
 plt.xlabel('r flywheel [m]')
 plt.ylabel('mass [kg]')
 plt.plot([robot.r_flywheel for robot in best_robots], [robot.m_total() for robot in best_robots])
-plt.legend(['m_total'])
+plt.legend(['total mass'])
 
 plt.figure()
-plt.title('wheel radius vs flywheel radius')
+plt.title('parameters vs flywheel radius')
 plt.xlabel('r flywheel [m]')
 plt.ylabel('[m]')
 plt.plot([robot.r_flywheel for robot in best_robots], [robot.r_wheel for robot in best_robots])
 plt.plot([robot.r_flywheel for robot in best_robots], [robot.w for robot in best_robots])
-plt.legend(['r wheel','w'])
+plt.legend(['wheel radius','w'])
 
 plt.figure()
 plt.title('N vs flywheel radius')
 plt.xlabel('r flywheel [m]')
-plt.ylabel('units')
+plt.ylabel('masses')
 plt.plot([robot.r_flywheel for robot in best_robots], [robot.N for robot in best_robots])
 plt.legend(['N'])
 
@@ -108,7 +107,7 @@ plt.plot([robot.r_flywheel for robot in best_robots], [robot.max_height_flywheel
 plt.legend(['height'])
 
 plt.figure()
-plt.title('speed flywheel, speed pendulum vs flywheel radius')
+plt.title('speed vs flywheel radius')
 plt.xlabel('r flywheel [m]')
 plt.ylabel('speed [m/s]')
 plt.plot([robot.r_flywheel for robot in best_robots], [robot.max_speed_horizontal_pendulum() for robot in best_robots])
