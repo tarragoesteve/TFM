@@ -15,7 +15,7 @@ from robot import Robot
 def requirements(robot: Robot):
   if(robot.max_speed_horizontal_flywheel()<0.1):
     return False
-  if(robot.max_acceleration_horizontal_flywheel()<0.01):
+  if(robot.max_acceleration_horizontal_flywheel()<1):
     return False
   #if(robot.max_height_flywheel()<0.001):
    #r_flywheel (7.5,14)
@@ -37,7 +37,7 @@ def requirements(robot: Robot):
 
 def cost_function(robot: Robot):
   if(requirements(robot)):
-    return robot.m_total() - robot.max_speed_horizontal_pendulum() - robot.max_acceleration_horizontal_flywheel()
+    return -robot.max_speed_horizontal_pendulum()/1.5 - robot.max_acceleration_horizontal_flywheel()/2
   return 300.0
 
 resolution = 700
@@ -52,7 +52,7 @@ for r_f in tqdm(r_flywheel_array):
   to_save = False
   for w in numpy.linspace(0.0, 2*my_robot.r_external - 0.3, resolution):
     for r_w in numpy.linspace(r_f, my_robot.r_external, resolution):
-      for N in range(2,7):
+      for N in [2,3,4]:
         my_robot.set_r_flywheel_r_wheel_w_N(r_f,r_w,w,N)
         if (cost_function(my_robot) < aux_cost):
           to_save = True
@@ -90,14 +90,14 @@ plt.xlabel('r flywheel [m]')
 plt.ylabel('[m]')
 plt.plot([robot.r_flywheel for robot in best_robots], [robot.r_wheel for robot in best_robots])
 plt.plot([robot.r_flywheel for robot in best_robots], [robot.w for robot in best_robots])
-plt.legend(['wheel radius','w'])
+plt.legend(['wheel radius','cylinder with'])
 
 plt.figure()
 plt.title('N vs flywheel radius')
 plt.xlabel('r flywheel [m]')
 plt.ylabel('masses')
 plt.plot([robot.r_flywheel for robot in best_robots], [robot.N for robot in best_robots])
-plt.legend(['N'])
+plt.legend(['Number of masses'])
 
 plt.figure()
 plt.title('height obtained vs flywheel radius')
