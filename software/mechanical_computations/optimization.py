@@ -37,10 +37,10 @@ def requirements(robot: Robot):
 
 def cost_function(robot: Robot):
   if(requirements(robot)):
-    return -robot.max_speed_horizontal_pendulum()/1.5 - robot.max_acceleration_horizontal_flywheel()/2
+    return -robot.max_sin_pendulum() - robot.max_speed_horizontal_flywheel()*robot.max_speed_horizontal_flywheel()
   return 300.0
 
-resolution = 700
+resolution = 200
 r_flywheel_array=numpy.linspace(0.00,0.15,resolution)
 best_robots :[Robot] = []
 my_robot = Robot()
@@ -52,7 +52,7 @@ for r_f in tqdm(r_flywheel_array):
   to_save = False
   for w in numpy.linspace(0.0, 2*my_robot.r_external - 0.3, resolution):
     for r_w in numpy.linspace(r_f, my_robot.r_external, resolution):
-      for N in [2,3,4]:
+      for N in [2,3,4,6]:
         my_robot.set_r_flywheel_r_wheel_w_N(r_f,r_w,w,N)
         if (cost_function(my_robot) < aux_cost):
           to_save = True

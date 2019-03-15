@@ -28,8 +28,7 @@ As a reminder: $L$ is the length of the robot, and $w$ the width of the flywheel
 \textbf{Flywheel mode}
 \begin{enumerate}
 	\item $\dot{y}_{max}$ (equation \ref{Maximum speed flywheel}) $> 0.1m/s$
-	\item $\ddot{y}_{max}$ (equation \ref{maximum acceleration flywheel}) $0.01m/s^2$
-	\item $h_{max}$ (equation \ref{Maximum height}) $> 0.001m$
+	\item $\ddot{y}_{max}$ (equation \ref{maximum acceleration flywheel}) $1m/s^2$
 	\item $sin(\alpha_{max})$ (equation \ref{Maximum angle using flywheel system}) $> 0.2$
 \end{enumerate}
 \textbf{Pendulum mode}
@@ -42,12 +41,32 @@ As a reminder: $L$ is the length of the robot, and $w$ the width of the flywheel
 
 
 \subsection{Cost function}
-We will minimize the total mass minus the pendulum max speed (eq \ref{Maximum speed flywheel})
-minus the flywheel acceleration (eq \ref{maximum acceleration flywheel}).
+We will maximize the maximum sinus in the pendulum mode 
+(equation \ref{Maximum angle using pendulum system}) because
+it give the robot the capacity to deliver force in a permanent state.
+
+We will also maximize the square of the max speed the robot can achieve
+in flywheel mode (equation \ref{Maximum speed flywheel}) because it is
+proportional to the energy the robot can deliver at a certain moment.
+
 \begin{equation}
-	cost = mass - \dot{y}_{max} -\ddot{y}_{max}
+	cost(r_{flywheel},r_{wheel},w,N) = - sin(\alpha_{max})_{pendulum} -\dot{y}^2_{max-flywheel}
 	\label{eq: cost}
 \end{equation}
+
+\begin{equation*}
+	m_{cylinder} = \rho * w * \pi * (\frac{r_{flywheel}}{3})^2
+\end{equation*}
+
+\begin{equation*}
+	sin(\alpha_{max})_{pendulum} = \frac{m_{cylinder} \cdot  (r_{max} - r_{min})}{m_{total} \cdot r_{wheel}} = \frac{m_{cylinder} \cdot  (\frac{r_{flywheel}}{3})}{(m_{rest} + N \cdot m_{cylinder})\cdot r_{wheel}} 	
+\end{equation*}
+
+\begin{equation*}
+	\dot{y}_{max} = r_{wheel} \cdot  R \cdot  \dot{\theta}_{max} =r_{wheel} \cdot  \frac{ N \cdot  m_{cylinder} \cdot  (\frac{2\cdot r_{flywheel}}{3})^2}
+    {r_{wheel}^2\cdot (m_{rest} + N \cdot m_{cylinder}) +  2\cdot I_{wheel}} \cdot  \dot{\theta}_{max}
+\end{equation*}
+
 \subsection{Results}
 Our procedure has been making a grid with the four parameters of the robot 
 design: $w$ (width of the cylinders),$N$ (number of cylinders), $r_{wheel}$ and $r_{flywheel}$.
