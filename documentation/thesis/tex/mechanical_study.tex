@@ -322,31 +322,40 @@ We are going to distinguish the same two cases as in the previous section:
 
 
     This angle give doesn't give us a lot of information because it may not be fulfilled in a 
-    permanent state. That's why in addition we would like to compute the maximum height.
+    permanent state. That's why in addition we would like to compute the maximum height
+    our robot can achieve start from rest position.
 
-    In order to keep the speed along an inclination we need to accelerate our flywheel:
-    \[\ddot{\theta} = \frac{sin(\alpha)\cdot m_{total}\cdot g\cdot r_{wheel}}{I_{flywheel}}\]
+    \[h=\int_{t=0}^{t=t_f} \dot{y}\cdot sin(\alpha) dt =\int_{t=0}^{t=t_f} sin(\alpha) (\int_{t=0}^{t=t} \ddot{y} dt)dt \]
 
-    So we need to apply a torque, we will be able to do so until $\dot{\theta} = \dot{\theta}_{e}$ such that:
-    \begin{equation*}
-        \tau_{motor-flywheel}(\dot{\theta}_{e}) = \ddot{\theta}\cdot I_{flywheel}
-    \end{equation*}
+    \[\ddot{y}(\frac{2\cdot I_{wheel}+ m_{total} \cdot r^2_{wheel} }{r^2_{wheel}}) =  \frac{\tau_{motor-flywheel}}{r_{wheel}} - m_{total} \cdot g \cdot sin(\alpha)\]
 
-    If we start with a initial conditions $\dot{y}=\dot{y}_0$ and $\dot{\theta} =\dot{\theta}_0$, we will be able to keep
-    the speed during:
-    \begin{equation*}
-        \Delta T = \frac{\dot{\theta}_{e}-\dot{\theta}_0}{\ddot{\theta}}        
-    \end{equation*}
+    \[\ddot{y}=
+    \frac{r_{wheel}\cdot\tau_{motor-flywheel}}{2\cdot I_{wheel}+ m_{total} \cdot r^2_{wheel}}
+    - \frac{m_{total} \cdot g \cdot sin(\alpha)\cdot r^2_{wheel}}{2\cdot I_{wheel}+ m_{total} \cdot r^2_{wheel}}\]
 
-    So the maximum height we can get is:
-    \[h_{max}= \dot{y}_0\cdot sin(\alpha) \cdot \Delta T = \dot{y}_0\cdot sin(\alpha) \cdot \frac{\dot{\theta}_{e}-\dot{\theta}_0}{\ddot{\theta}} =
-    \dot{y}_0\cdot sin(\alpha) \cdot \frac{\dot{\theta}_{e}-\dot{\theta}_0}{\frac{sin(\alpha)\cdot m_{total}\cdot g\cdot r_{wheel}}{I_{flywheel}}}
+    \[\ddot{y}=A\cdot \tau_{motor-flywheel} + B\]
+
+    \[\int_{t=0}^{t=t} \ddot{y} dt = \int_{t=0}^{t=t} (A\cdot \tau_{motor-flywheel} + B) dt\]
+
+
+    \[=A\int_{t=0}^{t=t} \tau_{motor-flywheel} dt + B t \]
+
+    \[\tau_{motor}(\dot{\theta}) \approx \tau_{max}- \dot{\theta}\cdot\frac{\tau_{max}}{\dot{\theta}_{max}}\]
+    \[\dot{\theta}=t\cdot\ddot{\theta}\]
+    \[\int_{t=0}^{t=t} \tau_{motor-flywheel} dt = 
+    \int_{\dot{\theta}=0}^{\dot{\theta}=t\cdot\ddot{\theta}} \tau_{motor-flywheel}(\dot{\theta}) \frac{d\dot{\theta}}{\ddot{\theta}} \]
+
+    \[\int_{\dot{\theta}=0}^{\dot{\theta}=t\cdot\ddot{\theta}} (\tau_{max}- \dot{\theta}\cdot\frac{\tau_{max}}{\dot{\theta}_{max}}) \frac{d\dot{\theta}}{\ddot{\theta}} =
+    \frac{\tau_{max} \cdot t}{\ddot{\theta}} - \frac{1}{2}\cdot(t\cdot\ddot{\theta})^2 \frac{\tau_{max}}{\dot{\theta}_{max}\ddot{\theta}} 
     \]
 
-    \begin{equation}
-        \boxed{h_{max}= \dot{y}_0\cdot  (\dot{\theta}_e- \dot{\theta}_0) \cdot  \frac{I_{flywheel}(r_{max})}{m_{total} \cdot  g \cdot  r_{wheel}}}
-        \label{Maximum height}
-    \end{equation}
+    \[ \frac{\tau_{max} \cdot t}{\ddot{\theta}} - \frac{1}{2}\cdot t^2\cdot \frac{\ddot{\theta} \cdot \tau_{max}}{\dot{\theta}_{max}}\]
+
+    \[t_f = \frac{\dot{\theta}_{max}}{\ddot{\theta}}\]
+
+    \[h=sin(\alpha)\int_{t=0}^{t=t_f} (A \cdot(\frac{\tau_{max} \cdot t}{\ddot{\theta}} - \frac{1}{2}\cdot t^2\cdot \frac{\ddot{\theta} \cdot \tau_{max}}{\dot{\theta}_{max}} ) +B t)dt \]
+
+    \[h=sin(\alpha)(\frac{1}{2}\frac{A\cdot\tau_{max}\dot{\theta}^2_{max}}{\ddot{\theta}^3} - \frac{1}{6}\frac{A\tau_{max} \dot{\theta}^2_{max}}{\ddot{\theta}^2} + \frac{1}{2}\frac{B \dot{\theta}^2_{max}}{\ddot{\theta}^2})\]
 
     \item Pendulum: $\dot{\theta} = 0$, and $r$ is fixed to $r = r_{min}$
     \[sin(\alpha) = \frac{min(\tau_{motor-flywheel},m_{cylinder} \cdot  g \cdot  (r_{max} - r_{min}) \cdot  \sin{\theta})}{m_{total} \cdot  g \cdot  r_{wheel}} \]
