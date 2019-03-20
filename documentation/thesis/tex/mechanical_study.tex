@@ -357,6 +357,67 @@ We are going to distinguish the same two cases as in the previous section:
 
     \[h=sin(\alpha)(\frac{1}{2}\frac{A\cdot\tau_{max}\dot{\theta}^2_{max}}{\ddot{\theta}^3} - \frac{1}{6}\frac{A\tau_{max} \dot{\theta}^2_{max}}{\ddot{\theta}^2} + \frac{1}{2}\frac{B \dot{\theta}^2_{max}}{\ddot{\theta}^2})\]
 
+
+    \begin{equation*}
+        W=\int_{t_1}^{t_2}2\tau_{motor-wheel}(t)\cdot \omega(t) \cdot dt       
+    \end{equation*}
+
+    \begin{equation*}
+        W=\int_{t_1}^{t_2}\tau_{flywheel-wheel}(t)\cdot \omega(t) \cdot dt       
+    \end{equation*}
+
+
+    \begin{equation*}
+        W=\int_{t_1}^{t_2}(A\cdot \dot{\omega}(t)+B)\cdot \omega(t) \cdot dt       
+    \end{equation*}
+
+    \begin{equation*}
+        W=[\frac{A}{2}\cdot \omega(t)^2)]_{t_1}^{t_2}+\int_{t_1}^{t_2} B\cdot \omega(t) \cdot dt       
+    \end{equation*}
+
+
+    \begin{equation*}
+        \int_{t_1}^{t_2} \omega(t) \cdot dt  = \int_{t_1}^{t_2} \int_{t_1}^{t} \dot{\omega}(t) \cdot dt \cdot dt     
+    \end{equation*}
+
+
+    \begin{equation*}
+        \int_{t_1}^{t} C\cdot\tau_{flywheel-wheel}(t) + D\cdot dt = [D]_{t_1}^{t} + C\cdot\int_{t_1}^{t}\tau_{flywheel-wheel}(t) dt
+    \end{equation*}
+
+
+    \begin{equation*}
+        \int_{t_1}^{t}\tau_{flywheel-wheel}(t) dt = 
+        \int_{t_1}^{t}\ddot{\theta}(t)\cdot I_f dt = 
+        I_f \cdot \int_{t_1}^{t}\ddot{\theta}(t) dt = 
+    \end{equation*}
+
+
+    \begin{equation*}
+        \int_{t_1}^{t}\ddot{\theta}(t) dt = 
+        [\dot{\theta}(t)]_{t_1}^{t} 
+    \end{equation*}
+
+
+    \begin{equation*}
+        \int_{t_1}^{t_2} \omega(t) \cdot dt  = \int_{t_1}^{t_2} [D]_{t_1}^{t} + C\cdot I_f \cdot[\dot{\theta}(t)]_{t_1}^t dt     
+    \end{equation*}
+
+
+    \begin{equation*}
+        \int_{t_1}^{t_2} D\cdot t - D \cdot t_1+ C\cdot I_f \cdot (\dot{\theta}(t)-\dot{\theta}(t_1)) dt     
+    \end{equation*}
+
+    \begin{equation*}
+        \int_{t_1}^{t_2} \dot{\theta}(t) dt = [\theta(t)]_{t_1}^{t_2}
+    \end{equation*}
+
+
+
+    \begin{equation*}
+        [\frac{D\cdot t^2}{2}]_{t_1}^{t_2} - [D \cdot t_1 \cdot t]_{t_1}^{t_2}+ C\cdot I_f \cdot (\dot{\theta}(t)-\dot{\theta}(t_1)) dt     
+    \end{equation*}
+
     \item Pendulum: $\dot{\theta} = 0$, and $r$ is fixed to $r = r_{min}$
     \[sin(\alpha) = \frac{min(\tau_{motor-flywheel},m_{cylinder} \cdot  g \cdot  (r_{max} - r_{min}) \cdot  \sin{\theta})}{m_{total} \cdot  g \cdot  r_{wheel}} \]
     \begin{equation}\label{Maximum angle using pendulum system}
