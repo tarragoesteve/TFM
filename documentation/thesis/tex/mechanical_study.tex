@@ -324,58 +324,48 @@ We are going to distinguish the same two cases as in the previous section:
     This angle doesn't give us a lot of information because it may not be fulfilled in a 
     permanent state. That's why in addition we would like to compute the maximum height
     our robot can achieve start from rest position.
+    \item Pendulum: $\dot{\theta} = 0$, and $r$ is fixed to $r = r_{min}$
+    \[sin(\alpha) = \frac{min(\tau_{motor-flywheel},m_{cylinder} \cdot  g \cdot  (r_{max} - r_{min}) \cdot  \sin{\theta})}{m_{total} \cdot  g \cdot  r_{wheel}} \]
+    \begin{equation}\label{Maximum angle using pendulum system}
+        \boxed{sin(\alpha_{max}) = \frac{min(\tau_{motor-flywheel},m_{cylinder} \cdot  g \cdot  (r_{max} - r_{min}))}{m_{total} \cdot  g \cdot  r_{wheel}}}
+    \end{equation}
+    Note that the $sin(\alpha_{max})$ will not be more than 1.
+\end{enumerate}
 
-    \[h=\int_{t=0}^{t=t_f} \dot{y}\cdot sin(\alpha) dt =\int_{t=0}^{t=t_f} sin(\alpha) (\int_{t=0}^{t=t} \ddot{y} dt)dt \]
-
-    \[\ddot{y}(\frac{2\cdot I_{wheel}+ m_{total} \cdot r^2_{wheel} }{r^2_{wheel}}) =  \frac{\tau_{motor-flywheel}}{r_{wheel}} - m_{total} \cdot g \cdot sin(\alpha)\]
-
-    \[\ddot{y}=
-    \frac{r_{wheel}\cdot\tau_{motor-flywheel}}{2\cdot I_{wheel}+ m_{total} \cdot r^2_{wheel}}
-    - \frac{m_{total} \cdot g \cdot sin(\alpha)\cdot r^2_{wheel}}{2\cdot I_{wheel}+ m_{total} \cdot r^2_{wheel}}\]
-
-    \[\ddot{y}=A\cdot \tau_{motor-flywheel} + B\]
-
-    \[\int_{t=0}^{t=t} \ddot{y} dt = \int_{t=0}^{t=t} (A\cdot \tau_{motor-flywheel} + B) dt\]
-
-
-    \[=A\int_{t=0}^{t=t} \tau_{motor-flywheel} dt + B t \]
-
-    From now on we will assume that we deliver the maximum torque to the flywheel.
-
-
+\subsubsection{Flywheel maximum height}
+    \paragraph{Computing $\theta(t)$:} Before we compute the height the robot can obtain using the flywheel system
+    we need to define how the flywheel will be turning.
+    We will assume that $\tau_{motor-flywheel}$ is always equal to the maximum torque the motor may apply.
     \[\tau_{motor}(\dot{\theta}) \approx \tau_{max}- \dot{\theta}\cdot\frac{\tau_{max}}{\dot{\theta}_{max}}\]
+    Using equation \ref{flywheel equation}:
     \[\dot{\theta}(t)=\int \ddot{\theta}(t) dt
     = \frac{1}{I_f} \int \tau_{max}- \dot{\theta}(t)\cdot\frac{\tau_{max}}{\dot{\theta}_{max}} dt \]
 
     \[\dot{\theta}(t) = \frac{\tau_{max}\cdot t}{I_f} - \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}\int \dot{\theta}(t) dt \]
     \[\dot{\theta}(t) + \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}\cdot \theta(t) = \frac{\tau_{max}\cdot t}{I_f} \]
     Which is a non-homogeneous first order differential equation with solution:
+    \begin{equation}
+        \label{eq: non-homogeneous solution}
+        \theta(t) = \frac{\int(\mu(t) \cdot \frac{\tau_{max}\cdot t}{I_f})dt}{\mu(t)}
+    \end{equation}
+    Being $\mu(t)$:    
     \begin{equation*}
         \mu(t) = e^{\int \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}} dt} = e^{t\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}+C_1}
     \end{equation*}
-
-    \begin{equation*}
-        \theta(t) = \frac{\int(\mu(t) \cdot \frac{\tau_{max}\cdot t}{I_f})dt}{\mu(t)}
-    \end{equation*}
-
-    Integrating by parts
+    Integrating by parts to get the numerator:
     \begin{equation*}
         \int(\mu(t) \cdot \frac{\tau_{max}\cdot t}{I_f})dt = \frac{\tau_{max}\cdot t}{I_f}\cdot\int\mu(t) - \int (\int \mu(t) dt) \cdot \frac{\tau_{max}}{I_f}dt
     \end{equation*}
-
     \begin{equation*}
         \int \mu(t) dt = \frac{I_f \cdot \dot{\theta}_{max}}{\tau_{max}} \cdot (e^{t\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}+C_1}+C_2)
     \end{equation*}
-
     \begin{equation*}
         \dot{\theta}_{max} \cdot t\cdot (e^{t\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}+C_1}+C_2) - \frac{I_f \cdot \dot{\theta}_{max}^2}{\tau_{max}} \cdot (e^{t\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}+C_1}+C_2) +C_3
     \end{equation*}
-
-
     \begin{equation*}
         (\dot{\theta}_{max} \cdot t- \frac{I_f \cdot \dot{\theta}_{max}^2}{\tau_{max}})\cdot (e^{t\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}+C_1}+C_2)+C_3 
     \end{equation*}
-
+    Substituting on equation \ref{eq: non-homogeneous solution}:
     \begin{equation*}
         \theta(t) = \frac{(\dot{\theta}_{max} \cdot t- \frac{I_f \cdot \dot{\theta}_{max}^2}{\tau_{max}})\cdot (e^{t\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}+C_1}+C_2)+C_3 }
         {e^{t\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}+C_1}}
@@ -397,46 +387,105 @@ Renaming the constants we get:
         + \frac{C_2 }
         {e^{t\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}}}
     \end{equation*}
+    Applying the initial position condition:
     \begin{equation*}
         \theta(0) = -\frac{I_f \cdot \dot{\theta}_{max}^2}{\tau_{max}}\cdot C_1 
         - \frac{I_f \cdot \dot{\theta}_{max}^2}{\tau_{max}}
         + C_2 = 0
     \end{equation*}
-
     \begin{equation*}
-        \dot{\theta(t)} = \frac{\dot{\theta}_{max}\cdot C_1 }
+        \rightarrow
+        C_2 = 
+        \frac{I_f \cdot \dot{\theta}_{max}^2}{\tau_{max}}\cdot (C_1+1)
+    \end{equation*}
+    Applying the initial speed condition:
+    \begin{equation*}
+        \dot{\theta}(t) = \frac{\dot{\theta}_{max}\cdot C_1 }
         {e^{t\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}}} 
         -\frac{(\dot{\theta}_{max} \cdot t- \frac{I_f \cdot \dot{\theta}_{max}^2}{\tau_{max}})\cdot C_1 \cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}} }
         {e^{t\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}}} 
         + \dot{\theta}_{max}
         - \frac{C_2\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}} }
         {e^{t\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}}}
-    \end{equation*}
-
-    
+    \end{equation*}    
     \begin{equation*}
-        \dot{\theta(0)} = \dot{\theta}_{max}\cdot C_1
-        +\frac{I_f \cdot \dot{\theta}_{max}^2}{\tau_{max}}\cdot C_1 \cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}
+        \dot{\theta}(0) = 2\cdot \dot{\theta}_{max}\cdot C_1
         + \dot{\theta}_{max}
         - C_2\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}
+        = 0
     \end{equation*}
+    \begin{equation*}
+        \rightarrow 
+        C_2
+        =
+        \frac{\dot{\theta}^2_{max}\cdot I_f}{\tau_{max}} \cdot (2\cdot C_1
+        + 1)
+    \end{equation*}
+    Solving the system of equations we get:
+    \begin{equation*}
+        C_1
+        =0
+    \end{equation*}
+    \begin{equation*}
+        C_2
+        =
+        \frac{\dot{\theta}^2_{max}\cdot I_f}{\tau_{max}}
+    \end{equation*}
+    So our final speed and position functions will be:
+    \begin{equation}
+        \label{eq: theta(t)}
+        \theta(t) =  
+        \dot{\theta}_{max} \cdot t+
+        \frac{\dot{\theta}^2_{max}\cdot I_f}{\tau_{max}} \cdot (\frac{1}
+        {e^{t\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}}}-1)
+    \end{equation}
+    \begin{equation}
+        \label{eq: dottheta(t)}
+        \dot{\theta}(t) = \dot{\theta}_{max}
+        - \frac{\dot{\theta}_{max}}
+        {e^{t\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}}}
+    \end{equation}
+    \paragraph{Height integral}
+    \[h=\int_{t=0}^{t=t_f} \dot{y}\cdot sin(\alpha) dt =\int_{t=0}^{t=t_f} sin(\alpha) (\int_{t=0}^{t=t} \ddot{y} dt)dt \]
+    Where $t_f$ is the time when the robot gets to the maximum height.\\    
+    From equation \ref{eq of acceleration} we get:
+    \[\ddot{y}(\frac{2\cdot I_{wheel}+ m_{total} \cdot r^2_{wheel} }{r^2_{wheel}}) =  \frac{\tau_{motor-flywheel}}{r_{wheel}} - m_{total} \cdot g \cdot sin(\alpha)\]
+    \[\ddot{y}=
+    \frac{r_{wheel}\cdot\tau_{motor-flywheel}}{2\cdot I_{wheel}+ m_{total} \cdot r^2_{wheel}}
+    - \frac{m_{total} \cdot g \cdot sin(\alpha)\cdot r^2_{wheel}}{2\cdot I_{wheel}+ m_{total} \cdot r^2_{wheel}}\]    \[\ddot{y}=A\cdot \tau_{motor-flywheel} + B\]
+    \[\dot{y} =\int_{t=0}^{t=t} \ddot{y} dt = \int_{t=0}^{t=t} (A\cdot \tau_{motor-flywheel} + B) dt\]
+    \[=A\int_{t=0}^{t=t} \tau_{motor-flywheel} dt + B t \]
+  
+Lets check now $\tau$ using equation \ref{flywheel equation}:
+    \[\int_{t=0}^{t=t} \tau_{motor-flywheel}(t) dt = 
+    I_f\int_{t=0}^{t=t}\ddot{\theta}(t) dt= 
+    I_f\cdot \dot{\theta}(t)\]
+    \[\dot{y} =A\cdot I_f\cdot \dot{\theta}(t)+B\cdot t\]
+    When $\dot{y}=0$ we get to the maximum height.
+    \[0 =A\cdot I_f\cdot (\dot{\theta}_{max}
+    - \frac{\dot{\theta}_{max}}
+    {e^{t\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}}})+B\cdot t\]
+
+
+    \[h=sin(\alpha)\cdot \int_{t=0}^{t=t_f} \dot{y} dt =sin(\alpha)\cdot (A\cdot I_f\cdot \theta(t)+\frac{B}{2}\cdot t^2)\]
+
+    Using equation \ref{eq: theta(t)}:
+\[0 =A\cdot(t_f\cdot \tau_{max} - (\dot{\theta}_{max} \cdot t_f+
+\frac{\dot{\theta}^2_{max}\cdot I_f}{\tau_{max}} \cdot (\frac{1}
+{e^{t_f\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}}}-1))\cdot\frac{\tau_{max}}{\dot{\theta}_{max}})+B\cdot t_f\]
+
+\[0 =- A\cdot\dot{\theta}_{max}\cdot I_f\cdot 
+(\frac{1}{e^{t_f\cdot \frac{\tau_{max}}{I_f \cdot \dot{\theta}_{max}}}}-1)
++B\cdot t_f\]
+
+\[B\cdot t_f + F \cdot \frac{1}{e^{t_f\cdot G}} -F =0\]
+\[x = (W_n(-(e^(-(F G)/B) F G)/B))/G + F/B\]
+ and G!=0 and B!=0 and F G!=0 and n element Z
+
+
+
+    \dots
     
-    
-    \[\int_{t=0}^{t=t} \tau_{motor-flywheel} dt = 
-    \int_{\dot{\theta}=0}^{\dot{\theta}=\dot{\theta}_{max}} \tau_{motor-flywheel}(\dot{\theta}) \frac{d\dot{\theta}}{\ddot{\theta}} \]
-
-    \[\int_{\dot{\theta}=0}^{\dot{\theta}=t\cdot\ddot{\theta}} (\tau_{max}- \dot{\theta}\cdot\frac{\tau_{max}}{\dot{\theta}_{max}}) \frac{d\dot{\theta}}{\ddot{\theta}} =
-    \frac{\tau_{max} \cdot t}{\ddot{\theta}} - \frac{1}{2}\cdot(t\cdot\ddot{\theta})^2 \frac{\tau_{max}}{\dot{\theta}_{max}\ddot{\theta}} 
-    \]
-
-    \[ \frac{\tau_{max} \cdot t}{\ddot{\theta}} - \frac{1}{2}\cdot t^2\cdot \frac{\ddot{\theta} \cdot \tau_{max}}{\dot{\theta}_{max}}\]
-
-    \[t_f = \frac{\dot{\theta}_{max}}{\ddot{\theta}}\]
-
-    \[h=sin(\alpha)\int_{t=0}^{t=t_f} (A \cdot(\frac{\tau_{max} \cdot t}{\ddot{\theta}} - \frac{1}{2}\cdot t^2\cdot \frac{\ddot{\theta} \cdot \tau_{max}}{\dot{\theta}_{max}} ) +B t)dt \]
-
-    \[h=sin(\alpha)(\frac{1}{2}\frac{A\cdot\tau_{max}\dot{\theta}^2_{max}}{\ddot{\theta}^3} - \frac{1}{6}\frac{A\tau_{max} \dot{\theta}^2_{max}}{\ddot{\theta}^2} + \frac{1}{2}\frac{B \dot{\theta}^2_{max}}{\ddot{\theta}^2})\]
-
     2n way
 
     \begin{equation*}
@@ -580,10 +629,3 @@ Renaming the constants we get:
     \end{equation*}
 
 
-    \item Pendulum: $\dot{\theta} = 0$, and $r$ is fixed to $r = r_{min}$
-    \[sin(\alpha) = \frac{min(\tau_{motor-flywheel},m_{cylinder} \cdot  g \cdot  (r_{max} - r_{min}) \cdot  \sin{\theta})}{m_{total} \cdot  g \cdot  r_{wheel}} \]
-    \begin{equation}\label{Maximum angle using pendulum system}
-        \boxed{sin(\alpha_{max}) = \frac{min(\tau_{motor-flywheel},m_{cylinder} \cdot  g \cdot  (r_{max} - r_{min}))}{m_{total} \cdot  g \cdot  r_{wheel}}}
-    \end{equation}
-    Note that the $sin(\alpha_{max})$ will not be more than 1.
-\end{enumerate}
