@@ -34,7 +34,7 @@ def system_function(robot):
     return lambda t,x: aux_function(t,x)
 
 my_robot = Robot()
-my_robot.set_r_flywheel_r_wheel_w(.08,.09,.07)
+my_robot.set_r_flywheel_r_wheel_w_N(0.09,0.1,0.55,3)
 
 system = system_function(my_robot)
 
@@ -60,7 +60,7 @@ def next_initial(final_condition):
         final_condition[1] = 0
     return [min(max(final_condition[0],my_robot.r_flywheel/3.0),my_robot.r_flywheel*2.0/3.0), - bounce_percentage *final_condition[1],final_condition[2],final_condition[3]]
 
-initial_contition = [my_robot.r_flywheel*2/3.0,0.0,math.pi,4.2*math.pi]
+initial_contition = [my_robot.r_flywheel*1/3.0,0.0,0,5*math.pi]
 total_t= 6
 accumulated_t=0.0
 results = [initial_contition]

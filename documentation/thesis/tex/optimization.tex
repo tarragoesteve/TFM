@@ -47,21 +47,18 @@ it give the robot the capacity to deliver force in a permanent state.
 
 We will also maximize the square of the max speed the robot can achieve
 in flywheel mode (equation \ref{Maximum speed flywheel}) because it is
-proportional to the energy the robot can deliver at a certain moment.
+proportional to the energy the robot can deliver using the flywheel at a certain moment.
 
 \begin{equation}
 	cost(r_{flywheel},r_{wheel},w,N) = - sin(\alpha_{max})_{pendulum} -\dot{y}^2_{max-flywheel}
 	\label{eq: cost}
 \end{equation}
-
 \begin{equation*}
 	m_{cylinder} = \rho * w * \pi * (\frac{r_{flywheel}}{3})^2
 \end{equation*}
-
 \begin{equation*}
 	sin(\alpha_{max})_{pendulum} = \frac{m_{cylinder} \cdot  (r_{max} - r_{min})}{m_{total} \cdot r_{wheel}} = \frac{m_{cylinder} \cdot  (\frac{r_{flywheel}}{3})}{(m_{rest} + N \cdot m_{cylinder})\cdot r_{wheel}} 	
 \end{equation*}
-
 \begin{equation*}
 	\dot{y}_{max} = r_{wheel} \cdot  R \cdot  \dot{\theta}_{max} =r_{wheel} \cdot  \frac{ N \cdot  m_{cylinder} \cdot  (\frac{2\cdot r_{flywheel}}{3})^2}
     {r_{wheel}^2\cdot (m_{rest} + N \cdot m_{cylinder}) +  2\cdot I_{wheel}} \cdot  \dot{\theta}_{max}
@@ -69,8 +66,8 @@ proportional to the energy the robot can deliver at a certain moment.
 
 \subsection{Results}
 Our procedure has been making a grid with the four parameters of the robot 
-design: $w$ (width of the cylinders),$N$ (number of cylinders), $r_{wheel}$ and $r_{flywheel}$.
-We have fixed $r_{flywheel}$, iterated over the other two variables and keeped the best parameters for our cost function.
+design: $w$ (width of the cylinders), $N$(number of cylinders), $r_{wheel}$ and $r_{flywheel}$.
+We have fixed $r_{flywheel}$, iterated over the other three variables and keeped the best parameters for our cost function.
 
 
 \begin{figure}[H]
@@ -115,12 +112,12 @@ We have fixed $r_{flywheel}$, iterated over the other two variables and keeped t
 	\label{fig:Mass plot}
 \end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{img/optimization/height.png}
-	\caption{Plot of the equation \ref{Maximum height} for each configuration.}
-	\label{fig:Mass plot}
-\end{figure}
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=10cm]{img/optimization/height.png}
+%	\caption{Plot of the equation \ref{Maximum height} for each configuration.}
+%	\label{fig:Mass plot}
+%\end{figure}
 
 \begin{figure}[H]
 	\centering
@@ -131,11 +128,11 @@ We have fixed $r_{flywheel}$, iterated over the other two variables and keeped t
 
 Our selected parameters are:
 \begin{center}
-	\begin{tabular}{ |c|c|c| } 
+	\begin{tabular}{ |c|c|c|c| } 
 	 \hline
-	 $r_{flywheel}$ & $r_{wheel}$ & $w$ \\
+	 $r_{flywheel}$ & $r_{wheel}$ & $w$ & $N$\\
 	 \hline 
-	 10cm & 11cm & 5cm \\ 
+	 10cm & 11cm & 5,5cm & 2 \\ 
 	 \hline
 	\end{tabular}
 	\end{center}
