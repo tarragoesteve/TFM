@@ -35,29 +35,42 @@ class Robot:
   C_D = 1
 
   
-  motor_max_speed = 19.0
+  motor_max_speed = 176*2*math.pi/60.0
   motor_max_torque = 5 * 9.8 / 100.0
   
   def __init__(self):
     pass
     
+  def r_cylinder(self):
+    return 0.28 * self.r_flywheel
+
+  def r_max(self):
+    return self.r_flywheel - 0.28 * self.r_flywheel
+
+  def r_min(self):
+    return 0.28 * self.r_flywheel + 0.015
+  
+
   def m_cylinder(self):
-    return  self.w * (self.r_flywheel/3.0)**2 * self.rho_flywheel
+    return  self.w * (self.r_cylinder())**2 * self.rho_flywheel * math.pi
   
   def m_flywheel(self):
     return self.N * self.m_cylinder()
   
   def I_flywheel(self, radius=0):
     if radius == 0:
-      return self.N * self.m_cylinder() * (self.r_flywheel*2.0/3.0)**2
+      return self.N * self.m_cylinder() * (self.r_max())**2
     else:
-      return (self.N-1) * self.m_cylinder() * (self.r_flywheel*2.0/3.0)**2 + self.m_cylinder() * (radius)**2
+      return (self.N-1) * self.m_cylinder() * (self.r_max())**2 + self.m_cylinder() * (radius)**2
     
+  def I_wheel(self):
+      return self.m_wheel * (self.r_wheel)**2
+  
   def m_total(self):
     return self.m_rest + self.m_flywheel() 
   
   def get_R(self):
-    return self.I_flywheel()/((self.m_total()+self.m_wheel)*self.r_wheel**2)
+    return self.I_flywheel()/(self.m_total()*self.r_wheel**2+2*self.I_wheel())
 
   def get_L(self):
     return self.L_rest + self.w
@@ -90,7 +103,7 @@ class Robot:
   def max_speed_horizontal_pendulum(self):
     if(not self.valid_configuration):
       return 0
-    return min(math.sqrt((2*self.m_cylinder() * self.g *(self.r_flywheel/3) )/(self.rho * self.C_D * self.A_drag* self.r_wheel)),self.motor_max_speed*self.r_wheel)
+    return min(math.sqrt((2*self.m_cylinder() * self.g *(self.r_max()-self.r_min()) )/(self.rho * self.C_D * self.A_drag* self.r_wheel)),self.motor_max_speed*self.r_wheel)
 
   def max_height_flywheel(self):
     if(not self.valid_configuration):
@@ -105,17 +118,12 @@ class Robot:
   def max_acceleration_horizontal_pendulum(self):
     if(not self.valid_configuration):
       return 0
-    return self.m_cylinder() * self.g * (self.r_flywheel/3)/(self.r_wheel *(self.m_total()+ self.m_wheel))
-
-  def max_acceleration_horizontal_pendulum(self):
-    if(not self.valid_configuration):
-      return 0
-    return self.m_cylinder() * self.g * (self.r_flywheel/3)/(self.r_wheel *(self.m_total()+ self.m_wheel))
+    return self.m_cylinder() * self.g * (self.r_max()-self.r_min())/(self.r_wheel *self.m_total()+ 2* self.I_wheel()/self.r_wheel)
 
   def max_sin_pendulum(self):
     if(not self.valid_configuration):
       return 0
-    return min(1,min(self.m_cylinder() * self.g * (self.r_flywheel/3) ,self.motor_max_torque)/(self.r_wheel *  self.m_total()*self.g))
+    return min(1,min(self.m_cylinder() * self.g * (self.r_max()-self.r_min()) ,self.motor_max_torque)/(self.r_wheel *  self.m_total()*self.g))
 
   def max_sin_flywheel(self):
     if(not self.valid_configuration):

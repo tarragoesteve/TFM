@@ -40,7 +40,7 @@ def cost_function(robot: Robot):
     return -robot.max_sin_pendulum() - robot.max_speed_horizontal_flywheel()*robot.max_speed_horizontal_flywheel()
   return 300.0
 
-resolution = 200
+resolution = 800
 r_flywheel_array=numpy.linspace(0.00,0.15,resolution)
 best_robots :[Robot] = []
 my_robot = Robot()
