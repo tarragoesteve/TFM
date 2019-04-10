@@ -21,7 +21,7 @@ class Robot:
   m_battery = .150#.15
   m_motor = .175
   m_wheel = .15
-  m_rest = 4 * m_battery + 3 * m_motor + 2 * m_wheel
+  m_rest = 4 * m_battery + 3 * m_motor + 2 * m_wheel +.25
 
   L_rest = 0.4
   r_external=0.5/2.0
@@ -45,7 +45,7 @@ class Robot:
     return 0.28 * self.r_flywheel
 
   def r_max(self):
-    return self.r_flywheel - 0.28 * self.r_flywheel
+    return self.r_flywheel - self.r_cylinder()
 
   def r_min(self):
     return 0.28 * self.r_flywheel + 0.015
@@ -84,6 +84,8 @@ class Robot:
     elif(self.r_external < math.sqrt(self.r_wheel**2+(self.get_L()/2)**2)):
       self.valid_configuration = False
     elif(self.m_total()>7):
+      self.valid_configuration = False
+    elif(self.r_max()<self.r_min()):
       self.valid_configuration = False
     else:
       self.valid_configuration = True

@@ -40,7 +40,7 @@ def cost_function(robot: Robot):
     return -robot.max_sin_pendulum() - robot.max_speed_horizontal_flywheel()*robot.max_speed_horizontal_flywheel()
   return 300.0
 
-resolution = 800
+resolution = 1500
 r_flywheel_array=numpy.linspace(0.00,0.15,resolution)
 best_robots :[Robot] = []
 my_robot = Robot()
@@ -78,11 +78,13 @@ plt.plot([robot.r_flywheel for robot in best_robots], [cost_function(robot) for 
 plt.legend(['cost'])
 
 plt.figure()
-plt.title('total mass vs flywheel radius')
+plt.title('mass vs flywheel radius')
 plt.xlabel('r flywheel [m]')
 plt.ylabel('mass [kg]')
 plt.plot([robot.r_flywheel for robot in best_robots], [robot.m_total() for robot in best_robots])
-plt.legend(['total mass'])
+plt.plot([robot.r_flywheel for robot in best_robots], [robot.m_cylinder() for robot in best_robots])
+plt.plot([robot.r_flywheel for robot in best_robots], [robot.m_flywheel() for robot in best_robots])
+plt.legend(['total mass','cylinder mass','flywheel mass'])
 
 plt.figure()
 plt.title('parameters vs flywheel radius')

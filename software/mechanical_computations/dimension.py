@@ -17,7 +17,7 @@ print('All units in S.I.:')
 #r_w = float(input('Enter wheel radius:'))
 #w = float(input('Enter cylinder width:'))
 
-my_robot.set_r_flywheel_r_wheel_w_N(.1,.12,.055,2)
+my_robot.set_r_flywheel_r_wheel_w_N(.08,.10,.05,2)
 my_robot.valid_configuration=True
 
 print('**Robot configuration**')
