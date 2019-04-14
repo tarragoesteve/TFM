@@ -17,11 +17,12 @@ print('All units in S.I.:')
 #r_w = float(input('Enter wheel radius:'))
 #w = float(input('Enter cylinder width:'))
 
-my_robot.set_r_flywheel_r_wheel_w_N(.08,.10,.05,2)
+my_robot.set_r_flywheel_r_wheel_w_N(.086,.10,.04,2)
 my_robot.valid_configuration=True
 
 print('**Robot configuration**')
 print('m_total:', my_robot.m_total())
+print('m_cylinder:', my_robot.m_cylinder())
 print('------Pendulum-------')
 print('max_sin_pendulum:',my_robot.max_sin_pendulum())
 print('max_speed_horizontal_pendulum:', my_robot.max_speed_horizontal_pendulum())
@@ -31,3 +32,36 @@ print('max_sin_flywheel:',my_robot.max_sin_flywheel())
 print('max_speed_horizontal_flywheel:',my_robot.max_speed_horizontal_flywheel())
 print('max_acceleration_horizontal_flywheel:', my_robot.max_acceleration_horizontal_flywheel())
 print('max_height_flywheel:', my_robot.max_height_flywheel())
+
+alpha = 0.01
+import matplotlib.pyplot as plt
+plt.figure()
+plt.title('omega(t) vs t')
+plt.xlabel('t [s]')
+plt.ylabel('omega [rad]')
+plt.plot(numpy.linspace(0.00,1), [my_robot.omega(t) for t in numpy.linspace(0.00,1)])
+plt.legend(['omega(t)'])
+
+plt.figure()
+plt.title('domega(t) vs t')
+plt.xlabel('t [s]')
+plt.ylabel('domega [rad/s]')
+plt.plot(numpy.linspace(0.00,1), [my_robot.dot_omega(t) for t in numpy.linspace(0.00,1)])
+plt.legend(['dot_omega(t)'])
+
+plt.figure()
+plt.title('dot_y(t) vs t')
+plt.xlabel('t [s]')
+plt.ylabel('dot_y [m/s]')
+plt.plot(numpy.linspace(0.00,1), [my_robot.dot_y(t,alpha) for t in numpy.linspace(0.00,1)])
+plt.legend(['dot_y(t)'])
+
+plt.figure()
+plt.title('height(t) vs t')
+plt.xlabel('t [s]')
+plt.ylabel('h [m]')
+plt.plot(numpy.linspace(0.00,1), [my_robot.height(t,alpha) for t in numpy.linspace(0.00,1)])
+plt.legend(['height(t)'])
+
+
+plt.show()

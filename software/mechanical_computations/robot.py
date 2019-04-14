@@ -131,3 +131,28 @@ class Robot:
     if(not self.valid_configuration):
       return 0
     return min(1,self.motor_max_torque /(self.r_wheel *self.m_total()* self.g))
+
+  ##height flywheel computations
+  def omega(self,t):
+    return self.motor_max_speed * t + (self.motor_max_speed**2 * self.I_flywheel()/self.motor_max_torque)*((math.e**(-t*self.motor_max_torque/(self.I_flywheel()*self.motor_max_speed)))-1)
+
+  def dot_omega(self,t):
+    return self.motor_max_speed - self.motor_max_speed * math.e**(-t*self.motor_max_torque/(self.I_flywheel()*self.motor_max_speed))
+
+  def A_height(self):
+    return (self.r_wheel/(2*self.I_flywheel()+self.m_total()*self.r_wheel**2))
+
+  def B_height(self, alpha):
+    return -(self.m_total()*self.g*math.sin(alpha)*self.r_wheel**2/(2*self.I_wheel()+self.m_total()*self.r_wheel**2))
+  
+  def dot_y(self,t,alpha):
+    return self.A_height()*self.I_flywheel()*self.dot_omega(t)+self.B_height(alpha)*t
+
+  def height(self,t,alpha):
+    return math.sin(alpha)*(self.A_height()*self.I_flywheel()*self.omega(t)+t**2 * self.B_height(alpha)/2)
+
+  def max_h(self,alpha):    
+    return 1
+
+  def max_torque(self,dot_omega):
+    return self.motor_max_torque - (dot_omega/self.motor_max_speed)*self.motor_max_torque
