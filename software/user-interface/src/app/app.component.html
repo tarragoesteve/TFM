@@ -1,25 +1,5 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Control Panel
-  </h1>
-</div>
-<mat-slider vertical min="-1" max="1" step="0.1" value="0" [(ngModel)]="left_value" (change)='onChange($event.value,"left_value")'> Left wheel</mat-slider>
-<mat-slider vertical min="-1" max="1" step="0.1" value="0" [(ngModel)]="right_value" (change)='onChange($event.value,"right_value")'> Right wheel</mat-slider>
+<app-wheel-controller [title]="'hello'"></app-wheel-controller>
+<app-wheel-controller [title]="'baby'"></app-wheel-controller>
+<app-wheel-controller [title]="'bye'"></app-wheel-controller>
 
-<input matInput type="number" placeholder="Value" [(ngModel)]="value">
-
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
-
-<router-outlet></router-outlet>
