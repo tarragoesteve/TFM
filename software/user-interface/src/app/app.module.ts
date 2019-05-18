@@ -1,19 +1,24 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WheelControllerComponent } from './wheel-controller/wheel-controller.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { MatGridListModule } from '@angular/material';
+import { WheelRotateComponent } from './wheel-rotate/wheel-rotate.component';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
     AppComponent,
-    WheelControllerComponent
+    WheelControllerComponent,
+    WheelRotateComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    MatGridListModule,
+    ChartsModule,
     NgCircleProgressModule.forRoot({
       // set defaults here
       radius: 100,

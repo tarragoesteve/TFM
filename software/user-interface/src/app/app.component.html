@@ -1,5 +1,22 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<app-wheel-controller [title]="'hello'"></app-wheel-controller>
-<app-wheel-controller [title]="'baby'"></app-wheel-controller>
-<app-wheel-controller [title]="'bye'"></app-wheel-controller>
+<mat-grid-list cols="3" rowHeight="3:1">
+    <mat-grid-tile>
+        <app-wheel-controller [title]="'hello'"></app-wheel-controller>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <app-wheel-controller [title]="'baby'"></app-wheel-controller>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <app-wheel-controller [title]="'bye'"></app-wheel-controller>
+    </mat-grid-tile>
+    <mat-grid-tile>
+            <app-wheel-rotate></app-wheel-rotate>
+    </mat-grid-tile>
 
+    <mat-grid-tile>
+            <app-wheel-rotate></app-wheel-rotate>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+            <app-wheel-rotate></app-wheel-rotate>
+    </mat-grid-tile>
+</mat-grid-list>
