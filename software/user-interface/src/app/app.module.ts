@@ -8,6 +8,7 @@ import { MatGridListModule } from '@angular/material';
 import { WheelRotateComponent } from './wheel-rotate/wheel-rotate.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { AppLogicService } from "./app-logic.service";
 
 @NgModule({
   declarations: [
@@ -31,7 +32,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
       animationDuration: 300,
     })
   ],
-  providers: [],
+  providers: [AppLogicService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

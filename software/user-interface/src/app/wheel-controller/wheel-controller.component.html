@@ -3,12 +3,12 @@
 </p>
 <!-- You can now use it in app.component.html -->
 <circle-progress
-  [percent]="percent"
+  [percent]="getPercentage()"
   [radius]="100"
   [outerStrokeWidth]="16"
   [outerStrokeColor]="color"
   [showInnerStroke] ="false"
-  [clockwise] ="true"
-  [animation]="true"
+  [clockwise] ="clockwise()"
+  [animation]="false"
   [animationDuration]="200"
 ></circle-progress>

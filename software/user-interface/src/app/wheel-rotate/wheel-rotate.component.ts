@@ -6,7 +6,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
   styleUrls: ['./wheel-rotate.component.css']
 })
 export class WheelRotateComponent implements OnInit {
-  view: any[] = [700, 400];
+  view: any[] = undefined;
 
   // options
   showXAxis = true;
