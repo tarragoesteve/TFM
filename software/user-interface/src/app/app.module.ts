@@ -6,7 +6,8 @@ import { WheelControllerComponent } from './wheel-controller/wheel-controller.co
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { MatGridListModule } from '@angular/material';
 import { WheelRotateComponent } from './wheel-rotate/wheel-rotate.component';
-import { ChartsModule } from 'ng2-charts';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ChartsModule } from 'ng2-charts';
     BrowserModule,
     AppRoutingModule,
     MatGridListModule,
-    ChartsModule,
+    NgxChartsModule,
+    BrowserAnimationsModule,
     NgCircleProgressModule.forRoot({
       // set defaults here
       radius: 100,
