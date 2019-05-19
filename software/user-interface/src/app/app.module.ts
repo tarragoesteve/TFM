@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { WheelControllerComponent } from './wheel-controller/wheel-controller.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { MatGridListModule } from '@angular/material';
-import { WheelRotateComponent } from './wheel-rotate/wheel-rotate.component';
+import { WheelDataComponent } from './wheel-data/wheel-data.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { AppLogicService } from "./app-logic.service";
@@ -14,7 +14,7 @@ import { AppLogicService } from "./app-logic.service";
   declarations: [
     AppComponent,
     WheelControllerComponent,
-    WheelRotateComponent
+    WheelDataComponent
   ],
   imports: [
     BrowserModule,

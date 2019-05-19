@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WheelRotateComponent } from './wheel-rotate.component';
+import { WheelDataComponent } from './wheel-data.component';
 
 describe('WheelRotateComponent', () => {
-  let component: WheelRotateComponent;
-  let fixture: ComponentFixture<WheelRotateComponent>;
+  let component: WheelDataComponent;
+  let fixture: ComponentFixture<WheelDataComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WheelRotateComponent ]
+      declarations: [ WheelDataComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WheelRotateComponent);
+    fixture = TestBed.createComponent(WheelDataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

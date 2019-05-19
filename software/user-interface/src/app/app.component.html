@@ -9,13 +9,15 @@
         <app-wheel-controller [selected]="'right'"></app-wheel-controller>
     </mat-grid-tile>
     <mat-grid-tile>
-            <app-wheel-rotate></app-wheel-rotate>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-            <app-wheel-rotate></app-wheel-rotate>
+        <app-wheel-data [selected]="'left'">
+        </app-wheel-data>
     </mat-grid-tile>
     <mat-grid-tile>
-            <app-wheel-rotate></app-wheel-rotate>
+        <app-wheel-data [selected]="'platform'">
+        </app-wheel-data>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <app-wheel-data [selected]="'right'">
+        </app-wheel-data>
     </mat-grid-tile>
 </mat-grid-list>

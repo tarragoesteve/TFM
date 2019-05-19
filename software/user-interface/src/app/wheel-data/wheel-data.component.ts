@@ -1,12 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Selected_Motor } from '../app-logic.service';
 
 @Component({
-  selector: 'app-wheel-rotate',
-  templateUrl: './wheel-rotate.component.html',
-  styleUrls: ['./wheel-rotate.component.css']
+  selector: 'app-wheel-data',
+  templateUrl: './wheel-data.component.html',
+  styleUrls: ['./wheel-data.component.css']
 })
-export class WheelRotateComponent implements OnInit {
+export class WheelDataComponent implements OnInit {
+  @Input() selected: Selected_Motor;
+
   view: any[] = undefined;
+  
 
   // options
   showXAxis = true;

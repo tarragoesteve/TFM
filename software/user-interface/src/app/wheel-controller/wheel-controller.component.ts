@@ -21,11 +21,11 @@ export class WheelControllerComponent implements OnInit {
   getPercentage() {
     switch (this.selected) {
       case Selected_Motor.Left:
-        return Math.abs(100*this.appLogic.speed_left/this.appLogic.max_speed);
+        return Math.abs(100*this.appLogic.speed_left_ref/this.appLogic.max_speed);
       case Selected_Motor.Right:
-        return Math.abs(100*this.appLogic.speed_right/this.appLogic.max_speed);
+        return Math.abs(100*this.appLogic.speed_right_ref/this.appLogic.max_speed);
       case Selected_Motor.Platfrom:
-        return Math.abs(100*this.appLogic.position_platform/360);
+        return Math.abs(100*this.appLogic.position_platform_ref/360);
       default:
         break;
     }
@@ -34,11 +34,11 @@ export class WheelControllerComponent implements OnInit {
   clockwise(){
     switch (this.selected) {
       case Selected_Motor.Left:
-        return this.appLogic.speed_left>0;
+        return this.appLogic.speed_left_ref>0;
       case Selected_Motor.Right:
-        return this.appLogic.speed_right>0;
+        return this.appLogic.speed_right_ref>0;
       case Selected_Motor.Platfrom:
-        return this.appLogic.position_platform>0;
+        return this.appLogic.position_platform_ref>0;
       default:
         break;
     }
