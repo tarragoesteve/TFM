@@ -1,3 +1,14 @@
 <p>
-  wheel-controller works!
+  wheel-controller works! {{title}}
 </p>
+<!-- You can now use it in app.component.html -->
+<circle-progress
+  [percent]="getPercentage()"
+  [radius]="100"
+  [outerStrokeWidth]="16"
+  [outerStrokeColor]="color"
+  [showInnerStroke] ="false"
+  [clockwise] ="clockwise()"
+  [animation]="false"
+  [animationDuration]="200"
+></circle-progress>

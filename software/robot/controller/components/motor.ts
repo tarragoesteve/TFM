@@ -1,6 +1,6 @@
 import {Component} from "../component";
 import {PID} from "./utils/PID";
-
+import { Gpio } from "pigpio";
 
 export class Motor extends Component {
     position: number;
