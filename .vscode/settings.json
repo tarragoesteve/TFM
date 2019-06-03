@@ -3,5 +3,6 @@
         "Reductor",
         "mises"
     ],
-    "python.linting.pylintEnabled": false
+    "python.linting.pylintEnabled": false,
+    "cSpell.language": "en-US"
 }

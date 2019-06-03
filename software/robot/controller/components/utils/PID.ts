@@ -19,7 +19,7 @@ export class PID {
         this.previous_error_time = Date.now();
     }
 
-    output(error:number) 
+    output(error:number) :number
     {
         this.first_error = false;
         if(this.first_error){
@@ -32,7 +32,7 @@ export class PID {
             this.kd * (error-this.previous_error)/(Date.now()-this.previous_error_time)
             this.previous_error = error;
             this.previous_error_time = Date.now()
-            return this.output
+            return output
         }
     }
 }
