@@ -1,7 +1,6 @@
 import { Component } from "../component";
 import { PID } from "./utils/PID";
 import { Gpio } from "pigpio";
-import { AnyARecord } from "dns";
 
 export class Motor extends Component {
     position: number;
@@ -15,48 +14,50 @@ export class Motor extends Component {
 
     PID: PID;
 
-    motor_power_pin: Gpio;
-    encoder_A_pin: Gpio;
-    encoder_B_pin: Gpio;
-    h_bridge_pin: Gpio;
+    PWM: Gpio;
+    encoder_A: Gpio;
+    encoder_B: Gpio;
+    direction: Gpio;
+    enable: Gpio;
+
 
     motor_reduction = 35;
 
-    //tick is the number of microseconds since system boot and it should be accurate to a few microseconds.
-    last_tick: any;
+    //tick is the where we store the encoder flags
+    encoder_flags: any;
 
-    update_state(){
+    update_state() {
         /*Incremental encoders often output signals on two channels – typically termed “A” and “B” – 
         offset by 90 degrees (in quadrature). The direction of rotation can be determined by 
         which channel is leading. Generally, if channel A is leading, the direction is taken to be clockwise,
         and if channel B is leading, the direction is counterclockwise.*/
-        if(this.last_tick['A'] && this.last_tick['B']){
-            let delta_time = (this.last_tick['A'].tick >> 0) - (this.last_tick['B'].tick >> 0);
+        if (this.encoder_flags['A'] && this.encoder_flags['B']) {
+            let delta_time = (this.encoder_flags['A'].tick >> 0) - (this.encoder_flags['B'].tick >> 0);
             let clockwise: boolean;
-            if(delta_time>0){
+            if (delta_time > 0) {
                 //First B flag then A flag
-                clockwise = (this.last_tick['A'].level != this.last_tick['B'].level)
+                clockwise = (this.encoder_flags['A'].level != this.encoder_flags['B'].level)
             } else {
                 //First A flag then B flag
-                clockwise = (this.last_tick['A'].level == this.last_tick['B'].level)
+                clockwise = (this.encoder_flags['A'].level == this.encoder_flags['B'].level)
             }
-            let elapsed_seconds = Math.abs(delta_time)/10e6
-            let new_speed = (Math.PI/2)/this.motor_reduction/elapsed_seconds;
-            if(!clockwise) new_speed = -new_speed;
-            let mean_speed = (new_speed+this.speed)/2;
+            let elapsed_seconds = Math.abs(delta_time) / 10e6
+            let new_speed = (Math.PI / 2) / this.motor_reduction / elapsed_seconds;
+            if (!clockwise) new_speed = -new_speed;
+            let mean_speed = (new_speed + this.speed) / 2;
             this.position += mean_speed * elapsed_seconds;
-            this.acceleration = (new_speed-this.speed)/ elapsed_seconds;
-
-
+            this.acceleration = (new_speed - this.speed) / elapsed_seconds;
+            this.speed = new_speed;
         }
     }
 
-    encoder_alert(encoder: string){
-        return ((level: number, tick: number)=>{
-            this.last_tick[encoder] = {
+    encoder_alert(encoder: string) {
+        return ((level: number, tick: number) => {
+            this.encoder_flags[encoder] = {
                 level: level,
-                tick: tick,                
-            }
+                tick: tick,
+            },
+                this.update_state();
         })
     }
 
@@ -69,20 +70,22 @@ export class Motor extends Component {
         //Load PID Configuration;
         this.PID = new PID(parameters.k_p, parameters.k_i, parameters.k_d)
         this.reference_parameter = parameters.reference_parameter;
-        //Pin Configuration
-        this.motor_power_pin = new Gpio(this.parameters.pins.M, { mode: Gpio.OUTPUT });
-        this.motor_power_pin.pwmFrequency(1024);
-        this.encoder_A_pin = new Gpio(this.parameters.pins.E1, { mode: Gpio.INPUT });
-        this.encoder_B_pin = new Gpio(this.parameters.pins.E2, { mode: Gpio.INPUT });
-        this.h_bridge_pin = new Gpio(this.parameters.pins.H, { mode: Gpio.OUTPUT });
-        this.encoder_A_pin.enableAlert()
-        this.encoder_B_pin.enableAlert()
-        let startTick: number;
 
-        // Use alerts to determine how long the LED was turned on
-        this.encoder_A_pin.on('alert', this.encoder_alert('A'));
-        this.encoder_B_pin.on('alert', this.encoder_alert('B'))
+        //H Bridge Pinout
+        this.PWM = new Gpio(this.parameters.pins.PWM, { mode: Gpio.OUTPUT });
+        this.PWM.pwmFrequency(1024);
+        this.direction = new Gpio(this.parameters.pins.DIR, { mode: Gpio.OUTPUT });
+        this.enable = new Gpio(this.parameters.pins.ENABLE, { mode: Gpio.OUTPUT });
 
+        //Encoder Pinout
+        this.encoder_A = new Gpio(this.parameters.pins.Enoder_A, { mode: Gpio.INPUT });
+        this.encoder_B = new Gpio(this.parameters.pins.Enoder_B, { mode: Gpio.INPUT });
+
+        // Alerts to trigger encoder flags
+        this.encoder_A.enableAlert()
+        this.encoder_B.enableAlert()
+        this.encoder_A.on('alert', this.encoder_alert('A'));
+        this.encoder_B.on('alert', this.encoder_alert('B'));
 
 
         //Configure the socket the reference when we get a msg
@@ -100,6 +103,9 @@ export class Motor extends Component {
                 this.acceleration_reference = msg.acceleration_reference;
             }
         })
+
+        //Enable the motor
+        this.enable.digitalWrite(1);
     }
 
     loop(): Promise<boolean> {
@@ -117,15 +123,19 @@ export class Motor extends Component {
                 let output = this.PID.output(error);
 
                 //Apply output to the motor
-                if (this.is_simulation) {
-                    console.log(output);
-                    this.speed = this.speed_reference * 0.9;
-                } else {
-                    this.h_bridge_pin.digitalWrite(output > 0 ? 1 : 0)
-                    this.motor_power_pin.pwmWrite(output)
-                }
+                this.apply_output(output);
             }, 100);
         });
+    }
+
+    apply_output(output: number) {
+        if (this.is_simulation) {
+            console.log(output);
+            this.speed = this.speed_reference * 0.9;
+        } else {
+            this.direction.digitalWrite(output > 0 ? 1 : 0)
+            this.PWM.pwmWrite(output)
+        }
     }
 
     private compute_error() {
