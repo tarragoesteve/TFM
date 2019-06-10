@@ -1,10 +1,13 @@
 import { Component } from "../component";
 import { Gpio } from "pigpio";
-import { I2cBus } from "i2c-bus";
+import * as i2c from "i2c-bus";
 
 export class Accelerometer extends Component {
     inclination: number;
     inclination_reference: number;
+
+    i2cBus: i2c.I2cBus;
+
 
 
 
@@ -12,8 +15,8 @@ export class Accelerometer extends Component {
         super(name, planner_uri, is_simulation, parameters);
         //Initialize variables to 0
         this.inclination = this.inclination_reference = 0;
+        this.i2cBus = i2c.open(1,()=>{});
 
-        
         //Configure the socket the reference when we get a msg
         this.socket.on('message', (msg: any) => {
             if (msg.inclination_reference) {
