@@ -19,13 +19,9 @@ export class SimpleMotor extends Component {
 
         //Configure the socket the reference when we get a msg
         this.socket.on('message', (msg: any) => {
-            console.log(msg);
-            
             if (!isNull(msg.PWM_reference)) {
                 this.PWM_reference = msg.PWM_reference;
             }
-            console.log(this.PWM_reference);
-            
         })
 
         //Enable the motor
