@@ -1,5 +1,5 @@
 
-import configuration from './hardware_config_led.json'
+import configuration from './hardware_config_single_motor.json'
 import { Motor } from "./components/motor";
 import { Stub } from "./components/stub";
 import { Component } from './component';
