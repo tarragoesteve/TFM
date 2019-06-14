@@ -6,12 +6,4 @@ export class Stub extends Component {
         super(name, planner_uri, is_simulation, parameters);
        
     }
-
-    loop(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            setInterval(() => {
-                console.log("Hello, I'm", this.name);                
-            }, 1000);
-        });
-    }
 }

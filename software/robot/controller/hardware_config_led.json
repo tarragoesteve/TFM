@@ -1,0 +1,13 @@
+{
+    "planner_uri": "http://localhost:3000",
+    "is_simulation": false,
+    "components": [
+        {
+            "name": "LED_0",
+            "class": "LED",
+            "parameters": {
+                "PIN": 17
+            }
+        }
+    ]
+}

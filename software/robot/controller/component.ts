@@ -16,7 +16,7 @@ export abstract class Component {
         this.is_simulation = is_simulation;
         this.socket = socketio.connect(planner_uri+'?name='+this.name)
         this.parameters = parameters;
-
+        console.log('Initializing ', this.name);
     }
 
     loop(): Promise<boolean>
