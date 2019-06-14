@@ -11,19 +11,8 @@ server.on('connection', function(socket: socket.Socket){
     })
 
     socket.on('input',(msg)=>{
-        console.log(msg);
+        if(component_sockets["motor_left"]){
+            component_sockets["motor_left"].emit('message', {'PWM_reference': msg.speed_left_ref})
+        }
     })
 });
-
-
-let dutyCycle = 0;
-
-setInterval(()=>{
-    dutyCycle += 5;
-    if (dutyCycle > 200) {
-      dutyCycle = 0;
-    }
-    for(let component_name in component_sockets){
-        component_sockets[component_name].emit('message', {'PWM_reference': dutyCycle})
-    }
-},100)

@@ -8,11 +8,6 @@ export class SimpleMotor extends Component {
     direction: Gpio;
     enable: Gpio;
 
-
-    motor_reduction = 35;
-
-
-
     constructor(name: string, planner_uri: string, is_simulation: boolean, parameters: any) {
         super(name, planner_uri, is_simulation, parameters);
         //H Bridge Pinout
@@ -49,6 +44,7 @@ export class SimpleMotor extends Component {
 
     apply_output(output: number) {
             this.direction.digitalWrite(output > 0 ? 1 : 0)
-            this.PWM.pwmWrite(output)
+            let dutyCycle = Math.floor(Math.abs(output) * 255)
+            this.PWM.pwmWrite(dutyCycle)
     }
 }

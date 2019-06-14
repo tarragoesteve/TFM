@@ -16,16 +16,8 @@ server.on('connection', function (socket) {
         console.log(msg);
     });
     socket.on('input', function (msg) {
-        console.log(msg);
+        if (component_sockets["motor_left"]) {
+            component_sockets["motor_left"].emit('message', { 'PWM_reference': msg.speed_left_ref });
+        }
     });
 });
-var dutyCycle = 0;
-setInterval(function () {
-    dutyCycle += 5;
-    if (dutyCycle > 200) {
-        dutyCycle = 0;
-    }
-    for (var component_name in component_sockets) {
-        component_sockets[component_name].emit('message', { 'PWM_reference': dutyCycle });
-    }
-}, 100);
