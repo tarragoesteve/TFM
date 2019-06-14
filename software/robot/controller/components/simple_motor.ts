@@ -1,5 +1,6 @@
 import { Component } from "../component";
 import { Gpio } from "pigpio";
+import { isNull } from "util";
 
 export class SimpleMotor extends Component {
     PWM_reference: number = 0;
@@ -18,9 +19,13 @@ export class SimpleMotor extends Component {
 
         //Configure the socket the reference when we get a msg
         this.socket.on('message', (msg: any) => {
-            if (msg.PWM_reference) {
+            console.log(msg);
+            
+            if (!isNull(msg.PWM_reference)) {
                 this.PWM_reference = msg.PWM_reference;
             }
+            console.log(this.PWM_reference);
+            
         })
 
         //Enable the motor
@@ -45,7 +50,6 @@ export class SimpleMotor extends Component {
     apply_output(output: number) {
             this.direction.digitalWrite(output > 0 ? 1 : 0)
             let dutyCycle = Math.floor(Math.min(1,Math.abs(output)) * 255)
-            console.log(dutyCycle);            
             this.PWM.pwmWrite(dutyCycle)
     }
 }
