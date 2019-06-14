@@ -1,0 +1,17 @@
+import { Component } from "../component";
+
+
+export class Stub extends Component {
+    constructor(name: string, planner_uri: string, is_simulation: boolean, parameters: any) {
+        super(name, planner_uri, is_simulation, parameters);
+       
+    }
+
+    loop(): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            setInterval(() => {
+                console.log("Hello, I'm", this.name);                
+            }, 1000);
+        });
+    }
+}

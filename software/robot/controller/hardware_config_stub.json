@@ -1,0 +1,12 @@
+{
+    "planner_uri": "http://localhost:3000",
+    "is_simulation": false,
+    "components": [
+        {
+            "name": "Stub_0",
+            "class": "Stub",
+            "parameters": {
+            }
+        }
+    ]
+}
