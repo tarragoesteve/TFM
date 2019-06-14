@@ -1,9 +1,10 @@
 
-import configuration from './hardware_config_single_motor.json'
+import configuration from './hardware_config_simple_motor.json'
 import { Motor } from "./components/motor";
 import { Stub } from "./components/stub";
 import { Component } from './component';
 import { LED } from "./components/led";
+import { SimpleMotor } from "./components/simple_motor";
 
 let components: Component[] = [];
 
@@ -22,6 +23,12 @@ function new_component(component_configuration: any, general_configuration: any)
     }
     if (component_configuration.class == 'LED') {
         return new LED(component_configuration.name,
+            general_configuration.planner_uri,
+            general_configuration.is_simulation,
+            component_configuration.parameters);
+    }
+    if (component_configuration.class == 'SimpleMotor') {
+        return new SimpleMotor(component_configuration.name,
             general_configuration.planner_uri,
             general_configuration.is_simulation,
             component_configuration.parameters);

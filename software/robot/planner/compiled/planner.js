@@ -19,8 +19,13 @@ server.on('connection', function (socket) {
         console.log(msg);
     });
 });
+var dutyCycle = 0;
 setInterval(function () {
-    for (var component_name in component_sockets) {
-        component_sockets[component_name].emit('message', { 'speed_reference': 4.0 });
+    dutyCycle += 5;
+    if (dutyCycle > 200) {
+        dutyCycle = 0;
     }
-}, 3000);
+    for (var component_name in component_sockets) {
+        component_sockets[component_name].emit('message', { 'PWM_reference': dutyCycle });
+    }
+}, 100);
