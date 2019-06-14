@@ -5,9 +5,11 @@ let component_sockets : any = {}
 
 server.on('connection', function(socket: socket.Socket){
     component_sockets[socket.handshake.query.name] = socket;
+    console.log('Connection from: ', socket.handshake.query.name);
+    
 
     socket.on('state',(msg)=>{
-        console.log(msg);
+        //console.log(msg);
     })
 
     socket.on('input',(msg)=>{

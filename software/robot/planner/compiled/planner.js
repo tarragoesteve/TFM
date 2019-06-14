@@ -12,8 +12,9 @@ var server = socket.listen(3000);
 var component_sockets = {};
 server.on('connection', function (socket) {
     component_sockets[socket.handshake.query.name] = socket;
+    console.log('Connection from: ', socket.handshake.query.name);
     socket.on('state', function (msg) {
-        console.log(msg);
+        //console.log(msg);
     });
     socket.on('input', function (msg) {
         if (component_sockets["motor_left"]) {

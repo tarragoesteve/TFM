@@ -44,7 +44,7 @@ export class SimpleMotor extends Component {
 
     apply_output(output: number) {
             this.direction.digitalWrite(output > 0 ? 1 : 0)
-            let dutyCycle = Math.floor(Math.abs(output) * 255)
+            let dutyCycle = Math.floor(Math.min(1,Math.abs(output)) * 255)
             this.PWM.pwmWrite(dutyCycle)
     }
 }

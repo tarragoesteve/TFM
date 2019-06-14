@@ -56,9 +56,9 @@ export class AppLogicService {
         this.speed_right_ref -= 1 / 100;
         break;
       case 'q':
-        this.speed_right_ref = 0;
-        this.speed_left_ref = 0;
-        this.position_platform_ref = 0;
+        this.speed_right_ref = 0.0;
+        this.speed_left_ref = 0.0;
+        this.position_platform_ref = 0.0;
         break;
       case 'w':
         this.speed_right_ref += 1 / 100;
