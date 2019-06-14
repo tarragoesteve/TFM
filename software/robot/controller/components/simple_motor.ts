@@ -38,13 +38,14 @@ export class SimpleMotor extends Component {
 
                 //Apply output to the motor
                 this.apply_output(this.PWM_reference);
-            }, 100);
+            }, 1000);
         });
     }
 
     apply_output(output: number) {
             this.direction.digitalWrite(output > 0 ? 1 : 0)
             let dutyCycle = Math.floor(Math.min(1,Math.abs(output)) * 255)
+            console.log(dutyCycle);            
             this.PWM.pwmWrite(dutyCycle)
     }
 }
