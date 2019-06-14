@@ -8,7 +8,7 @@ import { LED } from "./components/led";
 let components: Component[] = [];
 
 function new_component(component_configuration: any, general_configuration: any): Component {
-    if (false && component_configuration.class == 'Motor') {
+    if (component_configuration.class == 'Motor') {
         return new Motor(component_configuration.name,
             general_configuration.planner_uri,
             general_configuration.is_simulation,
