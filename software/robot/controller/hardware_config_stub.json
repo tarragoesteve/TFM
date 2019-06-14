@@ -7,6 +7,12 @@
             "class": "Stub",
             "parameters": {
             }
+        },
+        {
+            "name": "Stub_1",
+            "class": "Stub",
+            "parameters": {
+            }
         }
     ]
 }
