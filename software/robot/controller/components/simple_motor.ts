@@ -21,6 +21,7 @@ export class SimpleMotor extends Component {
         this.socket.on('message', (msg: any) => {
             if (!isNull(msg.PWM_reference)) {
                 this.PWM_reference = msg.PWM_reference;
+                this.apply_output(this.PWM_reference);
             }
         })
 
@@ -36,9 +37,6 @@ export class SimpleMotor extends Component {
                 this.socket.emit('state', {
                     "motor": this.name, "PWM_reference": this.PWM_reference,
                 })
-
-                //Apply output to the motor
-                this.apply_output(this.PWM_reference);
             }, 1000);
         });
     }
