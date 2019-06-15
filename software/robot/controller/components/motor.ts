@@ -19,8 +19,7 @@ export class Motor extends Component {
     position_reference: number;
     speed_reference: number;
     acceleration_reference: number;
-    reference_parameter: string;
-
+    reference_parameter: string = 'speed';
     PID: PID;
 
     PWM: Gpio;
@@ -169,11 +168,15 @@ export class Motor extends Component {
     }
 
     apply_output(output: number) {
+        console.log(output);
+        
         if(this.getReferenceDirection(output)!= this.direction){
             this.changeDirection(this.getReferenceDirection(output));
         }
         let dutyCycle = Math.floor(Math.min(1, Math.abs(output)) * 255)
+        console.log(dutyCycle);
         this.PWM.pwmWrite(dutyCycle)
+
     }
 
     private compute_error() {
