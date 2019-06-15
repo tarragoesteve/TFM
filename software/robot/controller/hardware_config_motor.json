@@ -14,8 +14,8 @@
                     "PWM": 13,
                     "IN1": 5,
                     "IN2": 6,
-                    "Enoder_A" :23,
-                    "Enoder_B" :24
+                    "Encoder_A" :23,
+                    "Encoder_B" :24
                 }
             }
         }
