@@ -14,11 +14,11 @@ server.on('connection', function (socket) {
     component_sockets[socket.handshake.query.name] = socket;
     console.log('Connection from: ', socket.handshake.query.name);
     socket.on('state', function (msg) {
-        //console.log(msg);
+        console.log(msg);
     });
     socket.on('input', function (msg) {
         if (component_sockets["motor_left"]) {
-            component_sockets["motor_left"].emit('message', { 'PWM_reference': msg.speed_left_ref });
+            component_sockets["motor_left"].emit('message', { 'speed_reference': msg.speed_left_ref });
         }
     });
 });
