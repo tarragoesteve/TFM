@@ -56,9 +56,6 @@ export class SimpleMotor extends Component {
         this.socket.on('message', (msg: any) => {
             if (!isNull(msg.PWM_reference)) {
                 this.PWM_reference = msg.PWM_reference;
-                if(this.getReferenceDirection(this.PWM_reference)!= this.direction){
-                    this.changeDirection(this.getReferenceDirection(this.PWM_reference));
-                }
                 this.apply_output(this.PWM_reference);
             }
         })
@@ -80,6 +77,9 @@ export class SimpleMotor extends Component {
     }
 
     apply_output(output: number) {
+        if(this.getReferenceDirection(output)!= this.direction){
+            this.changeDirection(this.getReferenceDirection(output));
+        }
         let dutyCycle = Math.floor(Math.min(1, Math.abs(output)) * 255)
         this.PWM.pwmWrite(dutyCycle)
     }

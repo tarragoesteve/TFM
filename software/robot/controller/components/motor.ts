@@ -1,11 +1,20 @@
 import { Component } from "../component";
 import { PID } from "./utils/PID";
 import { Gpio } from "pigpio";
+import { isNull } from "util";
+
+
+enum Direction {
+    Forward,
+    Backward,
+    Stop,
+}
 
 export class Motor extends Component {
     position: number;
     speed: number;
     acceleration: number;
+    direction: Direction = Direction.Stop;
 
     position_reference: number;
     speed_reference: number;
@@ -17,14 +26,41 @@ export class Motor extends Component {
     PWM: Gpio;
     encoder_A: Gpio;
     encoder_B: Gpio;
-    direction: Gpio;
-    enable: Gpio;
+    in_1: Gpio;
+    in_2: Gpio;
 
 
     motor_reduction = 35;
 
     //tick is the where we store the encoder flags
     encoder_flags: any;
+
+    private getReferenceDirection(output: number) {
+        if (output > 0) return Direction.Forward;
+        if (output < 0) return Direction.Backward;
+        return Direction.Stop;
+    }
+
+    private changeDirection(direction: Direction) {
+        switch (direction) {
+            case Direction.Forward:
+                this.in_1.digitalWrite(1);
+                this.in_2.digitalWrite(0);
+                break;
+            case Direction.Backward:
+                this.in_1.digitalWrite(0);
+                this.in_2.digitalWrite(1);
+                break;
+            case Direction.Stop:
+                this.in_1.digitalWrite(0);
+                this.in_2.digitalWrite(0);
+                break;
+            default:
+                this.in_1.digitalWrite(0);
+                this.in_2.digitalWrite(0);
+                break;
+        }
+    }
 
     update_state() {
         /*Incremental encoders often output signals on two channels – typically termed “A” and “B” – 
@@ -73,13 +109,15 @@ export class Motor extends Component {
 
         //H Bridge Pinout
         this.PWM = new Gpio(this.parameters.pins.PWM, { mode: Gpio.OUTPUT });
-        this.PWM.pwmFrequency(1024);
-        this.direction = new Gpio(this.parameters.pins.DIR, { mode: Gpio.OUTPUT });
-        this.enable = new Gpio(this.parameters.pins.ENABLE, { mode: Gpio.OUTPUT });
+        this.PWM.pwmFrequency(200);
+        this.in_1 = new Gpio(this.parameters.pins.IN1, { mode: Gpio.OUTPUT });
+        this.in_2 = new Gpio(this.parameters.pins.IN2, { mode: Gpio.OUTPUT });
+        //Motor stop
+        this.changeDirection(Direction.Stop)
 
         //Encoder Pinout
-        this.encoder_A = new Gpio(this.parameters.pins.Enoder_A, { mode: Gpio.INPUT });
-        this.encoder_B = new Gpio(this.parameters.pins.Enoder_B, { mode: Gpio.INPUT });
+        this.encoder_A = new Gpio(this.parameters.pins.Encoder_A, { mode: Gpio.INPUT });
+        this.encoder_B = new Gpio(this.parameters.pins.Encoder_B, { mode: Gpio.INPUT });
 
         // Alerts to trigger encoder flags
         this.encoder_A.enableAlert()
@@ -90,33 +128,34 @@ export class Motor extends Component {
 
         //Configure the socket the reference when we get a msg
         this.socket.on('message', (msg: any) => {
-            if (msg.position_reference) {
+            if (!isNull(msg.position_reference)) {
                 this.reference_parameter = 'position';
                 this.position_reference = msg.position_reference;
             }
-            if (msg.speed_reference) {
+            if (!isNull(msg.speed_reference)) {
                 this.reference_parameter = 'speed';
                 this.speed_reference = msg.speed_reference;
             }
-            if (msg.acceleration_reference) {
+            if (!isNull(msg.acceleration_reference)) {
                 this.reference_parameter = 'acceleration'
                 this.acceleration_reference = msg.acceleration_reference;
             }
         })
-
-        //Enable the motor
-        this.enable.digitalWrite(1);
     }
 
     loop(): Promise<boolean> {
+        let i=0;
         return new Promise((resolve, reject) => {
             setInterval(() => {
                 //Get current state of the motor
                 //Send state to the planner
-                this.socket.emit('state', {
-                    "motor": this.name, "position": this.position,
-                    "speed": this.speed, "acceleration": this.acceleration
-                })
+                if(i>=10){
+                    this.socket.emit('state', {
+                        "motor": this.name, "position": this.position,
+                        "speed": this.speed, "acceleration": this.acceleration
+                    })
+                    i=0;
+                }
 
                 //Compute output
                 let error = this.compute_error();
@@ -129,13 +168,11 @@ export class Motor extends Component {
     }
 
     apply_output(output: number) {
-        if (this.is_simulation) {
-            console.log(output);
-            this.speed = this.speed_reference * 0.9;
-        } else {
-            this.direction.digitalWrite(output > 0 ? 1 : 0)
-            this.PWM.pwmWrite(output)
+        if(this.getReferenceDirection(output)!= this.direction){
+            this.changeDirection(this.getReferenceDirection(output));
         }
+        let dutyCycle = Math.floor(Math.min(1, Math.abs(output)) * 255)
+        this.PWM.pwmWrite(dutyCycle)
     }
 
     private compute_error() {
