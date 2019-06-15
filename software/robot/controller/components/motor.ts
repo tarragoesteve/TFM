@@ -156,6 +156,7 @@ export class Motor extends Component {
                     })
                     i=0;
                 }
+                i++;
 
                 //Compute output
                 let error = this.compute_error();
