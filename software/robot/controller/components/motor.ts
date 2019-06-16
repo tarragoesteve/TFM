@@ -76,7 +76,7 @@ export class Motor extends Component {
         which channel is leading. Generally, if channel A is leading, the direction is taken to be clockwise,
         and if channel B is leading, the direction is counterclockwise.*/
         if (this.encoder_flags['A'] && this.encoder_flags['B']) {
-            console.log("encoder_flags",this.encoder_flags);            
+            //console.log("encoder_flags",this.encoder_flags);            
             let delta_time = (this.encoder_flags['A'].tick) - (this.encoder_flags['B'].tick);
             let clockwise: boolean;
             if (delta_time > 0) {
@@ -87,9 +87,9 @@ export class Motor extends Component {
                 clockwise = (this.encoder_flags['A'].level == this.encoder_flags['B'].level)
             }            
             let elapsed_seconds = Math.abs(delta_time) / 10e3;
-            console.log("elapsed_seconds",elapsed_seconds);            
+            //console.log("elapsed_seconds",elapsed_seconds);            
             let new_speed = (Math.PI*2 / this.counts_per_revolution) / this.motor_reduction / elapsed_seconds;
-            console.log("new_speed",new_speed);            
+            //console.log("new_speed",new_speed);            
             if (!clockwise) new_speed = -new_speed;
             let mean_speed = (new_speed + this.speed) / 2;
             this.position += mean_speed * elapsed_seconds;
@@ -100,11 +100,24 @@ export class Motor extends Component {
 
     encoder_interrupt(encoder: string) {
         return ((level: number) => {
+            let aux_flag = {
+                level: level,
+                tick: Date.now(),
+            }
+
+            let delta_time = this.encoder_flags['A'].tick - Date.now();
+            let elapsed_seconds = Math.abs(delta_time) / 10e3;
+            let new_speed = (Math.PI*2 / this.counts_per_revolution) / this.motor_reduction / elapsed_seconds;
+            let mean_speed = (new_speed + this.speed) / 2;
+            this.position += mean_speed * elapsed_seconds;
+            this.acceleration = (new_speed - this.speed) / elapsed_seconds;
+            this.speed = new_speed;
+
             this.encoder_flags[encoder] = {
                 level: level,
                 tick: Date.now(),
-            },
-                this.update_state();
+            }
+            //this.update_state();
         })
     }
 
@@ -131,9 +144,9 @@ export class Motor extends Component {
 
         // Alerts to trigger encoder flags
         this.encoder_A.enableInterrupt(Gpio.EITHER_EDGE)
-        this.encoder_B.enableInterrupt(Gpio.EITHER_EDGE)
+        //this.encoder_B.enableInterrupt(Gpio.EITHER_EDGE)
         this.encoder_A.on('interrupt', this.encoder_interrupt('A'));
-        this.encoder_B.on('interrupt', this.encoder_interrupt('B'));
+        //this.encoder_B.on('interrupt', this.encoder_interrupt('B'));
 
 
         //Configure the socket the reference when we get a msg
