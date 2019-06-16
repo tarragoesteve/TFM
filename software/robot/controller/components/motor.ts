@@ -186,7 +186,10 @@ export class Motor extends Component {
                     this.socket.emit('state', {
                         "motor": this.name, "position": this.position,
                         "speed": this.speed, "acceleration": this.acceleration,
-                        "output": output,
+                        "output": output, reference_parameter: this.reference_parameter,
+                        position_reference: this.position_reference, speed_reference: this.speed_reference,
+                        acceleration_reference: this.acceleration_reference,
+                        PWM_reference: this.PWM_reference
                     })
                     i = 0;
                 }
