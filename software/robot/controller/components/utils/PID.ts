@@ -31,7 +31,7 @@ export class PID {
                 this.kd * (error - this.previous_error) / (Date.now() - this.previous_error_time);
             this.previous_error = error;
             this.previous_error_time = Date.now();
-            return output
+            return output;
         }
     }
 }

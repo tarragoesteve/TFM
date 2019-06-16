@@ -37,8 +37,7 @@ export class Motor extends Component {
 
     motor_reduction = 35;
 
-    //tick is the where we store the encoder flags
-    encoder_flags: any;
+
 
     private getReferenceDirection(output: number) {
         if (output > 0) return Direction.Forward;
@@ -66,6 +65,9 @@ export class Motor extends Component {
                 break;
         }
     }
+
+        //tick is the where we store the encoder flags
+        encoder_flags: any = {};
 
     update_state() {
         /*Incremental encoders often output signals on two channels – typically termed “A” and “B” – 
@@ -182,7 +184,6 @@ export class Motor extends Component {
     }
 
     private compute_error() {
-        console.log(this.reference_parameter);
         switch (this.reference_parameter) {
             case ReferenceParameter.Position:
                 return this.position_reference - this.position;
