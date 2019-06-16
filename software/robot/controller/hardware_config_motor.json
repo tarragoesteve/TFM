@@ -6,8 +6,8 @@
             "name": "motor_left",
             "class": "Motor",
             "parameters": {
-                "k_p": 0.001,
-                "k_i": 0.0001,
+                "k_p": 0.000,
+                "k_i": 0.001,
                 "k_d": 1.0,
                 "reference_parameter": "speed",
                 "pins": {
