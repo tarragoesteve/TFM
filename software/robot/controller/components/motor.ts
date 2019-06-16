@@ -82,7 +82,7 @@ export class Motor extends Component {
         which channel is leading. Generally, if channel A is leading, the direction is taken to be clockwise,
         and if channel B is leading, the direction is counterclockwise.*/
         if (this.encoder_flags['A'] && this.encoder_flags['B']) {
-            let delta_time = (this.encoder_flags['A'].tick) - (this.encoder_flags['B'].tick);
+            let delta_time = (this.encoder_flags['A'].tick >> 0) - (this.encoder_flags['B'].tick >> 0);
             let clockwise: boolean;
             if (delta_time > 0) {
                 clockwise = (this.encoder_flags['A'].level != this.encoder_flags['B'].level)
@@ -91,6 +91,8 @@ export class Motor extends Component {
             }
             let elapsed_seconds = Math.abs(delta_time) * 10E-9;
             let new_speed = this.elapsed_radians / elapsed_seconds;
+            console.log("elapsed_seconds",elapsed_seconds,"new_speed",new_speed);
+            
             if (!clockwise) {
                 new_speed = -new_speed;
                 this.position -= this.elapsed_radians;
