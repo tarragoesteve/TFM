@@ -10,6 +10,12 @@ enum Direction {
     Stop,
 }
 
+enum ReferenceParameter {
+    Position,
+    Speed,
+    Acceleration
+}
+
 export class Motor extends Component {
     position: number = 0;
     speed: number = 0;
@@ -19,7 +25,7 @@ export class Motor extends Component {
     position_reference: number;
     speed_reference: number;
     acceleration_reference: number;
-    reference_parameter: string = 'speed';
+    reference_parameter: ReferenceParameter = ReferenceParameter.Speed;
     PID: PID;
 
     PWM: Gpio;
@@ -128,15 +134,15 @@ export class Motor extends Component {
         //Configure the socket the reference when we get a msg
         this.socket.on('message', (msg: any) => {
             if (!isNull(msg.position_reference)) {
-                this.reference_parameter = 'position';
+                this.reference_parameter = ReferenceParameter.Position;
                 this.position_reference = msg.position_reference;
             }
             if (!isNull(msg.speed_reference)) {
-                this.reference_parameter = 'speed';
+                this.reference_parameter = ReferenceParameter.Speed;
                 this.speed_reference = msg.speed_reference;
             }
             if (!isNull(msg.acceleration_reference)) {
-                this.reference_parameter = 'acceleration'
+                this.reference_parameter = ReferenceParameter.Acceleration;
                 this.acceleration_reference = msg.acceleration_reference;
             }
         })
@@ -148,7 +154,7 @@ export class Motor extends Component {
             setInterval(() => {
                 //Get current state of the motor
                 //Send state to the planner
-                if(i>=10){
+                if(i>=0){
                     this.socket.emit('state', {
                         "motor": this.name, "position": this.position,
                         "speed": this.speed, "acceleration": this.acceleration
@@ -159,9 +165,9 @@ export class Motor extends Component {
 
                 //Compute output
                 let error = this.compute_error();
-                console.log(error);                
+                console.log("error",error);                
                 let output = this.PID.output(error);
-                console.log(output);                
+                console.log("output",output);                
                 //Apply output to the motor
                 this.apply_output(output);
             }, 100);
@@ -177,13 +183,13 @@ export class Motor extends Component {
     }
 
     private compute_error() {
-        if (this.reference_parameter == 'position') {
+        if (this.reference_parameter == ReferenceParameter.Position) {
             return this.position_reference - this.position;
         }
-        if (this.reference_parameter == 'speed') {
+        if (this.reference_parameter == ReferenceParameter.Speed) {
             return this.speed_reference - this.speed;
         }
-        if (this.reference_parameter == 'acceleration') {
+        if (this.reference_parameter == ReferenceParameter.Acceleration) {
             return this.acceleration_reference - this.acceleration;
         }
         console.log("Error computing error");
