@@ -38,6 +38,8 @@ export class Motor extends Component {
     motor_reduction = 35;
     counts_per_revolution = 12;
 
+    elapsed_radians = Math.PI * 2 / this.counts_per_revolution / this.motor_reduction;
+
 
 
     private getReferenceDirection(output: number) {
@@ -67,8 +69,8 @@ export class Motor extends Component {
         }
     }
 
-        //tick is the where we store the encoder flags
-        encoder_flags: any = {};
+    //tick is the where we store the encoder flags
+    encoder_flags: any = {};
 
     update_state() {
         /*Incremental encoders often output signals on two channels – typically termed “A” and “B” – 
@@ -76,47 +78,33 @@ export class Motor extends Component {
         which channel is leading. Generally, if channel A is leading, the direction is taken to be clockwise,
         and if channel B is leading, the direction is counterclockwise.*/
         if (this.encoder_flags['A'] && this.encoder_flags['B']) {
-            //console.log("encoder_flags",this.encoder_flags);            
             let delta_time = (this.encoder_flags['A'].tick) - (this.encoder_flags['B'].tick);
             let clockwise: boolean;
             if (delta_time > 0) {
-                //First B flag then A flag
                 clockwise = (this.encoder_flags['A'].level != this.encoder_flags['B'].level)
             } else {
-                //First A flag then B flag
                 clockwise = (this.encoder_flags['A'].level == this.encoder_flags['B'].level)
-            }            
-            let elapsed_seconds = Math.abs(delta_time) / 10e3;
-            //console.log("elapsed_seconds",elapsed_seconds);            
-            let new_speed = (Math.PI*2 / this.counts_per_revolution) / this.motor_reduction / elapsed_seconds;
-            //console.log("new_speed",new_speed);            
-            if (!clockwise) new_speed = -new_speed;
-            let mean_speed = (new_speed + this.speed) / 2;
-            this.position += mean_speed * elapsed_seconds;
-            this.acceleration = (new_speed - this.speed) / elapsed_seconds;
+            }
+            let elapsed_seconds = Math.abs(delta_time) * 10E-9;
+            let new_speed = this.elapsed_radians / elapsed_seconds;
+            if (!clockwise) {
+                new_speed = -new_speed;
+                this.position -= this.elapsed_radians;
+            } else {
+                this.position += this.elapsed_radians;
+            }
+            //this.acceleration = (new_speed - this.speed) / elapsed_seconds;
             this.speed = new_speed;
         }
     }
 
     encoder_interrupt(encoder: string) {
         return ((level: number, tick: number) => {
-            if(this.encoder_flags[encoder]){
-                let delta_time = tick - this.encoder_flags[encoder].tick;
-                console.log(delta_time);
-                
-                let elapsed_seconds = Math.abs(delta_time) / 10e6;
-                let new_speed = (Math.PI*2 / this.counts_per_revolution) / this.motor_reduction / elapsed_seconds;
-                let mean_speed = (new_speed + this.speed) / 2;
-                this.position += mean_speed * elapsed_seconds;
-                this.acceleration = (new_speed - this.speed) / elapsed_seconds;
-                this.speed = new_speed;   
-            }
-
             this.encoder_flags[encoder] = {
                 level: level,
                 tick: tick,
             }
-            //this.update_state();
+            this.update_state();
         })
     }
 
@@ -143,9 +131,12 @@ export class Motor extends Component {
 
         // Alerts to trigger encoder flags
         this.encoder_A.enableAlert()
-        this.encoder_A.glitchFilter(50);
-        //this.encoder_B.enableInterrupt(Gpio.EITHER_EDGE)
+        this.encoder_A.glitchFilter(100);
+        this.encoder_B.enableAlert()
+        this.encoder_B.glitchFilter(100);
         this.encoder_A.on('alert', this.encoder_interrupt('A'));
+        this.encoder_A.on('alert', this.encoder_interrupt('B'));
+
         //this.encoder_B.on('interrupt', this.encoder_interrupt('B'));
 
 
@@ -172,7 +163,7 @@ export class Motor extends Component {
             setInterval(() => {
                 //Get current state of the motor
                 //Send state to the planner
-                if (i >= 10) {
+                if (i >= 20) {
                     this.socket.emit('state', {
                         "motor": this.name, "position": this.position,
                         "speed": this.speed, "acceleration": this.acceleration
