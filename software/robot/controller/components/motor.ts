@@ -152,7 +152,7 @@ export class Motor extends Component {
             }
             if (isNumber(msg.speed_reference)) {
                 this.reference_parameter = ReferenceParameter.Speed;
-                this.speed_reference =50* msg.speed_reference;
+                this.speed_reference =100* msg.speed_reference;
             }
             if (isNumber(msg.acceleration_reference)) {
                 this.reference_parameter = ReferenceParameter.Acceleration;
