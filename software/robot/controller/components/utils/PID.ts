@@ -20,15 +20,16 @@ export class PID {
     }
 
     output(error: number): number {
+        this.accumulated_error += error;
         if (this.first_error) {
             this.first_error = false;
             this.previous_error = error;
-            this.previous_error_time = Date.now()
+            this.previous_error_time = Date.now();
             return this.kp * error;
         } else {
             let output: number = this.kp * error +
-                this.ki * this.accumulated_error +
-                this.kd * (error - this.previous_error) / (Date.now() - this.previous_error_time);
+                this.ki * this.accumulated_error;
+                //this.kd * (error - this.previous_error) / (Date.now() - this.previous_error_time);
             this.previous_error = error;
             this.previous_error_time = Date.now();
             return output;

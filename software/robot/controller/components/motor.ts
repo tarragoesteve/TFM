@@ -84,7 +84,8 @@ export class Motor extends Component {
                 //First A flag then B flag
                 clockwise = (this.encoder_flags['A'].level == this.encoder_flags['B'].level)
             }
-            let elapsed_seconds = Math.abs(delta_time) / 10e6
+            let elapsed_seconds = Math.abs(delta_time) / 10e6;
+            console.log("elapsed_seconds",elapsed_seconds);            
             let new_speed = (Math.PI / 2) / this.motor_reduction / elapsed_seconds;
             if (!clockwise) new_speed = -new_speed;
             let mean_speed = (new_speed + this.speed) / 2;
