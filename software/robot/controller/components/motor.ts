@@ -91,7 +91,7 @@ export class Motor extends Component {
             }
             let elapsed_seconds = Math.abs(delta_time) * 10E-9;
             let new_speed = this.elapsed_radians / elapsed_seconds;
-            console.log("elapsed_seconds",elapsed_seconds,"new_speed",new_speed);
+            console.log("delta_time",delta_time,"elapsed_seconds",elapsed_seconds,"new_speed",new_speed);
             
             if (!clockwise) {
                 new_speed = -new_speed;
