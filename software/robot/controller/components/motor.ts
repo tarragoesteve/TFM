@@ -82,7 +82,6 @@ export class Motor extends Component {
         which channel is leading. Generally, if channel A is leading, the direction is taken to be clockwise,
         and if channel B is leading, the direction is counterclockwise.*/
         if (this.encoder_flags['A'] && this.encoder_flags['B']) {
-            console.log("encoder_flags",this.encoder_flags);            
             let delta_time = (this.encoder_flags['A'].tick >> 0) - (this.encoder_flags['B'].tick >> 0);
             let clockwise: boolean;
             if (delta_time > 0) {
