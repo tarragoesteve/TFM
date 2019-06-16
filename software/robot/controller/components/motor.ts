@@ -13,34 +13,38 @@ enum Direction {
 enum ReferenceParameter {
     Position,
     Speed,
-    Acceleration
+    Acceleration,
+    PWM,
 }
 
 export class Motor extends Component {
+    //State
     position: number = 0;
     speed: number = 0;
-    acceleration: number;
+    acceleration: number = 0;
     direction: Direction = Direction.Stop;
-
-    position_reference: number;
-    speed_reference: number;
-    acceleration_reference: number;
+    
+    //Reference
     reference_parameter: ReferenceParameter = ReferenceParameter.Speed;
+    position_reference: number = 0;
+    speed_reference: number = 0;
+    acceleration_reference: number = 0;
+    PWM_reference: number = 0;
+
+
     PID: PID;
 
+    //PINS
     PWM: Gpio;
     encoder_A: Gpio;
     encoder_B: Gpio;
     in_1: Gpio;
     in_2: Gpio;
 
-
+    //Constants
     motor_reduction = 35;
     counts_per_revolution = 12;
-
-    elapsed_radians = Math.PI * 2 / this.counts_per_revolution / this.motor_reduction / 10;
-
-
+    elapsed_radians = Math.PI * 2 / this.counts_per_revolution / this.motor_reduction;
 
     private getReferenceDirection(output: number) {
         if (output > 0) return Direction.Forward;
@@ -111,9 +115,6 @@ export class Motor extends Component {
 
     constructor(name: string, planner_uri: string, is_simulation: boolean, parameters: any) {
         super(name, planner_uri, is_simulation, parameters);
-        //Initialize variables to 0
-        this.position = this.speed = this.acceleration = 0.0;
-        this.position_reference = this.speed_reference = this.acceleration_reference = 0.0;
         //Load PID Configuration;
         this.PID = new PID(parameters.k_p, parameters.k_i, parameters.k_d);
 
@@ -137,9 +138,6 @@ export class Motor extends Component {
         this.encoder_A.on('alert', this.encoder_interrupt('A'));
         this.encoder_A.on('alert', this.encoder_interrupt('B'));
 
-        //this.encoder_B.on('interrupt', this.encoder_interrupt('B'));
-
-
         //Configure the socket the reference when we get a msg
         this.socket.on('message', (msg: any) => {
             if (isNumber(msg.position_reference)) {
@@ -154,6 +152,10 @@ export class Motor extends Component {
                 this.reference_parameter = ReferenceParameter.Acceleration;
                 this.acceleration_reference = msg.acceleration_reference;
             }
+            if (isNumber(msg.PWM_reference)) {
+                this.reference_parameter = ReferenceParameter.PWM;
+                this.PWM_reference = msg.PWM_reference;
+            }
         })
     }
 
@@ -161,22 +163,27 @@ export class Motor extends Component {
         let i = 0;
         return new Promise((resolve, reject) => {
             setInterval(() => {
-                //Get current state of the motor
+                let output: number;
+                if(this.reference_parameter == ReferenceParameter.PWM){
+                    output = this.PWM_reference;
+                } else {
+                    let error = this.compute_error();
+                    output = this.PID.output(error);
+                }
+                //Apply output to the motor
+                this.apply_output(output);
+
                 //Send state to the planner
                 if (i >= 20) {
                     this.socket.emit('state', {
                         "motor": this.name, "position": this.position,
-                        "speed": this.speed, "acceleration": this.acceleration
+                        "speed": this.speed, "acceleration": this.acceleration,
+                        "output": output,
                     })
                     i = 0;
                 }
                 i++;
 
-                //Compute output
-                let error = this.compute_error();
-                let output = this.PID.output(error);
-                //Apply output to the motor
-                this.apply_output(output);
             }, 50);
         });
     }
