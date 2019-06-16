@@ -25,7 +25,7 @@ export class Motor extends Component {
     direction: Direction = Direction.Stop;
     
     //Reference
-    reference_parameter: ReferenceParameter = ReferenceParameter.Speed;
+    reference_parameter: ReferenceParameter = ReferenceParameter.PWM;
     position_reference: number = 0;
     speed_reference: number = 0;
     acceleration_reference: number = 0;
@@ -42,8 +42,8 @@ export class Motor extends Component {
     in_2: Gpio;
 
     //Constants
-    motor_reduction = 35;
-    counts_per_revolution = 12;
+    motor_reduction = 34;
+    counts_per_revolution = 11;
     elapsed_radians = Math.PI * 2 / (this.counts_per_revolution * this.motor_reduction);
 
     private getReferenceDirection(output: number) {
@@ -100,12 +100,12 @@ export class Motor extends Component {
             } else {
                 this.position += this.elapsed_radians;
             }
-            //this.acceleration = (new_speed - this.speed) / elapsed_seconds;
+            this.acceleration = (new_speed - this.speed) / elapsed_seconds;
             this.speed = new_speed;
         }
     }
 
-    encoder_interrupt(encoder: string) {
+    encoder_alert(encoder: string) {
         return ((level: number, tick: number) => {
             this.encoder_flags[encoder] = {
                 level: level,
@@ -139,8 +139,8 @@ export class Motor extends Component {
         this.encoder_A.glitchFilter(100);
         this.encoder_B.enableAlert()
         this.encoder_B.glitchFilter(100);
-        this.encoder_A.on('alert', this.encoder_interrupt('A'));
-        this.encoder_B.on('alert', this.encoder_interrupt('B'));
+        this.encoder_A.on('alert', this.encoder_alert('A'));
+        this.encoder_B.on('alert', this.encoder_alert('B'));
 
         //Configure the socket the reference when we get a msg
         this.socket.on('message', (msg: any) => {
