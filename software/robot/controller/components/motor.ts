@@ -102,6 +102,8 @@ export class Motor extends Component {
         return ((level: number) => {
             if(this.encoder_flags[encoder]){
                 let delta_time = this.encoder_flags[encoder].tick - Date.now();
+                console.log(delta_time);
+                
                 let elapsed_seconds = Math.abs(delta_time) / 10e3;
                 let new_speed = (Math.PI*2 / this.counts_per_revolution) / this.motor_reduction / elapsed_seconds;
                 let mean_speed = (new_speed + this.speed) / 2;
@@ -180,9 +182,7 @@ export class Motor extends Component {
 
                 //Compute output
                 let error = this.compute_error();
-                console.log("error", error);
                 let output = this.PID.output(error);
-                console.log("output", output);
                 //Apply output to the motor
                 this.apply_output(output);
             }, 50);
@@ -202,7 +202,6 @@ export class Motor extends Component {
             case ReferenceParameter.Position:
                 return this.position_reference - this.position;
             case ReferenceParameter.Speed:
-                console.log(this.speed_reference);                
                 return this.speed_reference - this.speed;
             case ReferenceParameter.Acceleration:
                 return this.acceleration_reference - this.acceleration;
