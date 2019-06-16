@@ -123,7 +123,7 @@ export class Motor extends Component {
 
         //H Bridge Pinout
         this.PWM = new Gpio(this.parameters.pins.PWM, { mode: Gpio.OUTPUT });
-        this.PWM.pwmFrequency(2000);
+        this.PWM.pwmFrequency(200);
         this.in_1 = new Gpio(this.parameters.pins.IN1, { mode: Gpio.OUTPUT });
         this.in_2 = new Gpio(this.parameters.pins.IN2, { mode: Gpio.OUTPUT });
         //Motor stop
@@ -187,7 +187,7 @@ export class Motor extends Component {
                 }
                 i++;
 
-            }, 50);
+            }, 200);
         });
     }
 
