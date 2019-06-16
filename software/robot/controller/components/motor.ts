@@ -1,5 +1,6 @@
 import { Component } from "../component";
 import { PID } from "./utils/PID";
+import { Filter } from "./utils/Filter";
 import { Gpio } from "pigpio";
 import { isNumber } from "util";
 
@@ -30,6 +31,8 @@ export class Motor extends Component {
     speed_reference: number = 0;
     acceleration_reference: number = 0;
     PWM_reference: number = 0;
+
+    speed_filter : Filter;
 
 
     PID: PID;
@@ -100,7 +103,7 @@ export class Motor extends Component {
                 this.position += this.elapsed_radians;
             }
             this.acceleration = (new_speed - this.speed) / elapsed_seconds;
-            this.speed = new_speed;
+            this.speed = this.speed_filter.addSample(new_speed);
         }
     }
 
@@ -160,6 +163,8 @@ export class Motor extends Component {
                 this.PWM_reference = msg.PWM_reference;
             }
         })
+
+        this.speed_filter = new Filter(20);
     }
 
     loop(): Promise<boolean> {
