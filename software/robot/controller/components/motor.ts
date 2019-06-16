@@ -102,11 +102,11 @@ export class Motor extends Component {
         }
     }
 
-    encoder_alert(encoder: string) {
-        return ((level: number, tick: number) => {
+    encoder_interrupt(encoder: string) {
+        return ((level: number) => {
             this.encoder_flags[encoder] = {
                 level: level,
-                tick: tick,
+                tick: Date.now(),
             },
                 this.update_state();
         })
@@ -134,10 +134,10 @@ export class Motor extends Component {
         this.encoder_B = new Gpio(this.parameters.pins.Encoder_B, { mode: Gpio.INPUT });
 
         // Alerts to trigger encoder flags
-        this.encoder_A.enableAlert()
-        this.encoder_B.enableAlert()
-        this.encoder_A.on('alert', this.encoder_alert('A'));
-        this.encoder_B.on('alert', this.encoder_alert('B'));
+        this.encoder_A.enableInterrupt(Gpio.EITHER_EDGE)
+        this.encoder_B.enableInterrupt(Gpio.EITHER_EDGE)
+        this.encoder_A.on('interrupt', this.encoder_interrupt('A'));
+        this.encoder_B.on('interrupt', this.encoder_interrupt('B'));
 
 
         //Configure the socket the reference when we get a msg
