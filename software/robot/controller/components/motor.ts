@@ -99,12 +99,12 @@ export class Motor extends Component {
     }
 
     encoder_interrupt(encoder: string) {
-        return ((level: number) => {
+        return ((level: number, tick: number) => {
             if(this.encoder_flags[encoder]){
-                let delta_time = Date.now() - this.encoder_flags[encoder].tick;
+                let delta_time = tick - this.encoder_flags[encoder].tick;
                 console.log(delta_time);
                 
-                let elapsed_seconds = Math.abs(delta_time) / 10e3;
+                let elapsed_seconds = Math.abs(delta_time) / 10e6;
                 let new_speed = (Math.PI*2 / this.counts_per_revolution) / this.motor_reduction / elapsed_seconds;
                 let mean_speed = (new_speed + this.speed) / 2;
                 this.position += mean_speed * elapsed_seconds;
@@ -114,7 +114,7 @@ export class Motor extends Component {
 
             this.encoder_flags[encoder] = {
                 level: level,
-                tick: Date.now(),
+                tick: tick,
             }
             //this.update_state();
         })
@@ -142,9 +142,10 @@ export class Motor extends Component {
         this.encoder_B = new Gpio(this.parameters.pins.Encoder_B, { mode: Gpio.INPUT });
 
         // Alerts to trigger encoder flags
-        this.encoder_A.enableInterrupt(Gpio.EITHER_EDGE)
+        this.encoder_A.enableAlert()
+        this.encoder_A.glitchFilter(50);
         //this.encoder_B.enableInterrupt(Gpio.EITHER_EDGE)
-        this.encoder_A.on('interrupt', this.encoder_interrupt('A'));
+        this.encoder_A.on('alert', this.encoder_interrupt('A'));
         //this.encoder_B.on('interrupt', this.encoder_interrupt('B'));
 
 
