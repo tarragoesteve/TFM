@@ -148,7 +148,7 @@ export class Motor extends Component {
         this.socket.on('message', (msg: any) => {
             if (isNumber(msg.position_reference)) {
                 this.reference_parameter = ReferenceParameter.Position;
-                this.position_reference = msg.position_reference;
+                this.position_reference =12* msg.position_reference;
             }
             if (isNumber(msg.speed_reference)) {
                 this.reference_parameter = ReferenceParameter.Speed;
