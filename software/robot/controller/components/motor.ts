@@ -1,7 +1,7 @@
 import { Component } from "../component";
 import { PID } from "./utils/PID";
 import { Gpio } from "pigpio";
-import { isNull } from "util";
+import { isNumber } from "util";
 
 
 enum Direction {
@@ -132,15 +132,15 @@ export class Motor extends Component {
 
         //Configure the socket the reference when we get a msg
         this.socket.on('message', (msg: any) => {
-            if (!isNull(msg.position_reference)) {
+            if (isNumber(msg.position_reference)) {
                 this.reference_parameter = ReferenceParameter.Position;
                 this.position_reference = msg.position_reference;
             }
-            if (!isNull(msg.speed_reference)) {
+            if (isNumber(msg.speed_reference)) {
                 this.reference_parameter = ReferenceParameter.Speed;
                 this.speed_reference = msg.speed_reference;
             }
-            if (!isNull(msg.acceleration_reference)) {
+            if (isNumber(msg.acceleration_reference)) {
                 this.reference_parameter = ReferenceParameter.Acceleration;
                 this.acceleration_reference = msg.acceleration_reference;
             }
