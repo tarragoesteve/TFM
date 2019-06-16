@@ -38,7 +38,7 @@ export class Motor extends Component {
     motor_reduction = 35;
     counts_per_revolution = 12;
 
-    elapsed_radians = Math.PI * 2 / this.counts_per_revolution / this.motor_reduction;
+    elapsed_radians = Math.PI * 2 / this.counts_per_revolution / this.motor_reduction / 10;
 
 
 
