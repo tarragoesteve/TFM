@@ -187,6 +187,7 @@ export class Motor extends Component {
             case ReferenceParameter.Position:
                 return this.position_reference - this.position;
             case ReferenceParameter.Speed:
+                console.log(this.speed_reference);                
                 return this.speed_reference - this.speed;
             case ReferenceParameter.Acceleration:
                 return this.acceleration_reference - this.acceleration;
