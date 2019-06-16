@@ -149,7 +149,7 @@ export class Motor extends Component {
         this.encoder_B.enableAlert()
         this.encoder_B.glitchFilter(100);
         this.encoder_A.on('alert', this.encoder_interrupt('A'));
-        this.encoder_A.on('alert', this.encoder_interrupt('B'));
+        this.encoder_B.on('alert', this.encoder_interrupt('B'));
 
         //Configure the socket the reference when we get a msg
         this.socket.on('message', (msg: any) => {
