@@ -90,7 +90,7 @@ export class Motor extends Component {
             }
             console.log("clockwise",clockwise);
             
-            let elapsed_seconds = Math.abs(delta_time) / 10e4;
+            let elapsed_seconds = Math.abs(delta_time) / 10e3;
             console.log("elapsed_seconds",elapsed_seconds);            
             let new_speed = (Math.PI*2 / this.counts_per_revolution) / this.motor_reduction / elapsed_seconds;
             console.log("new_speed",new_speed);            
