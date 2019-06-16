@@ -149,7 +149,7 @@ export class Motor extends Component {
             }
             if (isNumber(msg.speed_reference)) {
                 this.reference_parameter = ReferenceParameter.Speed;
-                this.speed_reference = msg.speed_reference;
+                this.speed_reference =50* msg.speed_reference;
             }
             if (isNumber(msg.acceleration_reference)) {
                 this.reference_parameter = ReferenceParameter.Acceleration;
@@ -177,7 +177,7 @@ export class Motor extends Component {
                 this.apply_output(output);
 
                 //Send state to the planner
-                if (i >= 20) {
+                if (i >= 10) {
                     this.socket.emit('state', {
                         "motor": this.name, "position": this.position,
                         "speed": this.speed, "acceleration": this.acceleration,
