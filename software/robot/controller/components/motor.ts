@@ -108,8 +108,8 @@ export class Motor extends Component {
     encoder_interrupt(encoder: string) {
         return ((level: number, tick: number) => {
             if(this.encoder_flags[encoder]){
-                if(this.encoder_flags[encoder].level != level){
-                    let delta_time = tick-(this.encoder_flags[encoder].tick >> 0);
+                if(true || this.encoder_flags[encoder].level != level){
+                    let delta_time = (tick >> 0)-(this.encoder_flags[encoder].tick >> 0);
                     let elapsed_seconds = Math.abs(delta_time) * 10E-9;
                     let new_speed = this.elapsed_radians / elapsed_seconds;
                     console.log("delta_time",delta_time,"elapsed_seconds",elapsed_seconds,"new_speed",new_speed);
