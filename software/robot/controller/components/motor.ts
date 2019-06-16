@@ -44,7 +44,7 @@ export class Motor extends Component {
     //Constants
     motor_reduction = 35;
     counts_per_revolution = 12;
-    elapsed_radians = Math.PI * 2 / this.counts_per_revolution / this.motor_reduction;
+    elapsed_radians = Math.PI * 2 / (this.counts_per_revolution * this.motor_reduction);
 
     private getReferenceDirection(output: number) {
         if (output > 0) return Direction.Forward;
@@ -112,16 +112,16 @@ export class Motor extends Component {
                     let delta_time = (tick >> 0)-(this.encoder_flags[encoder].tick >> 0);
                     let elapsed_seconds = Math.abs(delta_time) * 10E-9;
                     let new_speed = this.elapsed_radians / elapsed_seconds;
-                    console.log("delta_time",delta_time,"elapsed_seconds",elapsed_seconds,"new_speed",new_speed);
+                    //console.log("delta_time",delta_time,"elapsed_seconds",elapsed_seconds,"new_speed",new_speed);
                 }
             }
             this.encoder_flags[encoder] = {
                 level: level,
                 tick: tick,
             }
-            console.log("encoder",encoder,"level",level,"tick",tick);
+            console.log("encoder",encoder,"level",level,"tick",tick,"Date.now()",Date.now());
             
-            this.update_state();
+            //this.update_state();
         })
     }
 
