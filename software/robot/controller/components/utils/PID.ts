@@ -28,8 +28,8 @@ export class PID {
         } else {
             this.accumulated_error += error * (Date.now() - this.previous_error_time);
             let output: number = this.kp * error +
-                this.ki * this.accumulated_error;
-                //this.kd * (error - this.previous_error) / (Date.now() - this.previous_error_time);
+                this.ki * this.accumulated_error +
+                this.kd * (error - this.previous_error) / (Date.now() - this.previous_error_time);
             this.previous_error = error;
             this.previous_error_time = Date.now();
             return output;
