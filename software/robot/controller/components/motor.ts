@@ -109,8 +109,7 @@ export class Motor extends Component {
         this.position = this.speed = this.acceleration = 0.0;
         this.position_reference = this.speed_reference = this.acceleration_reference = 0.0;
         //Load PID Configuration;
-        this.PID = new PID(parameters.k_p, parameters.k_i, parameters.k_d)
-        this.reference_parameter = parameters.reference_parameter;
+        this.PID = new PID(parameters.k_p, parameters.k_i, parameters.k_d);
 
         //H Bridge Pinout
         this.PWM = new Gpio(this.parameters.pins.PWM, { mode: Gpio.OUTPUT });
@@ -187,7 +186,6 @@ export class Motor extends Component {
         switch (this.reference_parameter) {
             case ReferenceParameter.Position:
                 return this.position_reference - this.position;
-
             case ReferenceParameter.Speed:
                 return this.speed_reference - this.speed;
             case ReferenceParameter.Acceleration:
@@ -195,7 +193,6 @@ export class Motor extends Component {
             default:
                 console.log("Error computing error");
                 return 0;
-                break;
         }
     }
 }
