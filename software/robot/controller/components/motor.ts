@@ -149,33 +149,33 @@ export class Motor extends Component {
     }
 
     loop(): Promise<boolean> {
-        let i=0;
+        let i = 0;
         return new Promise((resolve, reject) => {
             setInterval(() => {
                 //Get current state of the motor
                 //Send state to the planner
-                if(i>=0){
+                if (i >= 0) {
                     this.socket.emit('state', {
                         "motor": this.name, "position": this.position,
                         "speed": this.speed, "acceleration": this.acceleration
                     })
-                    i=0;
+                    i = 0;
                 }
                 i++;
 
                 //Compute output
                 let error = this.compute_error();
-                console.log("error",error);                
+                console.log("error", error);
                 let output = this.PID.output(error);
-                console.log("output",output);                
+                console.log("output", output);
                 //Apply output to the motor
                 this.apply_output(output);
             }, 100);
         });
     }
 
-    apply_output(output: number) {        
-        if(this.getReferenceDirection(output)!= this.direction){
+    apply_output(output: number) {
+        if (this.getReferenceDirection(output) != this.direction) {
             this.changeDirection(this.getReferenceDirection(output));
         }
         let dutyCycle = Math.floor(Math.min(1, Math.abs(output)) * 255)
@@ -183,16 +183,19 @@ export class Motor extends Component {
     }
 
     private compute_error() {
-        if (this.reference_parameter == ReferenceParameter.Position) {
-            return this.position_reference - this.position;
+        console.log(this.reference_parameter);
+        switch (this.reference_parameter) {
+            case ReferenceParameter.Position:
+                return this.position_reference - this.position;
+
+            case ReferenceParameter.Speed:
+                return this.speed_reference - this.speed;
+            case ReferenceParameter.Acceleration:
+                return this.acceleration_reference - this.acceleration;
+            default:
+                console.log("Error computing error");
+                return 0;
+                break;
         }
-        if (this.reference_parameter == ReferenceParameter.Speed) {
-            return this.speed_reference - this.speed;
-        }
-        if (this.reference_parameter == ReferenceParameter.Acceleration) {
-            return this.acceleration_reference - this.acceleration;
-        }
-        console.log("Error computing error");
-        return 0;
     }
 }
