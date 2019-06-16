@@ -100,18 +100,15 @@ export class Motor extends Component {
 
     encoder_interrupt(encoder: string) {
         return ((level: number) => {
-            let aux_flag = {
-                level: level,
-                tick: Date.now(),
+            if(this.encoder_flags[encoder]){
+                let delta_time = this.encoder_flags[encoder].tick - Date.now();
+                let elapsed_seconds = Math.abs(delta_time) / 10e3;
+                let new_speed = (Math.PI*2 / this.counts_per_revolution) / this.motor_reduction / elapsed_seconds;
+                let mean_speed = (new_speed + this.speed) / 2;
+                this.position += mean_speed * elapsed_seconds;
+                this.acceleration = (new_speed - this.speed) / elapsed_seconds;
+                this.speed = new_speed;   
             }
-
-            let delta_time = this.encoder_flags['A'].tick - Date.now();
-            let elapsed_seconds = Math.abs(delta_time) / 10e3;
-            let new_speed = (Math.PI*2 / this.counts_per_revolution) / this.motor_reduction / elapsed_seconds;
-            let mean_speed = (new_speed + this.speed) / 2;
-            this.position += mean_speed * elapsed_seconds;
-            this.acceleration = (new_speed - this.speed) / elapsed_seconds;
-            this.speed = new_speed;
 
             this.encoder_flags[encoder] = {
                 level: level,
