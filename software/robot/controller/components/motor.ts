@@ -101,7 +101,7 @@ export class Motor extends Component {
     encoder_interrupt(encoder: string) {
         return ((level: number) => {
             if(this.encoder_flags[encoder]){
-                let delta_time = this.encoder_flags[encoder].tick - Date.now();
+                let delta_time = Date.now() - this.encoder_flags[encoder].tick;
                 console.log(delta_time);
                 
                 let elapsed_seconds = Math.abs(delta_time) / 10e3;
