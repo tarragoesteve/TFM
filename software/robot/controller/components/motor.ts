@@ -182,7 +182,7 @@ export class Motor extends Component {
                 this.apply_output(output);
 
                 //Send state to the planner
-                if (i >= 10) {
+                if (i >= 50) {
                     this.socket.emit('state', {
                         "motor": this.name, "position": this.position,
                         "speed": this.speed, "acceleration": this.acceleration,
@@ -192,7 +192,7 @@ export class Motor extends Component {
                 }
                 i++;
 
-            }, 200);
+            }, 20);
         });
     }
 
