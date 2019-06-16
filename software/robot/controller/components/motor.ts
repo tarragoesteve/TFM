@@ -76,10 +76,8 @@ export class Motor extends Component {
         which channel is leading. Generally, if channel A is leading, the direction is taken to be clockwise,
         and if channel B is leading, the direction is counterclockwise.*/
         if (this.encoder_flags['A'] && this.encoder_flags['B']) {
-            console.log("encoder_flags",this.encoder_flags);
-            
-            let delta_time = (this.encoder_flags['A'].tick >> 0) - (this.encoder_flags['B'].tick >> 0);
-            console.log("delta_time",delta_time);            
+            console.log("encoder_flags",this.encoder_flags);            
+            let delta_time = (this.encoder_flags['A'].tick) - (this.encoder_flags['B'].tick);
             let clockwise: boolean;
             if (delta_time > 0) {
                 //First B flag then A flag
@@ -87,9 +85,7 @@ export class Motor extends Component {
             } else {
                 //First A flag then B flag
                 clockwise = (this.encoder_flags['A'].level == this.encoder_flags['B'].level)
-            }
-            console.log("clockwise",clockwise);
-            
+            }            
             let elapsed_seconds = Math.abs(delta_time) / 10e3;
             console.log("elapsed_seconds",elapsed_seconds);            
             let new_speed = (Math.PI*2 / this.counts_per_revolution) / this.motor_reduction / elapsed_seconds;
@@ -163,7 +159,7 @@ export class Motor extends Component {
             setInterval(() => {
                 //Get current state of the motor
                 //Send state to the planner
-                if (i >= 0) {
+                if (i >= 10) {
                     this.socket.emit('state', {
                         "motor": this.name, "position": this.position,
                         "speed": this.speed, "acceleration": this.acceleration
@@ -179,7 +175,7 @@ export class Motor extends Component {
                 console.log("output", output);
                 //Apply output to the motor
                 this.apply_output(output);
-            }, 100);
+            }, 50);
         });
     }
 
