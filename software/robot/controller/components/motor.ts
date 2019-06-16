@@ -11,8 +11,8 @@ enum Direction {
 }
 
 export class Motor extends Component {
-    position: number;
-    speed: number;
+    position: number = 0;
+    speed: number = 0;
     acceleration: number;
     direction: Direction = Direction.Stop;
 
@@ -159,24 +159,21 @@ export class Motor extends Component {
 
                 //Compute output
                 let error = this.compute_error();
+                console.log(error);                
                 let output = this.PID.output(error);
-
+                console.log(output);                
                 //Apply output to the motor
                 this.apply_output(output);
             }, 100);
         });
     }
 
-    apply_output(output: number) {
-        console.log(output);
-        
+    apply_output(output: number) {        
         if(this.getReferenceDirection(output)!= this.direction){
             this.changeDirection(this.getReferenceDirection(output));
         }
         let dutyCycle = Math.floor(Math.min(1, Math.abs(output)) * 255)
-        console.log(dutyCycle);
         this.PWM.pwmWrite(dutyCycle)
-
     }
 
     private compute_error() {
