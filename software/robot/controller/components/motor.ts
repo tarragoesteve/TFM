@@ -36,6 +36,7 @@ export class Motor extends Component {
 
 
     motor_reduction = 35;
+    counts_per_revolution = 12;
 
 
 
@@ -89,9 +90,9 @@ export class Motor extends Component {
             }
             console.log("clockwise",clockwise);
             
-            let elapsed_seconds = Math.abs(delta_time) / 10e6;
+            let elapsed_seconds = Math.abs(delta_time) / 10e4;
             console.log("elapsed_seconds",elapsed_seconds);            
-            let new_speed = (Math.PI / 2) / this.motor_reduction / elapsed_seconds;
+            let new_speed = (Math.PI*2 / this.counts_per_revolution) / this.motor_reduction / elapsed_seconds;
             console.log("new_speed",new_speed);            
             if (!clockwise) new_speed = -new_speed;
             let mean_speed = (new_speed + this.speed) / 2;
