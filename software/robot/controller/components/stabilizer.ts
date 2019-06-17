@@ -44,7 +44,7 @@ export class Stabilizer extends Component {
                 //this.inclination = this.accelerometer.getInclination();
                 //Send state to the planner
                 let data = this.accelerometer.sensor.readSync();
-                this.inclination = data.rotation.y;
+                this.inclination = Math.atan(data.accel.x/data.accel.z);
                 //Compute output
                 let error = this.compute_error();
                 let output = this.PID.output(error);
