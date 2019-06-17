@@ -43,7 +43,7 @@ export class Stabilizer extends Component {
                 //this.inclination = this.accelerometer.getInclination();
                 //Send state to the planner
                 this.socket.emit('state', {
-                    "component": this.name, "inclination": this.inclination
+                    "component": this.name, "data": this.accelerometer.sensor.readSync()
                 })
 
                 //Compute output
