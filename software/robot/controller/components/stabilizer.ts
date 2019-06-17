@@ -4,11 +4,11 @@ import { Gpio } from "pigpio";
 import { Motor } from "./motor";
 import { Accelerometer } from "./accelerometer";
 
-export class Stabilazer extends Component {
+export class Stabilizer extends Component {
     inclination: number;
     inclination_reference: number;
 
-    stabilazer_motor : Motor;
+    stabilizer_motor : Motor;
 
     accelerometer : Accelerometer;
     PID : PID;
@@ -21,7 +21,7 @@ export class Stabilazer extends Component {
         this.inclination = this.inclination_reference = 0;
 
         //Inicialize subcomponents
-        this.stabilazer_motor = new Motor('stabilazer_motor',planner_uri,is_simulation,parameters);
+        this.stabilizer_motor = new Motor('stabilizer_motor',planner_uri,is_simulation,parameters);
         this.accelerometer = new Accelerometer('accelerometer',planner_uri,is_simulation,parameters);
         
         //Load PID Configuration;
@@ -40,7 +40,7 @@ export class Stabilazer extends Component {
         return new Promise((resolve, reject) => {
             setInterval(() => {
                 //Get current state
-                this.inclination = this.accelerometer.getInclination();
+                //this.inclination = this.accelerometer.getInclination();
                 //Send state to the planner
                 this.socket.emit('state', {
                     "component": this.name, "inclination": this.inclination
@@ -51,7 +51,7 @@ export class Stabilazer extends Component {
                 let output = this.PID.output(error);
 
                 //Apply output to the motor
-                this.stabilazer_motor.apply_output(output)
+                this.stabilizer_motor.apply_output(output)
             }, 100);
         });
     }

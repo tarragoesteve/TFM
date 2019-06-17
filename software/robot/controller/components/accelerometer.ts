@@ -1,48 +1,32 @@
 import { Component } from "../component";
 import { Gpio } from "pigpio";
 import * as i2c from "i2c-bus";
+let MPU6050 = require('i2c-mpu6050');
+
 
 export class Accelerometer extends Component {
-    inclination: number;
-    inclination_reference: number;
-
-    i2cBus: i2c.I2cBus;
-
-
-
+    static readonly MPU_ADDR = 0x68;
+    static readonly ACCEL_X = 0x38B;
+    sensor: any;
 
     constructor(name: string, planner_uri: string, is_simulation: boolean, parameters: any) {
         super(name, planner_uri, is_simulation, parameters);
         //Initialize variables to 0
-        this.inclination = this.inclination_reference = 0;
-        this.i2cBus = i2c.open(1,()=>{});
-
-        //Configure the socket the reference when we get a msg
-        this.socket.on('message', (msg: any) => {
-            if (msg.inclination_reference) {
-                this.inclination_reference = msg.inclination_reference;
-            }
-        })
+        var i2c1 = i2c.openSync(1); 
+        this.sensor = new MPU6050(i2c1, Accelerometer.MPU_ADDR);
     }
 
     loop(): Promise<boolean> {
         return new Promise((resolve, reject) => {
             setInterval(() => {
-                //Get current state of the motor
+                let data = this.sensor.readSync();
+                console.log(data);
                 //Send state to the planner
                 this.socket.emit('state', {
-                    "component": this.name, "inclination": this.inclination
+                    "component": this.name, "data": data
                 })
 
-            }, 100);
+            }, 500);
         });
-    }
-
-    getInclination(): number{
-        return 0;
-    }
-
-    private compute_error() {
-        return this.inclination_reference - this.inclination;
     }
 }

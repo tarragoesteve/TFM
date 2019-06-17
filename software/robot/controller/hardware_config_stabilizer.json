@@ -1,0 +1,23 @@
+{
+    "planner_uri": "http://192.168.1.50:3000",
+    "is_simulation": false,
+    "components": [
+        {
+            "name": "stabilizer",
+            "class": "Stabilizer",
+            "parameters": {
+                "k_p": 1,
+                "k_i": 0.001,
+                "k_d": 0,
+                "reference_parameter": "PWM",
+                "pins": {
+                    "PWM": 13,
+                    "IN1": 5,
+                    "IN2": 6,
+                    "Encoder_A" :23,
+                    "Encoder_B" :24
+                }
+            }
+        }
+    ]
+}
