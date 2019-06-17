@@ -3,6 +3,7 @@ import { PID } from "./utils/PID";
 import { Gpio } from "pigpio";
 import { Motor } from "./motor";
 import { Accelerometer } from "./accelerometer";
+import { isNumber } from "util";
 
 export class Stabilizer extends Component {
     inclination: number;
@@ -25,34 +26,40 @@ export class Stabilizer extends Component {
         this.accelerometer = new Accelerometer('accelerometer',planner_uri,is_simulation,parameters);
         
         //Load PID Configuration;
-        this.PID = new PID(parameters.k_p, parameters.k_i, parameters.k_d)
-        
+        this.PID = new PID(parameters.k_p, parameters.k_i, parameters.k_d)        
         
         //Configure the socket the reference when we get a msg
         this.socket.on('message', (msg: any) => {
-            if (msg.inclination_reference) {
+            if (isNumber(msg.inclination_reference)) {
                 this.inclination_reference = msg.inclination_reference;
             }
         })
     }
 
     loop(): Promise<boolean> {
+        let i =0;
         return new Promise((resolve, reject) => {
             setInterval(() => {
                 //Get current state
                 //this.inclination = this.accelerometer.getInclination();
                 //Send state to the planner
-                this.socket.emit('state', {
-                    "component": this.name, "data": this.accelerometer.sensor.readSync()
-                })
-
+                let data = this.accelerometer.sensor.readSync();
+                this.inclination = data.rotation.y;
                 //Compute output
                 let error = this.compute_error();
                 let output = this.PID.output(error);
-
                 //Apply output to the motor
                 this.stabilizer_motor.apply_output(output)
-            }, 100);
+                if (i >= 50) {
+                    this.socket.emit('state', {
+                        "component": this.name, "data": data,
+                        "inclination": this.inclination,
+                        "inclination_reference": this.inclination_reference,
+                    })
+                    i = 0;
+                }
+                i++;
+            }, 20);
         });
     }
 
