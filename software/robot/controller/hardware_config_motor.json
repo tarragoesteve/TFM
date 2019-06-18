@@ -1,5 +1,5 @@
 {
-    "planner_uri": "http://192.168.1.50:3000",
+    "planner_uri": "http://10.42.0.1:3000",
     "is_simulation": false,
     "components": [
         {
@@ -7,15 +7,14 @@
             "class": "Motor",
             "parameters": {
                 "k_p": 1,
-                "k_i": 0.001,
+                "k_i": 0.01,
                 "k_d": 0,
-                "reference_parameter": "speed",
                 "pins": {
                     "PWM": 13,
-                    "IN1": 5,
-                    "IN2": 6,
-                    "Encoder_A" :23,
-                    "Encoder_B" :24
+                    "IN1": 14,
+                    "IN2": 15,
+                    "Encoder_A" :5,
+                    "Encoder_B" :6
                 }
             }
         }
