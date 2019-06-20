@@ -13,8 +13,8 @@
 \ProvidesClass{reportsascm}[2014/06/25 Estil de la revista reportsascm]
 \RequirePackage{xcolor}
 \RequirePackage{graphicx}
-\RequirePackage{hyperref}
-\hypersetup{citecolor=blue}
+%\RequirePackage{hyperref}
+%\hypersetup{citecolor=blue}
 \RequirePackage{lastpage}
 \RequirePackage{sfmath}
 \definecolor{blau}{RGB}{43,129,173}
@@ -23,7 +23,7 @@
 \usepackage[a4paper,left=20mm,top=18mm,right=20mm,bottom=18mm,includeheadfoot,headheight=24mm, headsep=0mm, footskip=15mm]{geometry}
 \makeatletter
 %Parametres de la pagina
-\hypersetup{colorlinks=true,urlcolor=black}
+%\hypersetup{colorlinks=true,urlcolor=black}
 %Definim les variables numero, any, pagin, pagfin, doi, ...
 \def\l@any{????}
 \def\l@numero{??}
