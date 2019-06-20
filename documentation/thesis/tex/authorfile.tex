@@ -1,0 +1,94 @@
+\documentclass[12,twoside]{mammeTFM}
+%\usepackage[active]{srcltx}
+\usepackage{amsthm,amsmath,amssymb,amsfonts,amscd}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage[all]{xy}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{float}
+
+\usetikzlibrary{shapes}
+\usetikzlibrary{positioning}
+%\usepackage[usenames]{xcolor}
+%\usepackage{fancyhdr}
+
+%%%%%Author packages if necessary
+
+
+% Theorem Environments: add extra ones at the end if you need it.
+
+\newtheorem*{theoremA}{Theorem A}
+\newtheorem{theorem}{Theorem}[section]
+
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem*{remarknonumber}{Remark}
+\newtheorem{observation}[theorem]{Observation}
+
+
+
+
+%%%%%%%%%%%%%%%%%%
+% macros/abbreviations: Include here your own.
+%%%%%%%%%%%%%%%%%%
+
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+
+
+% Body of document
+
+\titol{A Remotely-driven Hoverboard \\[3mm] With Platform Leaning Control}
+\titolcurt{Leaning Control}
+\authorStudent{Esteve Tarrag\'o}
+\supervisors{Enric Celaya}
+\monthYear{June, 2019}
+
+%\msc[2010]{Primary  	55M25, 57P10, Secondary 55P15, 57R19, 57N15.}
+
+\paraulesclau{Dynamic, System, Control, Design}
+\agraiments{
+Thanks to Patrick Grosch, Llu\'is Ros, Enric Celaya, I\"nigo Moreno}
+
+
+\abstracteng{This thesis is centered arround the design, construction and control of a remote hoverboard. The main challenge of this project is the study of the leaning control of the hoverboard platform.
+
+Nowadays segways robots have they inclination determined by their speed and they do not have it as a degree of freedom. Unblocking this degree of freedom may help two-wheel robots perform new task as mesurments, tacking images or samples from other inclinations, avoiding obstacles, etc.
+
+This project also aims to provide a benchmark and an easy to build robot that help experiment with non-linear control methods.}
+
+%%%%%%%%%
+\begin{document}
+
+\maketitle
+
+\newpage
+\tableofcontents
+
+\include{purpose}
+\include{design}
+\include{mechanical_study}
+\include{flywheel_study}
+\include{optimization}
+\include{components}
+\include{control}
+\include{software}
+\include{conclusion}
+
+
+
+
+
+
+\end{document}

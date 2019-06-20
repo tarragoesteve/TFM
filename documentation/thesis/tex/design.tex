@@ -1,11 +1,18 @@
-\section{Design}
+\section{Initial design considerations}
+The first thing we decided is the number of actuators.
+Most of segway robot include two motors for the motion control but we added a third on in order to control the inclination.
+We included three motors in total because we want to control three degrees of freedom (inclination and speed of both wheels).
+
+In order to control the inclination of the platform we needed to add an external torque to the platform. We considered three methods: accelerating a flywheel, holding a pendulum in a non-vertical position and air friction with a fan. We discarded the last one due to the high speeds we needed to obtain a reasonable torque on the platform.
+
+Both methods have strengths in different situations so we decided to build a mixed method that could combine both. 
+
+
+We took two restriction in our design. The first one symmetry along the inclination axis in order to have an equilibrium in all possible inclinations without the need of external forces. We also took in consideration that the reinforcement learning algorithms starts being clumsy so none of the configurations should touch the ground. Figure \ref{fig:Side render view} illustrates this restriction.   
+
 The design of the robot is done with the 3D design software \href{https://www.freecadweb.org/}{Free-cad}. All part files are uploaded to the GitHub repository \url{https://github.com/tarragoesteve/TFM} under the hardware folder.
 
 You can see the main views on Figure \ref{fig:Isometric render view}, \ref{fig:Front render view}, \ref{fig:Top render view} and \ref{fig:Side render view}.
-
-We included three actuators in the robot because we want to control three degrees of freedom (inclination and speed of both wheels). Furthermore we introduced a fly-wheel/pendulum so we can control the inclination of the body. 
-
-We ensured symmetry along the axis formed by all motors in order to have an equilibrium in all possible inclinations without the need of external forces. We also took in consideration that the reinforcement learning algorithm starts being clumsy so none of the configurations should intersect with the ground. Figure \ref{fig:Side render view} illustrates this restriction.   
 
 \begin{figure}
 	\centering
@@ -47,9 +54,7 @@ In order to create a configuration with maximum gravitational torque we have don
 Each mass weights:
 \[ m_{cylinder} = \rho * w * \pi * r_c^2 \]
 
-We will neglect the mass of the flywheel structure versus the mass of the cylinders.
-
-All the gravitational torque created by the masses will be compensated with the opposite weight except for the two masses with different radius.
+We neglect the mass of the flywheel structure versus the mass of the cylinders so all the gravitational torque created by the masses will be compensated with the opposite weight except for the two masses with different radius.
 
 One of the weight can be placed along a rail. The distance to the center will vary from $r_{min} = r_c + r_{motor-axis} \approx r_c $ to $r_{max} = r_f - r_c$. 
 
