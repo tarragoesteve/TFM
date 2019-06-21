@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgCircleProgressModule } from 'ng-circle-progress';
-import { Selected_Motor, AppLogicService } from "../app-logic.service";
+import { Selected_Motor, AppLogicService, ReferenceParameter } from "../app-logic.service";
 
 @Component({
   selector: 'app-wheel-controller',
@@ -12,40 +12,33 @@ export class WheelControllerComponent implements OnInit {
   circle: NgCircleProgressModule;
   color = "#AABB02";
   @Input() selected: Selected_Motor;
+  modes = [ReferenceParameter[ReferenceParameter.PWM]];
+  selected_mode = ReferenceParameter[ReferenceParameter.PWM];
+  
 
   constructor(private appLogic: AppLogicService) { }
 
   ngOnInit() {
+    switch (this.selected) {
+      case Selected_Motor.Platform:
+        this.modes = [ReferenceParameter[ReferenceParameter.PWM],ReferenceParameter[ReferenceParameter.position],
+              ReferenceParameter[ReferenceParameter.speed],ReferenceParameter[ReferenceParameter.inclination]]
+        break
+      default:
+          this.modes = [ReferenceParameter[ReferenceParameter.PWM],ReferenceParameter[ReferenceParameter.position],
+          ReferenceParameter[ReferenceParameter.speed]]
+          break;
+    }
   }
 
   getPercentage() {
-    switch (this.selected) {
-      case Selected_Motor.Left:
-        return Math.abs(100*this.appLogic.speed_left_ref);
-      case Selected_Motor.Right:
-        return Math.abs(100*this.appLogic.speed_right_ref);
-      case Selected_Motor.Platform:
-        return Math.abs(100*this.appLogic.position_platform_ref/360);
-      default:
-        break;
-    }
+    this.appLogic.modes[this.selected] = this.selected_mode;
+    return Math.abs(100 * this.appLogic.references[this.selected]);
   }
 
-  clockwise(){
-    switch (this.selected) {
-      case Selected_Motor.Left:
-        return this.appLogic.speed_left_ref>0;
-      case Selected_Motor.Right:
-        return this.appLogic.speed_right_ref>0;
-      case Selected_Motor.Platform:
-        return this.appLogic.position_platform_ref>0;
-      default:
-        break;
-    }
-
+  clockwise() {
+      return this.appLogic.references[this.selected] > 0;
   }
-
-
 
 
 }

@@ -1,14 +1,9 @@
-<p>
-  wheel-controller works! {{title}}
-</p>
-<!-- You can now use it in app.component.html -->
-<circle-progress
-  [percent]="getPercentage()"
-  [radius]="100"
-  [outerStrokeWidth]="16"
-  [outerStrokeColor]="color"
-  [showInnerStroke] ="false"
-  [clockwise] ="clockwise()"
-  [animation]="false"
-  [animationDuration]="200"
-></circle-progress>
+<round-progress [current]="getPercentage()" [radius]="120" [max]="100" [color]="color" [semicircle]="false" [rounded]="true"
+  [clockwise]="clockwise()" [responsive]="false" [duration]="10" [animation]="'easeInOutQuart'" [animationDelay]="0">
+</round-progress>
+<br>
+<mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" [(ngModel)]="selected_mode">
+  <mat-radio-button class="example-radio-button" *ngFor="let mode of modes" [value]="mode">
+    {{mode}}
+  </mat-radio-button>
+</mat-radio-group>

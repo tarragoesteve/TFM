@@ -13,8 +13,8 @@ server.on('connection', function(socket: socket.Socket){
     })
 
     socket.on('input',(msg)=>{
-        if(component_sockets["motor_left"]){
-            component_sockets["motor_left"].emit('message', {'PWM_reference': msg.speed_left_ref})
+        for(let component in msg){
+            component_sockets[component].emit('message', msg[component])
         }
     })
 });

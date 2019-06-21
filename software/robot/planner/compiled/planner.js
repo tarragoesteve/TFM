@@ -17,8 +17,9 @@ server.on('connection', function (socket) {
         console.log(msg);
     });
     socket.on('input', function (msg) {
+        console.log(msg);
         if (component_sockets["motor_left"]) {
-            component_sockets["motor_left"].emit('message', { 'position_reference': msg.speed_left_ref });
+            component_sockets["motor_left"].emit('message', { 'PWM_reference': msg.speed_left_ref });
         }
     });
 });
