@@ -97,7 +97,7 @@ proportional to the energy the robot can deliver using the flywheel at a certain
 \subsection{Results}
 Our procedure has been making a grid with the four parameters of the robot 
 design: $w$ (width of the cylinders), $N$(number of cylinders), $r_{wheel}$ and $r_{flywheel}$.
-We have fixed $r_{flywheel}$, iterated over the other three variables and keeped the best parameters for our reward function.
+We have fixed $r_{flywheel}$, iterated over the other three variables and keeped the best parameters to reduce our cost function.
 
 
 \begin{figure}[H]
@@ -191,18 +191,3 @@ With this parameters we get the following specifications:
 	 \hline
 	\end{tabular}
 \end{center}
-
-
-\subsection{Motor specifications}
-Here we have the factory specifications of our motors: 
-\begin{itemize}
-    \item Operating voltage: between 3 V and 9 V
-    \item Nominal voltage: 6 V
-    \item Free-run speed at 6 V: 176 RPM
-    \item Free-run current at 6 V: 80 mA
-    \item Stall current at 6V: 900 mA
-    \item Stall torque at 6V: 5 kg·cm
-    \item Gear ratio: 1:35
-    \item Reductor size: 21 mm
-    \item Weight: 85 g
-\end{itemize}
