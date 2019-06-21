@@ -45,7 +45,7 @@ export class Motor extends Component {
     in_2: Gpio;
 
     //Constants
-    static readonly PWM_limit = 0.6;
+    static readonly PWM_limit = 1;
     static readonly motor_reduction = 34;
     static readonly counts_per_revolution = 11;
     static readonly elapsed_radians = Math.PI / 2 / (Motor.counts_per_revolution * Motor.motor_reduction);
