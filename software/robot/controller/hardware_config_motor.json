@@ -6,8 +6,8 @@
             "name": "motor_left",
             "class": "Motor",
             "parameters": {
-                "k_p": 0.01,
-                "k_i": 0.01,
+                "k_p": 1,
+                "k_i": 0.0001,
                 "k_d": 0,
                 "pins": {
                     "PWM": 13,

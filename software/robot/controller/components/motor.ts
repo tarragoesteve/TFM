@@ -45,11 +45,12 @@ export class Motor extends Component {
     in_2: Gpio;
 
     //Constants
-    motor_reduction = 34;
-    counts_per_revolution = 11;
-    elapsed_radians = Math.PI / 2 / (this.counts_per_revolution * this.motor_reduction);
+    static readonly PWM_limit = 0.5;
+    static readonly motor_reduction = 34;
+    static readonly counts_per_revolution = 11;
+    static readonly elapsed_radians = Math.PI / 2 / (Motor.counts_per_revolution * Motor.motor_reduction);
 
-    private getReferenceDirection(output: number) {
+    static getReferenceDirection(output: number) {
         if (output > 0) return Direction.Forward;
         if (output < 0) return Direction.Backward;
         return Direction.Stop;
@@ -93,14 +94,14 @@ export class Motor extends Component {
                 clockwise = (this.encoder_flags['A'].level == this.encoder_flags['B'].level)
             }
             let elapsed_seconds = Math.abs(delta_time) * 10E-8;
-            let new_speed = this.elapsed_radians / elapsed_seconds;
+            let new_speed = Motor.elapsed_radians / elapsed_seconds;
             //console.log("delta_time",delta_time,"elapsed_seconds",elapsed_seconds,"new_speed",new_speed);
             
             if (!clockwise) {
                 new_speed = -new_speed;
-                this.position -= this.elapsed_radians;
+                this.position -= Motor.elapsed_radians;
             } else {
-                this.position += this.elapsed_radians;
+                this.position += Motor.elapsed_radians;
             }
             this.acceleration = (new_speed - this.speed) / elapsed_seconds;
             this.speed = this.speed_filter.addSample(new_speed);
@@ -200,10 +201,10 @@ export class Motor extends Component {
     }
 
     apply_output(output: number) {
-        if (this.getReferenceDirection(output) != this.direction) {
-            this.changeDirection(this.getReferenceDirection(output));
+        if (Motor.getReferenceDirection(output) != this.direction) {
+            this.changeDirection(Motor.getReferenceDirection(output));
         }
-        let dutyCycle = Math.floor(Math.min(1, Math.abs(output)) * 255)
+        let dutyCycle = Math.floor(Math.min(Motor.PWM_limit, Math.abs(output)) * 255)
         this.PWM.pwmWrite(dutyCycle)
     }
 
