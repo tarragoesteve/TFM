@@ -1,11 +1,6 @@
-<p>
-  wheel-rotate works!
-</p>
 <ngx-charts-line-chart
       [view]="view"
-      [scheme]="colorScheme"
       [results]="multi"
-      [gradient]="gradient"
       [xAxis]="showXAxis"
       [yAxis]="showYAxis"
       [legend]="showLegend"
@@ -14,6 +9,8 @@
       [xAxisLabel]="xAxisLabel"
       [yAxisLabel]="yAxisLabel"
       [autoScale]="autoScale"
-      [timeline]="timeline"
+      [schemeType]="schemeType"
+      [xScaleMin]="xScaleMin"
+      [xScaleMax]="xScaleMax"
       (select)="onSelect($event)">
 </ngx-charts-line-chart>

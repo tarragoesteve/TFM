@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { Selected_Motor } from '../app-logic.service';
+import { Selected_Motor, AppLogicService, ReferenceParameter } from "../app-logic.service";
 
 @Component({
   selector: 'app-wheel-data',
@@ -10,18 +10,20 @@ export class WheelDataComponent implements OnInit {
   @Input() selected: Selected_Motor;
 
   view: any[] = undefined;
-  
 
   // options
   showXAxis = true;
   showYAxis = true;
   gradient = false;
   showLegend = true;
-  showXAxisLabel = true;
+  showXAxisLabel = false;
   xAxisLabel = 'Number';
-  showYAxisLabel = true;
+  showYAxisLabel = false;
   yAxisLabel = 'Color Value';
   timeline = true;
+  schemeType = 'ordinal'
+  xScaleMin = 1
+  xScaleMax = 5
 
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
@@ -29,41 +31,27 @@ export class WheelDataComponent implements OnInit {
 
   multi: any[] = [
     {
-      name: 'Cyan',
+      name: 'Speed',
       series: [
-        {
-          name: 5,
-          value: 2650
-        },
-        {
-          name: 10,
-          value: 2800      },
-        {
-          name: 15,
-          value: 2000
-        }
       ]
     },
-    {
-      name: 'Yellow',
-      series: [
-        {
-          name: 5,
-          value: 2500
-        },
-        {
-          name: 10,
-          value: 3100
-        },
-        {
-          name: 15,
-          value: 2350
-        }
-      ]
-    }
   ];
 
-  ngOnInit(){
+  ngOnInit() {
 
+    let time = 0;
+    setInterval(() => {
+      time = time +1;
+      this.multi[0]['series'].push({
+        name: time,
+        value: Math.random()*5
+      })
+      this.multi = [...this.multi]
+      console.log(this.multi[0]['series']);
+      
+      this.xScaleMin = this.multi[0]['series'][this.multi[0]['series'].length-1].name-5; 
+      this.xScaleMax = this.multi[0]['series'][this.multi[0]['series'].length-1].name;
+     
+    }, 1000)
   }
 }

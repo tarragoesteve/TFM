@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as socketio from "socket.io-client";
+import { SocketIOClient } from "socket.io-client";
 
 
 export enum ReferenceParameter {
@@ -32,22 +33,27 @@ export class AppLogicService {
     right_motor : "PWM",
     platform_motor : "PWM",
   };
+  history: any;
 
   sendState() {
-    let data = {};
-    data["left_motor"] = {}
-    data["right_motor"] = {}
-    data["platform_motor"] = {}
+    let input = {};
+    input["left_motor"] = {}
+    input["right_motor"] = {}
+    input["platform_motor"] = {}
 
     for (let motor of  ["left_motor","right_motor","platform_motor"]){
-      data[motor][this.modes[motor]+"_reference"]=this.references[motor]
+      input[motor][this.modes[motor]+"_reference"]=this.references[motor]
     }
-    this.socket.emit('input', data)
+    this.socket.emit('input', input)
   }
 
   constructor() {
     //TODO: Change localhost
-    this.socket = socketio.connect('http://localhost:3000/' + '?name=user_interface')
+    this.socket = socketio.connect('http://localhost:3000/' + '?name=user_interface');
+    this.socket.on('state', (msg: any) => {
+
+    })
+    
   }
 
   onKeyPress(event) {

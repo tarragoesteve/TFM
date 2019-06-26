@@ -23,6 +23,7 @@
     "@angular/router": "~7.2.0",
     "@swimlane/ngx-charts": "^11.1.0",
     "angular-chart.js": "^1.1.1",
+    "angular-svg-round-progressbar": "^3.0.1",
     "chart.js": "^2.8.0",
     "chartjs-plugin-annotation": "^0.5.7",
     "core-js": "^2.5.4",
