@@ -1,0 +1,112 @@
+\section{Dynamics}
+
+In order to study the dynamics of the robot we will use the Lagrange mechanics.
+
+\subsection{Rectilinear movement}
+To reduce the number of variables we wil study the case of rectilinear
+movement by imposing both wheel turn at the same speed.
+
+The generalized coordinates ($q$) will be:
+\begin{enumerate}
+	\item $\phi_{ground-wheel}$: rotation of the wheel respect the ground.
+	\item $\phi_{wheel-platform}$: rotation of the platform respect the wheel.
+	\item $\phi_{platform-flywheel}$: rotation of the platform respect the wheel.
+\end{enumerate}
+
+We will use two auxiliary variables:
+\begin{enumerate}
+	\item $\phi_{ground-platform}=\phi_{ground-wheel}+\phi_{wheel-platform}$: rotation of the platform respect the ground.
+	\item $\phi_{ground-flywheel}=\phi_{ground-platform}+\phi_{platform-flywheel}$: rotation of the flywheel respect the ground.
+\end{enumerate}
+
+The total potential energy:
+\begin{equation}
+	V = m_{flywheel}\cdot (r_{flywheel-max}-r_{flywheel-min}) \cdot sin(\phi_{ground-flywheel}) \cdot g	
+\end{equation}
+
+
+The total kinetic energy:
+\begin{equation}
+	T = \frac{1}{2}\cdot[\dot{\phi}_{ground-wheel}^2\cdot I_{wheel}
+	+ \dot{\phi}_{ground-platform}^2 \cdot I_{platform}
+	+ \dot{\phi}_{ground-flywheel}^2\cdot I_{flywheel}
+	+ \dot{\phi}_{ground-wheel}^2\cdot r_{wheel}^2\cdot m_{total}]	
+\end{equation}
+
+The Lagrangian is defined as:
+\begin{equation}
+	L=T-V	
+\end{equation}
+
+Lagrange's equation is:
+\begin{equation}
+	\frac{d}{dt}(\frac{\partial L}{\partial \dot{q}_j})=
+	\frac{\partial L}{\partial q_j}	
+\end{equation}
+
+So in our case:
+\begin{equation}
+	\frac{\partial L}{\partial \dot{\phi}_{ground-wheel}}=
+	\dot{\phi}_{ground-wheel} \cdot I_{wheel}
+	+ \dot{\phi}_{ground-platform} \cdot I_{platform}
+	+ \dot{\phi}_{ground-flywheel}\cdot I_{flywheel}
+	+ \dot{\phi}_{ground-wheel}\cdot r_{wheel}^2\cdot m_{total}
+\end{equation}
+
+\begin{equation}
+	\frac{\partial L}{\partial \dot{\phi}_{wheel-platform}}=
+	\dot{\phi}_{ground-platform} \cdot I_{platform}
+	+ \dot{\phi}_{ground-flywheel}\cdot I_{flywheel}
+\end{equation}
+
+\begin{equation}
+	\frac{\partial L}{\partial \dot{\phi}_{wheel-platform}}=
+	\dot{\phi}_{platform-flywheel}\cdot I_{flywheel}
+\end{equation}
+
+We define M as the following matrix:
+\begin{equation}
+	\begin{pmatrix} 
+		I_{wheel} + I_{platform} + I_{flywheel} + r_{wheel}^2 \cdot m_{total} &
+		I_{platform} + I_{flywheel} &
+		I_{flywheel}\\
+		I_{platform} + I_{flywheel} &
+		I_{platform} + I_{flywheel} &
+		I_{flywheel}\\
+		I_{flywheel} &
+		I_{flywheel} &
+		I_{flywheel}\\
+		\end{pmatrix}
+\end{equation}
+
+In matrix form and with our generalized coordinates:
+\begin{equation}
+	\frac{\partial L}{\partial \dot{q}} =
+	M \cdot \dot{q}
+\end{equation}
+
+\begin{equation}
+	\frac{d}{dt}(\frac{\partial L}{\partial \dot{q}}) = 	M \cdot \ddot{q}	
+\end{equation}
+
+Let a as a constant:
+\begin{equation}
+	a = - m_{flywheel}\cdot (r_{flywheel-max}-r_{flywheel-min}) \cdot g	
+\end{equation}
+
+\begin{equation}
+	\frac{\partial L}{\partial q} = a \cdot cos(\phi_{ground-flywheel}) \cdot 	
+	\begin{pmatrix}
+	1 \\ 1 \\ 1
+	\end{pmatrix}	
+\end{equation}
+
+So using Lagrange's equation we get:
+\begin{equation}
+	\boxed{
+	M \cdot \ddot{q} = a \cdot cos(\phi_{ground-flywheel}) \cdot 	
+	\begin{pmatrix}
+	1 \\ 1 \\ 1
+	\end{pmatrix}
+	}
+\end{equation}
