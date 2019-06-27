@@ -1,5 +1,7 @@
-<round-progress [current]="getPercentage()" [radius]="120" [max]="100" [color]="color" [semicircle]="false" [rounded]="true"
-  [clockwise]="clockwise()" [responsive]="false" [duration]="10" [animation]="'easeInOutQuart'" [animationDelay]="0">
+<div class="percentage">{{ (getPercentage()|number:'.2') +'%' }}</div>
+
+<round-progress class="round-progress" [current]="getPercentage()" [radius]="120" [max]="100" [color]="color" [semicircle]="false" [rounded]="true"
+  [clockwise]="clockwise()" [responsive]="false" [duration]="10" [animation]="'easeInOutQuart'" [animationDelay]="0">hola
 </round-progress>
 <br>
 <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" [(ngModel)]="selected_mode">

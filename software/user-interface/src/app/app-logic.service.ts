@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import * as socketio from "socket.io-client";
-import { SocketIOClient } from "socket.io-client";
 
 
 export enum ReferenceParameter {
@@ -22,7 +21,7 @@ export enum Selected_Motor {
 })
 export class AppLogicService {
   //State
-  socket: SocketIOClient.Socket;
+  socket: any;
   references = {
     left_motor : 0,
     right_motor : 0,
@@ -35,7 +34,7 @@ export class AppLogicService {
   };
   history: any;
 
-  sendState() {
+  sendInput() {
     let input = {};
     input["left_motor"] = {}
     input["right_motor"] = {}
@@ -49,11 +48,10 @@ export class AppLogicService {
 
   constructor() {
     //TODO: Change localhost
-    this.socket = socketio.connect('http://localhost:3000/' + '?name=user_interface');
+    this.socket = socketio.connect('http://185.181.8.143:3000/' + '?name=user_interface');
     this.socket.on('state', (msg: any) => {
-
-    })
-    
+      console.log(msg);      
+    })    
   }
 
   onKeyPress(event) {
@@ -107,7 +105,7 @@ export class AppLogicService {
         this.references[Selected_Motor.Left] -= 1 / 100;
         break;
     }
-    this.sendState()
+    this.sendInput()
   }
 }
 

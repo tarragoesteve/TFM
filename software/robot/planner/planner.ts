@@ -14,7 +14,9 @@ server.on('connection', function(socket: socket.Socket){
 
     socket.on('input',(msg)=>{
         for(let component in msg){
-            component_sockets[component].emit('message', msg[component])
+            if(component_sockets[component]){
+                component_sockets[component].emit('message', msg[component])
+            }
         }
     })
 });

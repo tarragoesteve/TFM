@@ -40,5 +40,4 @@ export class WheelControllerComponent implements OnInit {
       return this.appLogic.references[this.selected] > 0;
   }
 
-
 }
