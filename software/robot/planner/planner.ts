@@ -13,7 +13,10 @@ server.on('connection', function(socket: socket.Socket){
     })
 
     socket.on('input',(msg)=>{
+        console.log(msg);
         for(let component in msg){
+            console.log(component);
+            
             if(component_sockets[component]){
                 component_sockets[component].emit('message', msg[component])
             }
