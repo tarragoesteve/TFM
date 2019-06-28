@@ -1,16 +1,17 @@
 \section{Dynamics}
 
-In order to study the dynamics of the robot we will use the Lagrange mechanics.
+In order to study the dynamics of the robot we will use Lagrange mechanics.
 
 \subsection{Rectilinear movement with $r_{flywheel}$ fixed to $r_{flywheel-min}$}
 To reduce the number of variables we wil study the case of rectilinear
-movement by imposing that both wheels turn at the same speed.
+movement by imposing that both wheels turn at the same speed. We will also set
+the radius of the free weight to $r_{flywheel-min}$.
 
 The generalized coordinates ($q$) will be:
 \begin{enumerate}
 	\item $\phi_{ground-wheel}$: rotation of the wheel respect the ground.
 	\item $\phi_{wheel-platform}$: rotation of the platform respect the wheel.
-	\item $\phi_{platform-flywheel}$: rotation of the platform respect the wheel.
+	\item $\phi_{platform-flywheel}$: rotation of the flywheel respect the platform.
 \end{enumerate}
 
 We will use two auxiliary variables:
@@ -21,7 +22,7 @@ We will use two auxiliary variables:
 
 The total potential energy:
 \begin{equation}
-	V = m_{flywheel}\cdot (r_{flywheel-max}-r_{flywheel-min}) \cdot sin(\phi_{ground-flywheel}) \cdot g	
+	V = m_{flywheel}\cdot (r_{flywheel-max}-r_{flywheel-min}) \cdot cos(\phi_{ground-flywheel}) \cdot g	
 \end{equation}
 
 
@@ -60,8 +61,8 @@ So in our case:
 \end{equation}
 
 \begin{equation}
-	\frac{\partial L}{\partial \dot{\phi}_{wheel-platform}}=
-	\dot{\phi}_{platform-flywheel}\cdot I_{flywheel}
+	\frac{\partial L}{\partial \dot{\phi}_{platform-flywheel}}=
+	\dot{\phi}_{ground-flywheel}\cdot I_{flywheel}
 \end{equation}
 
 We define M as the following matrix:
@@ -89,13 +90,13 @@ In matrix form and with our generalized coordinates:
 	\frac{d}{dt}(\frac{\partial L}{\partial \dot{q}}) = 	M \cdot \ddot{q}	
 \end{equation}
 
-Let a as a constant:
+Let a be a constant:
 \begin{equation}
-	a = - m_{flywheel}\cdot (r_{flywheel-max}-r_{flywheel-min}) \cdot g	
+	a = m_{flywheel}\cdot (r_{flywheel-max}-r_{flywheel-min}) \cdot g	
 \end{equation}
 
 \begin{equation}
-	\frac{\partial L}{\partial q} = a \cdot cos(\phi_{ground-flywheel}) \cdot 	
+	\frac{\partial L}{\partial q} = a \cdot sin(\phi_{ground-flywheel}) \cdot 	
 	\begin{pmatrix}
 	1 \\ 1 \\ 1
 	\end{pmatrix}	
@@ -104,7 +105,7 @@ Let a as a constant:
 So using Lagrange's equation we get:
 \begin{equation}
 	\boxed{
-	M \cdot \ddot{q} = a \cdot cos(\phi_{ground-flywheel}) \cdot 	
+	M \cdot \ddot{q} = a \cdot sin(\phi_{ground-flywheel}) \cdot 	
 	\begin{pmatrix}
 	1 \\ 1 \\ 1
 	\end{pmatrix}
