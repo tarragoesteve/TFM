@@ -42,7 +42,7 @@ The Lagrangian is defined as:
 Lagrange's equation is:
 \begin{equation}
 	\frac{d}{dt}(\frac{\partial L}{\partial \dot{q}_j})=
-	\frac{\partial L}{\partial q_j}	
+	\frac{\partial L}{\partial q_j}	+ F_{j}
 \end{equation}
 
 So in our case:
@@ -108,6 +108,6 @@ So using Lagrange's equation we get:
 	M \cdot \ddot{q} = a \cdot sin(\phi_{ground-flywheel}) \cdot 	
 	\begin{pmatrix}
 	1 \\ 1 \\ 1
-	\end{pmatrix}
+	\end{pmatrix} + F
 	}
 \end{equation}
