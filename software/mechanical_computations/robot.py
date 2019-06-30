@@ -65,7 +65,10 @@ class Robot:
     
   def I_wheel(self):
       return self.m_wheel * (self.r_wheel)**2
-  
+
+  def I_platform(self):
+      return self.m_total() * 0.5 * (self.r_wheel)**2
+
   def m_total(self):
     return self.m_rest + self.m_flywheel() 
   
