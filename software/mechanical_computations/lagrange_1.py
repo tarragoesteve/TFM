@@ -6,9 +6,9 @@ import scipy
 from scipy import optimize, integrate
 from robot import Robot
 
-#experiment = "Maximum equal torque"
+experiment = "Maximum equal torque"
 #experiment = "PID 90º"
-experiment = "Only flywheel torque"
+#experiment = "Only flywheel torque"
 
 
 accumulated_error = 0
