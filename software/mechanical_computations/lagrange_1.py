@@ -91,7 +91,7 @@ my_robot.set_r_flywheel_r_wheel_w_N(.086, .10, .04, 2)
 initial_contition = [0,0,0,0,0,0]
 ode_int = scipy.integrate.solve_ivp(
     system_function(my_robot),
-    (0, 50),
+    (0, 25),
     initial_contition,
     max_step=0.001,
     method='RK45',
@@ -117,7 +117,9 @@ plt.ylabel('theta dot [rad/s]')
 plt.plot(ode_int.t, ode_int.y[3])
 plt.plot(ode_int.t, ode_int.y[4])
 plt.plot(ode_int.t, ode_int.y[5])
-plt.legend(['dot_q[0]', 'dot_q[1]', 'dot_q[2]'])
+plt.plot(ode_int.t, ode_int.y[3]+ode_int.y[4])
+plt.plot(ode_int.t, ode_int.y[3]+ode_int.y[4]+ode_int.y[5])
+plt.legend(['dot_q[0]', 'dot_q[1]', 'dot_q[2]','ground-platform' ,'ground-flywheel'])
 
 plt.show()
 
