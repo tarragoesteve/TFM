@@ -6,18 +6,18 @@ import scipy
 from scipy import optimize, integrate
 from robot import Robot
 
-experiment = "Maximum equal torque"
+#experiment = "Maximum equal torque"
 #experiment = "PID 90º"
-#experiment = "Only flywheel torque"
+experiment = "Only flywheel torque"
 
 
 accumulated_error = 0
 previous_error = 0
 previous_error_time = 0
 first_error = True
-kp = 0.001
-ki = 0.01
-kd = 0
+kp = +0.001
+ki = 0
+kd = 0.01
 
 
 def PID(error, time):
@@ -35,8 +35,8 @@ def PID(error, time):
         previous_error_time = time
         return kp * error
     else:
-        accumulated_error = accumulated_error + error * (time - previous_error_time)
         if time - previous_error_time > 0:
+            accumulated_error = accumulated_error + error * (time - previous_error_time)
             output = kp * error + ki * accumulated_error + kd * (error - previous_error) / (time - previous_error_time)
         else:
             output = kp * error + ki * accumulated_error
@@ -91,7 +91,7 @@ my_robot.set_r_flywheel_r_wheel_w_N(.086, .10, .04, 2)
 initial_contition = [0,0,0,0,0,0]
 ode_int = scipy.integrate.solve_ivp(
     system_function(my_robot),
-    (0, 25),
+    (0, 50),
     initial_contition,
     max_step=0.001,
     method='RK45',
