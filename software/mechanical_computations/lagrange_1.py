@@ -8,7 +8,8 @@ from robot import Robot
 
 #experiment = "Maximum equal torque"
 #experiment = "PID 90º"
-experiment = "Only flywheel torque"
+#experiment = "Only flywheel torque"
+experiment = "No torque"
 
 
 accumulated_error = 0
@@ -88,7 +89,7 @@ def system_function(robot: Robot):
 
 my_robot = Robot()
 my_robot.set_r_flywheel_r_wheel_w_N(.086, .10, .04, 2)
-initial_contition = [0,0,0,0,0,0]
+initial_contition = [0,0,0,0,0,18.5]
 ode_int = scipy.integrate.solve_ivp(
     system_function(my_robot),
     (0, 25),
