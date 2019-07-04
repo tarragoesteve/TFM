@@ -5,12 +5,9 @@ import numpy
 import scipy
 from scipy import optimize, integrate
 from robot import Robot
+from tqdm import tqdm
 
-#experiment = "Maximum equal torque"
-#experiment = "PID 90º"
-experiment = "Only flywheel torque"
-#experiment = "No torque"
-
+transition_time=0
 
 accumulated_error = 0
 previous_error = 0
@@ -47,19 +44,14 @@ def PID(error, time):
 
 
 def external_torque(robot, t, q, dot_q):
-    if experiment == "Maximum equal torque":
+    global transition_time
+    if t< transition_time:
+        output = PID( (math.pi/2) - (q[0]+q[1]+q[2]), t)
+        tau = min(output, 2*robot.max_torque(dot_q[1]), robot.max_torque(dot_q[2]))
+        return [0, tau, tau]
+    else:
         tau = max(0,min(2*robot.max_torque(dot_q[1]), robot.max_torque(dot_q[2])))
         return [0, tau, tau]
-    elif (experiment == "PID 90º"):
-        output = PID( (math.pi/2) - (q[0]+q[1]+q[2]), t)
-        #print("output", output, "error", (0.3) - (q[0]+q[1]+q[2]))
-        tau = min(output, robot.max_torque(dot_q[1]), robot.max_torque(dot_q[2]))
-        return [0, tau, tau]
-    elif (experiment == "Only flywheel torque"):
-        return [0, 0, max(0,robot.max_torque(dot_q[2]))]
-    else:
-        return [0, 0, 0]
-
 
 def system_function(robot: Robot):
     M = numpy.matrix([[robot.I_wheel()+robot.I_platform() + robot.I_flywheel() + robot.m_total() * robot.r_wheel**2,
@@ -90,38 +82,27 @@ def system_function(robot: Robot):
 my_robot = Robot()
 my_robot.set_r_flywheel_r_wheel_w_N(.086, .10, .04, 2)
 initial_contition = [0,0,0,0,0,0]
-ode_int = scipy.integrate.solve_ivp(
-    system_function(my_robot),
-    (0, 15),
-    initial_contition,
-    max_step=0.001,
-    method='RK45',
-    dense_output=True)
+results=[]
+num_divisions = 100
+total_time = 12
+for tt in tqdm(numpy.linspace(0,total_time,num_divisions)):
+    transition_time= tt
+    ode_int = scipy.integrate.solve_ivp(
+        system_function(my_robot),
+        (0, total_time),
+        initial_contition,
+        max_step=0.001,
+        method='RK45',
+        dense_output=False)
+    results.append(ode_int)
 
 
 plt.figure()
-plt.title('Experiment: ' + experiment)
-plt.xlabel('t [s]')
-plt.ylabel('theta [rad]')
-plt.plot(ode_int.t, ode_int.y[0])
-plt.plot(ode_int.t, ode_int.y[1])
-plt.plot(ode_int.t, ode_int.y[2])
-plt.plot(ode_int.t, ode_int.y[0]+ode_int.y[1])
-plt.plot(ode_int.t, ode_int.y[0]+ode_int.y[1]+ode_int.y[2])
-plt.legend(['q[0]', 'q[1]', 'q[2]', 'ground-platform', 'ground-flywheel'])
-
-
-plt.figure()
-plt.title('Experiment: ' + experiment)
-plt.xlabel('t [s]')
-plt.ylabel('theta dot [rad/s]')
-plt.plot(ode_int.t, ode_int.y[3])
-plt.plot(ode_int.t, ode_int.y[4])
-plt.plot(ode_int.t, ode_int.y[5])
-plt.plot(ode_int.t, ode_int.y[3]+ode_int.y[4])
-plt.plot(ode_int.t, ode_int.y[3]+ode_int.y[4]+ode_int.y[5])
-plt.legend(['dot_q[0]', 'dot_q[1]', 'dot_q[2]','ground-platform' ,'ground-flywheel'])
+plt.title('Experiment: ' + 'Changing transition time')
+plt.xlabel('transition time [s]')
+plt.ylabel('distance [m]')
+distance = [-result.y[0][-1] * my_robot.r_wheel for result in results]
+plt.plot(numpy.linspace(0,total_time,num_divisions), distance)
+plt.legend(['q[0]'])
 
 plt.show()
-
-# print(ode_int)
