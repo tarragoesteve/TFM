@@ -6,10 +6,10 @@ import scipy
 from scipy import optimize, integrate
 from robot import Robot
 
-#experiment = "Maximum equal torque"
+experiment = "Maximum equal torque"
 #experiment = "PID 90º"
 #experiment = "Only flywheel torque"
-experiment = "No torque"
+#experiment = "No torque"
 
 
 accumulated_error = 0
@@ -48,7 +48,7 @@ def PID(error, time):
 
 def external_torque(robot, t, q, dot_q):
     if experiment == "Maximum equal torque":
-        tau = min(2*robot.max_torque(dot_q[1]), robot.max_torque(dot_q[2]))
+        tau = max(0,min(2*robot.max_torque(dot_q[1]), robot.max_torque(dot_q[2])))
         return [0, tau, tau]
     elif (experiment == "PID 90º"):
         output = PID( (math.pi/2) - (q[0]+q[1]+q[2]), t)
@@ -56,7 +56,7 @@ def external_torque(robot, t, q, dot_q):
         tau = min(output, robot.max_torque(dot_q[1]), robot.max_torque(dot_q[2]))
         return [0, tau, tau]
     elif (experiment == "Only flywheel torque"):
-        return [0, 0, robot.max_torque(dot_q[2])]
+        return [0, 0, max(0,robot.max_torque(dot_q[2]))]
     else:
         return [0, 0, 0]
 
@@ -92,7 +92,7 @@ my_robot.set_r_flywheel_r_wheel_w_N(.086, .10, .04, 2)
 initial_contition = [0,0,0,0,0,18.5]
 ode_int = scipy.integrate.solve_ivp(
     system_function(my_robot),
-    (0, 25),
+    (0, 15),
     initial_contition,
     max_step=0.001,
     method='RK45',
