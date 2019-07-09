@@ -1,5 +1,4 @@
-
-import configuration from './hardware_config_motor.json'
+import configuration from './hardware_config.json'
 import { Motor } from "./components/motor";
 import { Stub } from "./components/stub";
 import { Component } from './component';

@@ -6,9 +6,9 @@
             "name": "motor_left",
             "class": "Motor",
             "parameters": {
-                "k_p": 1,
-                "k_i": 0.0001,
-                "k_d": 0,
+                "k_p": 0.1,
+                "k_i": 0.1,
+                "k_d": 0.1,
                 "pins": {
                     "PWM": 13,
                     "IN1": 14,

@@ -43,7 +43,6 @@ export class AppLogicService {
     for (let motor of  ["left_motor","right_motor","platform_motor"]){
       input[motor][this.modes[motor]+"_reference"]=this.references[motor]
     }
-    console.log(input);    
     this.socket.emit('input', input)
   }
 
@@ -51,7 +50,7 @@ export class AppLogicService {
     //TODO: Change localhost
     this.socket = socketio.connect('http://185.181.8.143:3000/' + '?name=user_interface');
     this.socket.on('state', (msg: any) => {
-      console.log(msg);      
+    //TODO: Update state to do the graphics
     })    
   }
 

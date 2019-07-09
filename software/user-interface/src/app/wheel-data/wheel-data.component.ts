@@ -47,8 +47,7 @@ export class WheelDataComponent implements OnInit {
         value: Math.random()*5
       })
       this.multi = [...this.multi]
-      console.log(this.multi[0]['series']);
-      
+     
       this.xScaleMin = this.multi[0]['series'][this.multi[0]['series'].length-1].name-5; 
       this.xScaleMax = this.multi[0]['series'][this.multi[0]['series'].length-1].name;
      
