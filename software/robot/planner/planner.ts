@@ -7,7 +7,6 @@ server.on('connection', function(socket: socket.Socket){
     component_sockets[socket.handshake.query.name] = socket;
     console.log('Connection from: ', socket.handshake.query.name);
     
-
     socket.on('state',(msg)=>{
         if(component_sockets["user_interface"]){
             component_sockets["user_interface"].emit('state', msg)
