@@ -9,14 +9,13 @@ server.on('connection', function(socket: socket.Socket){
     
 
     socket.on('state',(msg)=>{
-        console.log(msg);
+        if(component_sockets["user_interface"]){
+            component_sockets["user_interface"].emit('state', msg)
+        }
     })
 
     socket.on('input',(msg)=>{
-        console.log(msg);
         for(let component in msg){
-            console.log(component);
-            
             if(component_sockets[component]){
                 component_sockets[component].emit('message', msg[component])
             }

@@ -43,6 +43,7 @@ export class AppLogicService {
     for (let motor of  ["left_motor","right_motor","platform_motor"]){
       input[motor][this.modes[motor]+"_reference"]=this.references[motor]
     }
+    console.log(input);    
     this.socket.emit('input', input)
   }
 
