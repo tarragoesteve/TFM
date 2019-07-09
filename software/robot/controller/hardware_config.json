@@ -36,7 +36,7 @@
         },
         {
             "name": "platform_motor",
-            "class": "Stabilizer",
+            "class": "Motor",
             "parameters": {
                 "k_p": 0.1,
                 "k_i": 0.1,
