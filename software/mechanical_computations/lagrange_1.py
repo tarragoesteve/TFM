@@ -6,11 +6,11 @@ import scipy
 from scipy import optimize, integrate
 from robot import Robot
 
-#experiment = "Maximum equal torque"
+experiment = "Maximum equal torque"
 #experiment = "PID 90º"
-experiment = "Only flywheel torque"
+#experiment = "Only flywheel torque"
 #experiment = "No torque"
-
+radius_fixed = "r_max"
 
 accumulated_error = 0
 previous_error = 0
@@ -62,15 +62,20 @@ def external_torque(robot, t, q, dot_q):
 
 
 def system_function(robot: Robot):
-    M = numpy.matrix([[robot.I_wheel()+robot.I_platform() + robot.I_flywheel() + robot.m_total() * robot.r_wheel**2,
-                       robot.I_platform() + robot.I_flywheel(),
-                       robot.I_flywheel()],
-                      [robot.I_platform() + robot.I_flywheel(),
-                       robot.I_platform() + robot.I_flywheel(),
-                       robot.I_flywheel()],
-                      [robot.I_flywheel(),
-                       robot.I_flywheel(),
-                       robot.I_flywheel()]
+    r = 0.0
+    if radius_fixed == "r_min":
+        r = robot.r_min()
+    else:
+        r = robot.r_max()
+    M = numpy.matrix([[robot.I_wheel()+robot.I_platform() + robot.I_flywheel(r) + robot.m_total() * robot.r_wheel**2,
+                       robot.I_platform() + robot.I_flywheel(r),
+                       robot.I_flywheel(r)],
+                      [robot.I_platform() + robot.I_flywheel(r),
+                       robot.I_platform() + robot.I_flywheel(r),
+                       robot.I_flywheel(r)],
+                      [robot.I_flywheel(r),
+                       robot.I_flywheel(r),
+                       robot.I_flywheel(r)]
                       ])
 
     a = robot.m_cylinder() * (robot.r_min()-robot.r_max()) * robot.g

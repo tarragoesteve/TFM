@@ -82,7 +82,7 @@ def system_function(robot: Robot):
 
 
 my_robot = Robot()
-my_robot.set_r_flywheel_r_wheel_w_N(.07, .10, .005, 3)
+my_robot.set_r_flywheel_r_wheel_w_N(.086, .10, .04, 2)
 results=[]
 num_divisions = 20
 total_time = 6

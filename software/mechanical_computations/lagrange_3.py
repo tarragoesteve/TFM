@@ -8,10 +8,10 @@ from scipy import optimize, integrate
 from robot import Robot
 
 #experiment = "Maximum equal torque"
-#experiment = "PID 90º"
+experiment = "PID 90º"
 #experiment = "Only flywheel torque"
 #experiment = "No torque"
-experiment = "5 rad/s"
+#experiment = "5 rad/s"
 
 
 
@@ -126,6 +126,8 @@ def system_function(robot: Robot):
         return [q_dot[0], q_dot[1], q_dot[2], q_dot[3], q_ddot[0], q_ddot[1], q_ddot[2],  q_ddot[3]]
     return lambda t, x: aux_function(t, x)
 
+my_robot = Robot()
+my_robot.set_r_flywheel_r_wheel_w_N(.086, .10, .04, 2)
 
 def r_max_event(t, x):
     if (x[7] <= 0):
