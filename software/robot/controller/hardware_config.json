@@ -10,11 +10,11 @@
                 "k_i": 0.1,
                 "k_d": 0.1,
                 "pins": {
-                    "PWM": 12,
-                    "IN1": 7,
-                    "IN2": 1,
-                    "Encoder_A": 16,
-                    "Encoder_B": 20
+                    "PWM": 13,
+                    "IN1": 16,
+                    "IN2": 20,
+                    "Encoder_A": 27,
+                    "Encoder_B": 22
                 }
             }
         },
@@ -26,9 +26,9 @@
                 "k_i": 0.1,
                 "k_d": 0.1,
                 "pins": {
-                    "PWM": 13,
-                    "IN1": 5,
-                    "IN2": 6,
+                    "PWM": 18,
+                    "IN1": 23,
+                    "IN2": 24,
                     "Encoder_A": 19,
                     "Encoder_B": 26
                 }
@@ -42,11 +42,11 @@
                 "k_i": 0.1,
                 "k_d": 0.1,
                 "pins": {
-                    "PWM": 18,
-                    "IN1": 23,
-                    "IN2": 24,
-                    "Encoder_A": 14,
-                    "Encoder_B": 15,
+                    "PWM": 12,
+                    "IN1": 25,
+                    "IN2": 8,
+                    "Encoder_A": 0,
+                    "Encoder_B": 5,
                     "SDA":2,
                     "SDL":3
                 }
