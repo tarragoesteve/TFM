@@ -23,16 +23,17 @@ export class AppLogicService {
   //State
   socket: any;
   references = {
-    left_motor : 0,
-    right_motor : 0,
-    platform_motor : 0,
+    left_motor: 0,
+    right_motor: 0,
+    platform_motor: 0,
   };
-  modes= {
-    left_motor : "PWM",
-    right_motor : "PWM",
-    platform_motor : "PWM",
+  modes = {
+    left_motor: "PWM",
+    right_motor: "PWM",
+    platform_motor: "PWM",
   };
-  history: any;
+
+  history: any = {};
 
   sendInput() {
     let input = {};
@@ -40,8 +41,8 @@ export class AppLogicService {
     input["right_motor"] = {}
     input["platform_motor"] = {}
 
-    for (let motor of  ["left_motor","right_motor","platform_motor"]){
-      input[motor][this.modes[motor]+"_reference"]=this.references[motor]
+    for (let motor of ["left_motor", "right_motor", "platform_motor"]) {
+      input[motor][this.modes[motor] + "_reference"] = this.references[motor]
     }
     this.socket.emit('input', input)
   }
@@ -49,10 +50,15 @@ export class AppLogicService {
   constructor() {
     //TODO: Change localhost
     this.socket = socketio.connect('http://185.181.8.64:3000/' + '?name=user_interface');
+    this.history["left_motor"] = []
+    this.history["right_motor"] = []
+    this.history["platform_motor"] = []
     this.socket.on('state', (msg: any) => {
-      console.log(msg);      
-    //TODO: Update state to do the graphics
-    })    
+      if(msg.motor){
+        this.history[msg.motor].push(msg)
+      }
+      //console.log(msg);
+    })
   }
 
   onKeyPress(event) {
@@ -67,13 +73,13 @@ export class AppLogicService {
         this.references[Selected_Motor.Left] -= 1 / 100;
         break;
       case 'y':
-        this.references[Selected_Motor.Platform]+= 1 / 100;
+        this.references[Selected_Motor.Platform] += 1 / 100;
         break;
       case 'h':
         this.references[Selected_Motor.Platform] = 0;
         break;
       case 'n':
-        this.references[Selected_Motor.Platform]-= 1 / 100;
+        this.references[Selected_Motor.Platform] -= 1 / 100;
         break;
       case 'u':
         this.references[Selected_Motor.Right] += 1 / 100;

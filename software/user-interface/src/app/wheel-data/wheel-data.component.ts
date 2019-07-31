@@ -22,8 +22,8 @@ export class WheelDataComponent implements OnInit {
   yAxisLabel = 'Color Value';
   timeline = true;
   schemeType = 'ordinal'
-  xScaleMin = 1
-  xScaleMax = 5
+  //xScaleMin = 1
+  //xScaleMax = 5
 
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
@@ -36,21 +36,34 @@ export class WheelDataComponent implements OnInit {
       ]
     },
   ];
+  appLogic : AppLogicService;
+
+  constructor(appLogic: AppLogicService){
+    this.appLogic = appLogic;
+  }
 
   ngOnInit() {
 
-    let time = 0;
     setInterval(() => {
-      time = time +1;
-      this.multi[0]['series'].push({
-        name: time,
-        value: Math.random()*5
-      })
+      let aux = []
+      for(let item of this.appLogic.history[this.selected])
+      {
+        console.log(item);
+        
+        if(Date.now()-item.time<10*1000){
+          aux.push({
+            name: item.time,
+            value: item.speed
+          })
+        }
+      }
+
+      console.log(aux);
+      
+
+      this.multi[0]['series'] = aux;
+      
       this.multi = [...this.multi]
-     
-      this.xScaleMin = this.multi[0]['series'][this.multi[0]['series'].length-1].name-5; 
-      this.xScaleMax = this.multi[0]['series'][this.multi[0]['series'].length-1].name;
-     
     }, 1000)
   }
 }

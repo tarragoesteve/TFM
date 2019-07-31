@@ -174,7 +174,7 @@ export class Motor extends Component {
                         "speed": (this.position_counter - this.previous_position_counter)*Motor.elapsed_radians*1000.0/Motor.loop_ms,
                         "output": output, reference_parameter: this.reference_parameter,
                         position_reference: this.position_reference, speed_reference: this.speed_reference,
-                        PWM_reference: this.PWM_reference
+                        PWM_reference: this.PWM_reference, time: Date.now()
                     })
                     i = 0;
                 }
