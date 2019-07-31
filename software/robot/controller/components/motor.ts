@@ -168,7 +168,7 @@ export class Motor extends Component {
                 this.apply_output(output);
 
                 //Send state to the planner
-                if (i >= 50) {
+                if (i >= 5) {
                     this.socket.emit('state', {
                         "motor": this.name, "position": this.position_counter * Motor.elapsed_radians,
                         "speed": (this.position_counter - this.previous_position_counter)*Motor.elapsed_radians*1000.0/Motor.loop_ms,
