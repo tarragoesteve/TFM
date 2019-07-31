@@ -47,7 +47,8 @@ export class Motor extends Component {
     static readonly motor_reduction = 34;
     static readonly pulse_per_revolution = 341.2;
     static readonly counts_per_revolution = 4* Motor.pulse_per_revolution;
-    static readonly elapsed_radians = Math.PI * 2/Motor.counts_per_revolution;
+    static readonly corrector = 1.4511;
+    static readonly elapsed_radians = Motor.corrector* Math.PI * 2/Motor.counts_per_revolution;
     static readonly loop_ms = 20;
 
     static getReferenceDirection(output: number) {
