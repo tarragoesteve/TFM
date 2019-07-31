@@ -30,9 +30,6 @@ export class Motor extends Component {
     acceleration_reference: number = 0;
     PWM_reference: number = 0;
 
-    speed_filter : Filter;
-
-
     PID: PID;
 
     //PINS
@@ -146,15 +143,13 @@ export class Motor extends Component {
             }
             if (isNumber(msg.speed_reference)) {
                 this.reference_parameter = ReferenceParameter.Speed;
-                this.speed_reference =10* msg.speed_reference;
+                this.speed_reference =25* msg.speed_reference;
             }
             if (isNumber(msg.PWM_reference)) {
                 this.reference_parameter = ReferenceParameter.PWM;
                 this.PWM_reference = msg.PWM_reference;
             }
         })
-
-        this.speed_filter = new Filter(20);
     }
 
     loop(): Promise<boolean> {
