@@ -14,15 +14,13 @@ enum Direction {
 enum ReferenceParameter {
     Position,
     Speed,
-    Acceleration,
     PWM,
 }
 
 export class Motor extends Component {
     //State
-    position: number = 0;
-    speed: number = 0;
-    acceleration: number = 0;
+    previous_position_counter :number = 0;
+    position_counter: number = 0;
     direction: Direction = Direction.Stop;
     
     //Reference
@@ -47,8 +45,10 @@ export class Motor extends Component {
     //Constants
     static readonly PWM_limit = 1;
     static readonly motor_reduction = 34;
-    static readonly counts_per_revolution = 11;
-    static readonly elapsed_radians = Math.PI / 2 / (Motor.counts_per_revolution * Motor.motor_reduction);
+    static readonly pulse_per_revolution = 341.2;
+    static readonly counts_per_revolution = 4* Motor.pulse_per_revolution;
+    static readonly elapsed_radians = Math.PI * 2/Motor.counts_per_revolution;
+    static readonly loop_ms = 20;
 
     static getReferenceDirection(output: number) {
         if (output > 0) return Direction.Forward;
@@ -92,19 +92,12 @@ export class Motor extends Component {
                 clockwise = (this.encoder_flags['A'].level != this.encoder_flags['B'].level)
             } else {
                 clockwise = (this.encoder_flags['A'].level == this.encoder_flags['B'].level)
-            }
-            let elapsed_seconds = Math.abs(delta_time) * 10E-8;
-            let new_speed = Motor.elapsed_radians / elapsed_seconds;
-            //console.log("delta_time",delta_time,"elapsed_seconds",elapsed_seconds,"new_speed",new_speed);
-            
+            }            
             if (!clockwise) {
-                new_speed = -new_speed;
-                this.position -= Motor.elapsed_radians;
+                this.position_counter --;
             } else {
-                this.position += Motor.elapsed_radians;
+                this.position_counter ++;
             }
-            this.acceleration = (new_speed - this.speed) / elapsed_seconds;
-            this.speed = this.speed_filter.addSample(new_speed);
         }
     }
 
@@ -114,7 +107,6 @@ export class Motor extends Component {
                 level: level,
                 tick: tick,
             }
-            //console.log("encoder",encoder,"level",level,"tick",tick,"Date.now()",Date.now());            
             this.update_state();
         })
     }
@@ -149,15 +141,11 @@ export class Motor extends Component {
         this.socket.on('message', (msg: any) => {
             if (isNumber(msg.position_reference)) {
                 this.reference_parameter = ReferenceParameter.Position;
-                this.position_reference =12* msg.position_reference;
+                this.position_reference =2*Math.PI* msg.position_reference;
             }
             if (isNumber(msg.speed_reference)) {
                 this.reference_parameter = ReferenceParameter.Speed;
-                this.speed_reference =100* msg.speed_reference;
-            }
-            if (isNumber(msg.acceleration_reference)) {
-                this.reference_parameter = ReferenceParameter.Acceleration;
-                this.acceleration_reference = msg.acceleration_reference;
+                this.speed_reference =10* msg.speed_reference;
             }
             if (isNumber(msg.PWM_reference)) {
                 this.reference_parameter = ReferenceParameter.PWM;
@@ -173,6 +161,7 @@ export class Motor extends Component {
         return new Promise((resolve, reject) => {
             setInterval(() => {
                 let output: number;
+                //Compute new speed and acceleration
                 if(this.reference_parameter == ReferenceParameter.PWM){
                     output = this.PWM_reference;
                 } else {
@@ -185,18 +174,18 @@ export class Motor extends Component {
                 //Send state to the planner
                 if (i >= 50) {
                     this.socket.emit('state', {
-                        "motor": this.name, "position": this.position,
-                        "speed": this.speed, "acceleration": this.acceleration,
+                        "motor": this.name, "position": this.position_counter * Motor.elapsed_radians,
+                        "speed": (this.position_counter - this.previous_position_counter)*Motor.elapsed_radians*1000.0/Motor.loop_ms,
                         "output": output, reference_parameter: this.reference_parameter,
                         position_reference: this.position_reference, speed_reference: this.speed_reference,
-                        acceleration_reference: this.acceleration_reference,
                         PWM_reference: this.PWM_reference
                     })
                     i = 0;
                 }
                 i++;
+                this.previous_position_counter = this.position_counter;
 
-            }, 20);
+            }, Motor.loop_ms);
         });
     }
 
@@ -211,11 +200,9 @@ export class Motor extends Component {
     private compute_error() {
         switch (this.reference_parameter) {
             case ReferenceParameter.Position:
-                return this.position_reference - this.position;
+                return this.position_reference - this.position_counter * Motor.elapsed_radians;
             case ReferenceParameter.Speed:
-                return this.speed_reference - this.speed;
-            case ReferenceParameter.Acceleration:
-                return this.acceleration_reference - this.acceleration;
+                return this.speed_reference - (this.position_counter - this.previous_position_counter)*Motor.elapsed_radians*1000.0/Motor.loop_ms;
             default:
                 console.log("Error computing error");
                 return 0;

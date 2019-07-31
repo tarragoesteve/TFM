@@ -48,7 +48,7 @@ export class AppLogicService {
 
   constructor() {
     //TODO: Change localhost
-    this.socket = socketio.connect('http://185.181.8.143:3000/' + '?name=user_interface');
+    this.socket = socketio.connect('http://185.181.8.64:3000/' + '?name=user_interface');
     this.socket.on('state', (msg: any) => {
       console.log(msg);      
     //TODO: Update state to do the graphics

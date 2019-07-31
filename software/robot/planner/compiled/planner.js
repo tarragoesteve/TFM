@@ -14,12 +14,15 @@ server.on('connection', function (socket) {
     component_sockets[socket.handshake.query.name] = socket;
     console.log('Connection from: ', socket.handshake.query.name);
     socket.on('state', function (msg) {
-        console.log(msg);
+        if (component_sockets["user_interface"]) {
+            component_sockets["user_interface"].emit('state', msg);
+        }
     });
     socket.on('input', function (msg) {
-        console.log(msg);
-        if (component_sockets["motor_left"]) {
-            component_sockets["motor_left"].emit('message', { 'PWM_reference': msg.speed_left_ref });
+        for (var component in msg) {
+            if (component_sockets[component]) {
+                component_sockets[component].emit('message', msg[component]);
+            }
         }
     });
 });

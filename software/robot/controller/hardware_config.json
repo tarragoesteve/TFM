@@ -1,5 +1,5 @@
 {
-    "planner_uri": "http://185.181.8.143:3000",
+    "planner_uri": "http://185.181.8.64:3000",
     "is_simulation": false,
     "components": [
         {
