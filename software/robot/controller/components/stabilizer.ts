@@ -59,6 +59,8 @@ export class Stabilizer extends Component {
                 this.stabilizer_motor.apply_output(output)
                 //Send state to the UI
                 if (i >= 5) {
+                    console.log(this.inclination);
+                    
                     this.socket.emit('state', {
                         "component": this.name, "data": data,
                         "inclination": this.inclination,
