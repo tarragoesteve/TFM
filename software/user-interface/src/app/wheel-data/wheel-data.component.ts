@@ -53,7 +53,7 @@ export class WheelDataComponent implements OnInit {
         if(Date.now()-item.time<10*1000){
           aux.push({
             name: (item.time/1000)%1000,
-            value: item.speed
+            value: item[this.appLogic.modes[this.selected]]
           })
         }
       }
