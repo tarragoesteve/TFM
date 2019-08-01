@@ -15,6 +15,7 @@ export enum ReferenceParameter {
     Position,
     Speed,
     PWM,
+    Inclination,
 }
 
 export class Motor extends Component {

@@ -36,6 +36,7 @@ export class Stabilizer extends Component {
                 this.PWM_reference = msg.PWM_reference;
             }
             if (isNumber(msg.inclination_reference)) {
+                this.reference_parameter = ReferenceParameter.Inclination;
                 this.inclination_reference = msg.inclination_reference;
             }
         })
