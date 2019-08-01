@@ -48,7 +48,12 @@ export class WheelDataComponent implements OnInit {
       let aux = []
       for(let item of this.appLogic.history[this.selected])
       {
-        console.log(item);
+        if(this.selected == "platform_motor"){
+          console.log("item",item);
+          console.log("modes", this.appLogic.modes[this.selected]);
+          
+          
+        }
         
         if(Date.now()-item.time<10*1000){
           aux.push({
@@ -58,7 +63,7 @@ export class WheelDataComponent implements OnInit {
         }
       }
 
-      console.log(aux);
+      //console.log(aux);
       
 
       this.multi[0]['series'] = aux;
