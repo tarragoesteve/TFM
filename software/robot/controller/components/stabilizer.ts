@@ -46,7 +46,7 @@ export class Stabilizer extends Component {
         return new Promise((resolve, reject) => {
             setInterval(() => {
                 let data = this.accelerometer.sensor.readSync();
-                this.inclination = Math.atan(data.accel.x/data.accel.z);
+                this.inclination = Math.atan2(data.accel.z,data.accel.x);
                 //Compute output
                 let output;
                 if(this.reference_parameter == ReferenceParameter.PWM){
@@ -65,7 +65,7 @@ export class Stabilizer extends Component {
                         "component": this.name, "data": data,
                         "inclination": this.inclination,
                         "inclination_reference": this.inclination_reference,
-                        "PWM": output,
+                        "PWM": output, time: Date.now()
                     })
                     i = 0;
                 }
