@@ -11,7 +11,7 @@ enum Direction {
     Stop,
 }
 
-enum ReferenceParameter {
+export enum ReferenceParameter {
     Position,
     Speed,
     PWM,

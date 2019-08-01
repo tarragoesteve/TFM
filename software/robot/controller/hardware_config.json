@@ -36,11 +36,11 @@
         },
         {
             "name": "platform_motor",
-            "class": "Motor",
+            "class": "Stabilizer",
             "parameters": {
-                "k_p": 0.1,
-                "k_i": 0.1,
-                "k_d": 0.1,
+                "k_p": 10,
+                "k_i": 0,
+                "k_d": 0,
                 "pins": {
                     "PWM": 12,
                     "IN1": 25,
