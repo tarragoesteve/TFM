@@ -49,11 +49,14 @@ function new_component(component_configuration: any, general_configuration: any)
         component_configuration.parameters);
 }
 
+console.log("Initializing the components...");
+
 /*Init all the components with the configuration parameters*/
 for (let component_configuration of configuration.components) {
     components.push(new_component(component_configuration, configuration));
 }
 
+console.log("Starting components loop...");
 
 /*Start all components loop*/
 for (let component of components) {
