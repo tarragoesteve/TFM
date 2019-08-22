@@ -111,6 +111,26 @@ export class AppLogicService {
         this.references[Selected_Motor.Right] += 1 / 100;
         this.references[Selected_Motor.Left] -= 1 / 100;
         break;
+
+      case '5':
+        this.references[Selected_Motor.Right] += 1 / 100;
+        this.references[Selected_Motor.Left] -= 1 / 100;
+        break;
+
+      case '1':
+        this.references[Selected_Motor.Right] += 1 / 100;
+        this.references[Selected_Motor.Left] += 1 / 100;
+        break;
+
+      case '3':
+        this.references[Selected_Motor.Right] -= 1 / 100;
+        this.references[Selected_Motor.Left] -= 1 / 100;
+        break;
+
+      case '2':
+        this.references[Selected_Motor.Right] -= 1 / 100;
+        this.references[Selected_Motor.Left] += 1 / 100;
+        break;
     }
     this.sendInput()
   }
