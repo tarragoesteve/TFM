@@ -9,6 +9,7 @@ from tqdm import tqdm
 from enum import Enum
 from PID import PID
 
+
 class Experiment(Enum):
     Horizontal = 1
     Waitress = 2
@@ -21,48 +22,68 @@ transition_time = 0
 my_robot = Robot()
 my_robot.set_r_flywheel_r_wheel_w_N(.086, .10, .04, 2)
 
-flywheel_controler = PID(0.1,0.1,0.01)
-platform_controler = PID(0.1,0.1,0.01)
-
+flywheel_controller = PID(0.5, 0.3, 0.05)
+platform_controller = PID(0.1, 0.1, 0.01)
 
 
 def nearestMultiple(target_angle, current_angle):
     return target_angle + round((current_angle - target_angle)/(2*math.pi))*2*math.pi
 
+
 def external_torque(robot, t, q, dot_q, ddot_q):
     global transition_time
     if t < transition_time:
-        #We are accelerationg
-        flywheel_signal = flywheel_controler.control_variable(math.pi/2 - (q[0]+q[1]+q[2]), t)
+        # We are accelerating
+        flywheel_signal = flywheel_controller.control_variable(
+            -math.pi/2 - (q[0]+q[1]+q[2]), t)
     else:
-        #We are breaking
-        flywheel_signal = flywheel_controler.control_variable(-math.pi/2 - (q[0]+q[1]+q[2]), t)
-    
+        # We are breaking
+        flywheel_signal = flywheel_controller.control_variable(
+            +math.pi/2 - (q[0]+q[1]+q[2]), t)
+
     if experiment == Experiment.Horizontal:
-        wheel_signal = -flywheel_signal
-    
+        wheel_signal = +flywheel_signal
+
     elif experiment == Experiment.Free:
         if t < transition_time:
-            wheel_signal = 2*robot.max_torque(dot_q[1])
+            wheel_signal = 2*robot.max_torque(0)
         else:
             wheel_signal = -2*robot.max_torque(0)
-    
-    elif experiment = Experiment.Waitress:
+
+    elif experiment == Experiment.Waitress:
         forward_acceleration = ddot_q[0] * my_robot.r_wheel
+        desired_angle = math.atan2(forward_acceleration, -my_robot.g)
+        wheel_signal = platform_controller.control_variable(
+            desired_angle-(q[0]+q[1]), t)
+
+    if(dot_q[2] > 0):
+        flywheel_signal = max(min(my_robot.max_torque(
+            dot_q[2]), flywheel_signal), -robot.max_torque(0))
+    else:
+        flywheel_signal = max(min(robot.max_torque(
+            0), flywheel_signal), -robot.max_torque(-dot_q[1]))
+
+    if experiment == Experiment.Horizontal:
+        wheel_signal = +flywheel_signal
+
+    if (dot_q[1] > 0):
+        # wheel signal belongs to (-2*robot.max_torque(0),2*robot.max_torque(dot_q[1]))
+        wheel_signal = max(
+            min(2*my_robot.max_torque(dot_q[1]), wheel_signal), -2*robot.max_torque(0))
+    else:
+        # wheel signal belongs to (-2*robot.max_torque(-dot_q[1]),2*robot.max_torque(0))
+        wheel_signal = max(
+            min(2*robot.max_torque(0), wheel_signal), -2*robot.max_torque(-dot_q[1]))
+    
+    if experiment == Experiment.Horizontal:
+        flywheel_signal = +wheel_signal
+
+    return [0, wheel_signal, flywheel_signal]
 
 
-
-        
-        tau = max(
-            0, min(2*robot.max_torque(dot_q[1]), robot.max_torque(dot_q[2])))
-        return [0, tau, tau]
-
-            tau = min(output, max(
-            0, 2*robot.max_torque(dot_q[1])), max(0, robot.max_torque(dot_q[2])))
-        return [0, tau, tau]
+previous_q_ddot = [0, 0, 0]
 
 
-previous_q_ddot = [0,0,0]
 def system_function(robot: Robot):
     M = numpy.matrix([[robot.I_wheel()+robot.I_platform() + robot.I_flywheel(robot.r_min()) + robot.m_total() * robot.r_wheel**2,
                        robot.I_platform() + robot.I_flywheel(robot.r_min()),
@@ -78,6 +99,7 @@ def system_function(robot: Robot):
     a = robot.m_cylinder() * (robot.r_min()-robot.r_max()) * robot.g
 
     def aux_function(t, x):
+        global previous_q_ddot
         q = x[0:3]
         q_dot = x[3:6]
         phi_ground_flywheel = q[0]+q[1]+q[2]
@@ -91,15 +113,11 @@ def system_function(robot: Robot):
 
 
 results = []
-num_divisions = 50
-total_time = 1.5
+num_divisions = 1
+total_time = 6
 time_divisions = numpy.linspace(0, total_time, num_divisions)
 for tt in tqdm(time_divisions):
-    transition_time = tt
-    accumulated_error = 0
-    previous_error = 0
-    previous_error_time = 0
-    first_error = True
+    transition_time = 3
     initial_contition = [0, 0, 0, 0, 0, 0]
     ode_int = scipy.integrate.solve_ivp(
         system_function(my_robot),
@@ -110,25 +128,9 @@ for tt in tqdm(time_divisions):
         dense_output=False)
     results.append(ode_int)
 
-
-plt.figure()
-plt.title('Experiment: ' + 'Changing transition time')
-plt.xlabel('transition time [s]')
-plt.ylabel('distance [m]')
-distance = [-result.y[0][-1] * my_robot.r_wheel for result in results]
-plt.plot(time_divisions, distance)
-plt.legend(['q[0]'])
-
-max_distance = 0.0
 max_index = 0
-for i in range(len(results)):
-    if (-results[i].y[0][-1] * my_robot.r_wheel) > max_distance:
-        max_distance = -results[i].y[0][-1] * my_robot.r_wheel
-        max_index = i
-
 plt.figure()
-plt.title('Max distance of ' + str(max_distance) +
-          'at transition-time ' + str(time_divisions[max_index]))
+plt.title('Experiment: ' + experiment.name)
 plt.xlabel('t [s]')
 plt.ylabel('theta [rad]')
 plt.plot(results[max_index].t, results[max_index].y[0])
@@ -141,8 +143,7 @@ plt.legend(['q[0]', 'q[1]', 'q[2]', 'ground-platform', 'ground-flywheel'])
 
 
 plt.figure()
-plt.title('Max distance of ' + str(max_distance) +
-          'at transition-time ' + str(time_divisions[max_index]))
+plt.title('Experiment: ' + experiment.name)
 plt.xlabel('t [s]')
 plt.ylabel('theta dot [rad/s]')
 plt.plot(results[max_index].t, results[max_index].y[3])

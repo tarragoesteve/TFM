@@ -8,7 +8,7 @@ class PID:
     kd = 0
 
     def __init__(self,kp,ki,kd):
-        self.kd = kd
+        self.kp = kp
         self.ki = ki
         self.kd = kd       
         pass
@@ -18,7 +18,7 @@ class PID:
             self.first_error = False
             self.previous_error = error
             self.previous_error_time = time
-            return kp * error
+            return self.kp * error
         else:
             if time - self.previous_error_time > 0:
                 self.accumulated_error = self.accumulated_error + \
