@@ -16,14 +16,14 @@ class Experiment(Enum):
     Free = 3
 
 
-experiment = Experiment.Horizontal
+experiment = Experiment.Free
 transition_time = 0
 
 my_robot = Robot()
 my_robot.set_r_flywheel_r_wheel_w_N(.086, .10, .04, 2)
 
 flywheel_controller = PID(0.5, 0.3, 0.05)
-platform_controller = PID(0.1, 0.1, 0.01)
+platform_controller = PID(0.5, 0.3, 0.05)
 
 
 def nearestMultiple(target_angle, current_angle):
@@ -46,9 +46,9 @@ def external_torque(robot, t, q, dot_q, ddot_q):
 
     elif experiment == Experiment.Free:
         if t < transition_time:
-            wheel_signal = 2*robot.max_torque(0)
-        else:
             wheel_signal = -2*robot.max_torque(0)
+        else:
+            wheel_signal = +2*robot.max_torque(0)
 
     elif experiment == Experiment.Waitress:
         forward_acceleration = ddot_q[0] * my_robot.r_wheel
