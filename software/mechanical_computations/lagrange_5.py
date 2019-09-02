@@ -23,7 +23,7 @@ my_robot = Robot()
 my_robot.set_r_flywheel_r_wheel_w_N(.086, .10, .04, 2)
 
 flywheel_controller = PID(0.5, 0.3, 0.05)
-platform_controller = PID(0.5, 0.3, 0.05)
+platform_controller = PID(0.1, 0,0 )
 
 
 def nearestMultiple(target_angle, current_angle):
@@ -52,10 +52,10 @@ def external_torque(robot, t, q, dot_q, ddot_q):
 
     elif experiment == Experiment.Waitress:
         forward_acceleration = ddot_q[0] * my_robot.r_wheel
-        desired_angle = math.atan2(forward_acceleration, -my_robot.g)
-        wheel_signal = platform_controller.control_variable(
+        desired_angle = math.atan2(forward_acceleration, my_robot.g)
+        platform_signal = platform_controller.control_variable(
             desired_angle-(q[0]+q[1]), t)
-
+        wheel_signal = platform_signal + flywheel_signal
     if(dot_q[2] > 0):
         flywheel_signal = max(min(my_robot.max_torque(
             dot_q[2]), flywheel_signal), -robot.max_torque(0))
@@ -74,7 +74,7 @@ def external_torque(robot, t, q, dot_q, ddot_q):
         # wheel signal belongs to (-2*robot.max_torque(-dot_q[1]),2*robot.max_torque(0))
         wheel_signal = max(
             min(2*robot.max_torque(0), wheel_signal), -2*robot.max_torque(-dot_q[1]))
-    
+
     if experiment == Experiment.Horizontal:
         flywheel_signal = +wheel_signal
 
@@ -82,6 +82,8 @@ def external_torque(robot, t, q, dot_q, ddot_q):
 
 
 previous_q_ddot = [0, 0, 0]
+q_ddot_hist = []
+t_hist = []
 
 
 def system_function(robot: Robot):
@@ -96,10 +98,12 @@ def system_function(robot: Robot):
                        robot.I_flywheel(robot.r_min())]
                       ])
 
+    desired_angle = 0
     a = robot.m_cylinder() * (robot.r_min()-robot.r_max()) * robot.g
 
     def aux_function(t, x):
         global previous_q_ddot
+        global q_ddot_hist
         q = x[0:3]
         q_dot = x[3:6]
         phi_ground_flywheel = q[0]+q[1]+q[2]
@@ -108,13 +112,21 @@ def system_function(robot: Robot):
         q_ddot = numpy.matmul(numpy.linalg.inv(M), numpy.transpose(aux))
         q_ddot = numpy.transpose(q_ddot)
         previous_q_ddot = q_ddot
+        t_hist.append(t)
+        q_ddot_hist.append(q_ddot)
         return [q_dot[0], q_dot[1], q_dot[2], q_ddot[0], q_ddot[1], q_ddot[2]]
     return lambda t, x: aux_function(t, x)
 
 
+def stop_event(t, x):
+    return x[3]
+
+stop_event.terminal = True
+stop_event.direction = -1
+
 results = []
 num_divisions = 1
-total_time = 6
+total_time = 10
 time_divisions = numpy.linspace(0, total_time, num_divisions)
 for tt in tqdm(time_divisions):
     transition_time = 3
@@ -125,7 +137,8 @@ for tt in tqdm(time_divisions):
         initial_contition,
         max_step=0.001,
         method='RK45',
-        dense_output=False)
+        dense_output=False,
+        events=[stop_event])
     results.append(ode_int)
 
 max_index = 0
@@ -139,6 +152,9 @@ plt.plot(results[max_index].t, results[max_index].y[2])
 plt.plot(results[max_index].t, results[max_index].y[0]+results[max_index].y[1])
 plt.plot(results[max_index].t, results[max_index].y[0] +
          results[max_index].y[1]+results[max_index].y[2])
+#plt.plot(t_hist, [float(q_ddot[0]) for q_ddot in q_ddot_hist ])
+#plt.plot(t_hist, [math.atan2(float(q_ddot[0])* my_robot.r_wheel,my_robot.g) for q_ddot in q_ddot_hist ])
+
 plt.legend(['q[0]', 'q[1]', 'q[2]', 'ground-platform', 'ground-flywheel'])
 
 
