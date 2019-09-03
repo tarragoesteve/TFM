@@ -23,7 +23,7 @@ my_robot = Robot()
 my_robot.set_r_flywheel_r_wheel_w_N(.086, .10, .04, 2)
 
 flywheel_controller = PID(0.5, 0.3, 0.05)
-platform_controller = PID(0.1, 0,0 )
+platform_controller = PID(0.1, 0,0)
 
 
 def nearestMultiple(target_angle, current_angle):
@@ -32,7 +32,7 @@ def nearestMultiple(target_angle, current_angle):
 
 def external_torque(robot, t, q, dot_q, ddot_q):
     global transition_time
-    if t < transition_time:
+    if t < (transition_time-1.5):
         # We are accelerating
         flywheel_signal = flywheel_controller.control_variable(
             -math.pi/2 - (q[0]+q[1]+q[2]), t)
@@ -153,9 +153,9 @@ plt.plot(results[max_index].t, results[max_index].y[0]+results[max_index].y[1])
 plt.plot(results[max_index].t, results[max_index].y[0] +
          results[max_index].y[1]+results[max_index].y[2])
 #plt.plot(t_hist, [float(q_ddot[0]) for q_ddot in q_ddot_hist ])
-#plt.plot(t_hist, [math.atan2(float(q_ddot[0])* my_robot.r_wheel,my_robot.g) for q_ddot in q_ddot_hist ])
+plt.plot(t_hist, [math.atan2(float(q_ddot[0])* my_robot.r_wheel,my_robot.g) for q_ddot in q_ddot_hist ])
 
-plt.legend(['q[0]', 'q[1]', 'q[2]', 'ground-platform', 'ground-flywheel'])
+plt.legend(['q[0]', 'q[1]', 'q[2]', 'ground-platform', 'ground-flywheel', 'angle'])
 
 
 plt.figure()
