@@ -59,6 +59,43 @@ export class AppLogicService {
       }
       //console.log(msg);
     })
+
+    window.addEventListener("gamepadconnected", this.eventController.call(this));
+
+
+  }
+
+  gamepad_index :any;
+
+  eventController(e:any){
+    console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+    e.gamepad.index, e.gamepad.id,
+    e.gamepad.buttons.length, e.gamepad.axes.length);
+    this.gamepad_index = e.gamepad.index
+
+    setInterval(this.intervalLoop,200)
+    
+    setInterval(this.controllerLoop ,50)
+
+  }
+
+  intervalLoop()
+  {
+    console.log(this.references);
+
+  }
+
+  controllerLoop() : void
+  {
+    console.log('Hi');
+    
+    let gp = navigator.getGamepads()[this.gamepad_index];
+    let x = gp.axes[0]
+    let y = -gp.axes[1]    
+    this.references.left_motor = x + y;
+    this.references.right_motor = -x + y;
+    console.log(this.references);
+    
   }
 
   onKeyPress(event) {
