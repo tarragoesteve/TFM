@@ -12,24 +12,24 @@ from PID import PID
 
 class Experiment(Enum):
     Horizontal = 1
-    Waitress = 2
+    Waitress_Old = 2
     Free = 3
     Compose = 4
-    Flywheel = 5
+    Waitress = 5
 
 
-experiment = Experiment.Flywheel
+experiment = Experiment.Waitress
 
 time_to_stop = {
     Experiment.Horizontal: 2.59,
-    Experiment.Waitress: 2.59,
+    Experiment.Waitress_Old: 2.59,
     Experiment.Free: 4,
     Experiment.Compose: 3.54,
-    Experiment.Flywheel: 4.1,
+    Experiment.Waitress: 4.1,
 }
 
 integration_time = 1
-if experiment == Experiment.Waitress or experiment == Experiment.Flywheel:
+if experiment == Experiment.Waitress_Old or experiment == Experiment.Waitress:
     integration_time = 0.2
 waitress_angle = 0
 
@@ -59,7 +59,7 @@ def external_torque(robot, t, q, dot_q, ddot_q):
         else:
             wheel_signal = +2*robot.max_torque(0)
 
-    elif experiment == Experiment.Waitress:
+    elif experiment == Experiment.Waitress_Old:
         if t < time_to_stop[experiment]:
             flywheel_signal = flywheel_controller.control_variable(
             -math.pi/2 - (q[0]+q[1]+q[2]), t)
@@ -71,7 +71,7 @@ def external_torque(robot, t, q, dot_q, ddot_q):
             waitress_angle-(q[0]+q[1]), t)
         wheel_signal = platform_signal
 
-    elif experiment == Experiment.Flywheel:
+    elif experiment == Experiment.Waitress:
         wheel_signal = -robot.max_torque(0)/6+(robot.max_torque(0)/6)*t/time_to_stop[experiment] 
         flywheel_signal = -platform_controller.control_variable(
             waitress_angle-(q[0]+q[1]), t)
@@ -180,7 +180,7 @@ while not stopped:
         end_time = start_time + integration_time
         initial_contition = [y[-1] for y in ode_int.y]
     ode_int['waitress_angle'] = [waitress_angle for _ in ode_int.t]
-    if experiment == Experiment.Waitress or experiment == Experiment.Flywheel:
+    if experiment == Experiment.Waitress_Old or experiment == Experiment.Waitress:
         acceleration = (ode_int.y[3][-1]-ode_int.y[3][0])/(ode_int.t[-1]-ode_int.t[0]) * my_robot.r_wheel
         waitress_angle = math.atan2(acceleration, my_robot.g)
 
@@ -211,7 +211,7 @@ for i in range(3):
     plt.plot(result['t'], result['y'][i])
 plt.plot(result['t'], result['y'][0] + result['y'][1])
 plt.plot(result['t'], result['y'][0] + result['y'][1] + result['y'][2])
-if experiment == Experiment.Waitress or experiment == Experiment.Flywheel:
+if experiment == Experiment.Waitress_Old or experiment == Experiment.Waitress:
     plt.plot(result['t'], result['waitress_angle'])
 
 
@@ -234,12 +234,8 @@ plt.xlabel('t [s]')
 plt.ylabel('theta dot [rad/s]')
 for i in [3,4,5]:
     plt.plot(result['t'], result['y'][i])
-# plt.plot(results[max_index].t, results[max_index].y[3])
-# plt.plot(results[max_index].t, results[max_index].y[4])
-# plt.plot(results[max_index].t, results[max_index].y[5])
-# plt.plot(results[max_index].t, results[max_index].y[3]+results[max_index].y[4])
-# plt.plot(results[max_index].t, results[max_index].y[3] +
-#         results[max_index].y[4]+results[max_index].y[5])
+plt.plot(result['t'], result['y'][3]+result['y'][4])
+plt.plot(result['t'], result['y'][3]+result['y'][4]+result['y'][5])
 plt.legend(['dot_q[0]', 'dot_q[1]', 'dot_q[2]',
             'ground-platform', 'ground-flywheel'])
 
