@@ -16,14 +16,16 @@ class Experiment(Enum):
     Free = 3
     Compose = 4
     Waitress = 5
+    Double = 6
 
 
-experiment = Experiment.Waitress
+experiment = Experiment.Double
 
 time_to_stop = {
     Experiment.Horizontal: 2.59,
     Experiment.Waitress_Old: 2.59,
     Experiment.Free: 4,
+    Experiment.Double: 3.56,
     Experiment.Compose: 3.54,
     Experiment.Waitress: 4.1,
 }
@@ -58,6 +60,14 @@ def external_torque(robot, t, q, dot_q, ddot_q):
             wheel_signal = -2*robot.max_torque(0)
         else:
             wheel_signal = +2*robot.max_torque(0)
+    elif experiment == Experiment.Double:
+        if t < time_to_stop[experiment]:
+            wheel_signal = -2*robot.max_torque(0)
+            flywheel_signal = -robot.max_torque(0)
+        else:
+            wheel_signal = +2*robot.max_torque(0)
+            flywheel_signal = robot.max_torque(0)
+
 
     elif experiment == Experiment.Waitress_Old:
         if t < time_to_stop[experiment]:
@@ -122,7 +132,20 @@ t_hist = []
 
 
 def system_function(robot: Robot):
-    M = numpy.matrix([[robot.I_wheel()+robot.I_platform() + robot.I_flywheel(robot.r_min()) + robot.m_total() * robot.r_wheel**2,
+    if experiment == Experiment.Free or experiment == Experiment.Double :
+        M = numpy.matrix([[robot.I_wheel()+robot.I_platform() + robot.I_flywheel(robot.r_max()) + robot.m_total() * robot.r_wheel**2,
+                       robot.I_platform() + robot.I_flywheel(robot.r_max()),
+                       robot.I_flywheel(robot.r_max())],
+                      [robot.I_platform() + robot.I_flywheel(robot.r_max()),
+                       robot.I_platform() + robot.I_flywheel(robot.r_max()),
+                       robot.I_flywheel(robot.r_max())],
+                      [robot.I_flywheel(robot.r_max()),
+                       robot.I_flywheel(robot.r_max()),
+                       robot.I_flywheel(robot.r_max())]
+                      ])
+        a = 0
+    else:
+        M = numpy.matrix([[robot.I_wheel()+robot.I_platform() + robot.I_flywheel(robot.r_min()) + robot.m_total() * robot.r_wheel**2,
                        robot.I_platform() + robot.I_flywheel(robot.r_min()),
                        robot.I_flywheel(robot.r_min())],
                       [robot.I_platform() + robot.I_flywheel(robot.r_min()),
@@ -132,9 +155,8 @@ def system_function(robot: Robot):
                        robot.I_flywheel(robot.r_min()),
                        robot.I_flywheel(robot.r_min())]
                       ])
+        a = robot.m_cylinder() * (robot.r_min()-robot.r_max()) * robot.g
 
-    desired_angle = 0
-    a = robot.m_cylinder() * (robot.r_min()-robot.r_max()) * robot.g
 
     def aux_function(t, x):
         q = x[0:3]
