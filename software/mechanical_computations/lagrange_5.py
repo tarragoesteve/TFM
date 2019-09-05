@@ -19,12 +19,12 @@ class Experiment(Enum):
     Double = 6
 
 
-experiment = Experiment.Double
+experiment = Experiment.Free
 
 time_to_stop = {
     Experiment.Horizontal: 2.59,
     Experiment.Waitress_Old: 2.59,
-    Experiment.Free: 4,
+    Experiment.Free: 4.35,
     Experiment.Double: 3.56,
     Experiment.Compose: 3.54,
     Experiment.Waitress: 4.1,
