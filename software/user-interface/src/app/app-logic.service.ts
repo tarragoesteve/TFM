@@ -35,6 +35,8 @@ export class AppLogicService {
 
   history: any = {};
 
+  gamepads : any = {};
+
   sendInput() {
     let input = {};
     input["left_motor"] = {}
@@ -54,48 +56,48 @@ export class AppLogicService {
     this.history["right_motor"] = []
     this.history["platform_motor"] = []
     this.socket.on('state', (msg: any) => {
-      if(msg.motor){
+      if (msg.motor) {
         this.history[msg.motor].push(msg)
       }
       //console.log(msg);
     })
 
-    window.addEventListener("gamepadconnected", this.eventController.call(this));
-
-
-  }
-
-  gamepad_index :any;
-
-  eventController(e:any){
-    console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
-    e.gamepad.index, e.gamepad.id,
-    e.gamepad.buttons.length, e.gamepad.axes.length);
-    this.gamepad_index = e.gamepad.index
-
-    setInterval(this.intervalLoop,200)
+    console.log('Constructed');
     
-    setInterval(this.controllerLoop ,50)
 
-  }
+    window.addEventListener("gamepadconnected", (e: GamepadEvent) => {
+      this.gamepads[e.gamepad.index] = e.gamepad
+      console.log('Gamepad connected!');
+    });
 
-  intervalLoop()
-  {
-    console.log(this.references);
+    window.addEventListener("gamepaddisconnected",(e: GamepadEvent) => {
+      delete this.gamepads[e.gamepad.index]
+      console.log('Gamepad disconnected!');
+    });
 
-  }
+    setInterval(()=>{
+      if (Object.keys(this.gamepads).length > 0)
+      {
+        let gamepad = this.gamepads[Object.keys(this.gamepads)[0]]
+        let gp = navigator.getGamepads()[gamepad.index];
+        let x = gp.axes[0]
+        let y = -gp.axes[1]    
+        this.references.left_motor = x + y;
+        this.references.right_motor = -x + y;
+        if (Math.abs(this.references.left_motor)>1) {
+          this.references.left_motor /= Math.abs(this.references.left_motor);
+          this.references.right_motor /= Math.abs(this.references.left_motor);        
+        }
+        if (Math.abs(this.references.right_motor)>1) {
+          this.references.left_motor /= Math.abs(this.references.right_motor);
+          this.references.right_motor /= Math.abs(this.references.right_motor);        
+        }
+        this.sendInput()
+      }
+    },50)
 
-  controllerLoop() : void
-  {
-    console.log('Hi');
-    
-    let gp = navigator.getGamepads()[this.gamepad_index];
-    let x = gp.axes[0]
-    let y = -gp.axes[1]    
-    this.references.left_motor = x + y;
-    this.references.right_motor = -x + y;
-    console.log(this.references);
-    
+
+
   }
 
   onKeyPress(event) {
