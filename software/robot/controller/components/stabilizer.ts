@@ -7,6 +7,7 @@ import { isNumber } from "util";
 export class Stabilizer extends Component {
     inclination: number = 0;
     inclination_reference: number = 0;
+    position_reference: number = 0;
     PWM_reference: number = 0;
     reference_parameter: ReferenceParameter = ReferenceParameter.PWM;
 
@@ -37,6 +38,10 @@ export class Stabilizer extends Component {
                 this.reference_parameter = ReferenceParameter.Inclination;
                 this.inclination_reference = msg.inclination_reference;
             }
+            if (isNumber(msg.position_reference)) {
+                this.reference_parameter = ReferenceParameter.Position;
+                this.position_reference = msg.position_reference;
+            }
         })
     }
 
@@ -56,9 +61,13 @@ export class Stabilizer extends Component {
                     //Apply output to the motor
                     this.stabilizer_motor.apply_output(output)
                 } else if (this.parameters.pendulum) {
-                    let error = this.compute_error();
-                    output = this.PID.output(error);
-                    output = Math.min(1,Math.max(-1,output)) * Math.PI/4;
+                    if(this.reference_parameter == ReferenceParameter.Inclination){
+                        let error = this.compute_error();
+                        output = this.PID.output(error);
+                        output = Math.min(1,Math.max(-1,output)) * Math.PI/4;
+                    } else {
+                        output = this.position_reference;
+                    }
                     this.stabilizer_motor.reference_parameter = ReferenceParameter.Position;
                     this.stabilizer_motor.position_reference = output - this.inclination;
                 } else {
