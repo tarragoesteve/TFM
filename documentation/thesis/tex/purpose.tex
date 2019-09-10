@@ -1,7 +1,23 @@
-\section{Objective}
-The objective of this project is to design, build and run reinforcement learning experiments on a dynamic robot. We wish to make this experiments easy and cheap to reproduce so we will try minimize its components and fabrication cost. 
+\section{Introduction}
+In the IRI lab we have two segway robots, Tibi and Dabo show in figure
+\ref{fig:Picture of Tibi and Dabo}. Both of them move the same way.
+They must incline their body to compensate the wheel reaction. 
+This may cause some problems when measuring with the sensors.
+This fact also restricts the possible trajectories of the robots. 
 
-The chosen robot is inspired in a \textit{segway hover-board}, similar to the one in Figure \ref{fig:Picture of a commercial segway hover-board}. The two wheels are controlled with classic control algorithms and the inclination of the central body is controlled with a reinforcement learning algorithm.
+We decided to build a prototype of segway robot that could control it's
+inclination independently. The chosen robot is inspired in a \textit{segway hover-board}, 
+similar to the one appearing in Figure \ref{fig:Picture of a commercial 
+segway hover-board}. The two wheels are controlled with classic
+control algorithms and the inclination of the central body is
+controlled with a flywheel mechanism that we will discuss in section \ref{}.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=8cm]{img/robots-TIBI-i-DABO-IRI-red.jpg}
+	\caption{Picture of Tibi and Dabo, \textit{two segway robots} }
+	\label{fig:Picture of Tibi and Dabo}
+\end{figure}
 
 \begin{figure}
 	\centering

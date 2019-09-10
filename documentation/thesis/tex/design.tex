@@ -15,18 +15,19 @@ Both methods have strengths in different situations so we decided to build a mix
 piece that could combine both. 
 
 
-We took two restriction in our design. The first one symmetry along the 
+We took two more restriction in our design. The first one symmetry along the 
 inclination axis in order to have an equilibrium in all possible inclinations
 without the need of external forces. 
 We also took in consideration that some experiments may start clumsy so none of
-the configurations should touch the ground. Figure \ref{fig:Side render view}
+the configurations should touch the ground to avoid crashes. Figure \ref{fig:Side render view}
 illustrates this last restriction.   
 
 The design of the robot is done with the 3D design software 
-\href{https://www.freecadweb.org/}{Free-cad}.
+\href{https://www.freecadweb.org/}{Free-cad} and most of parts where 3D printed. 3D printing has
+also it's own restrictions, for example not being able to print parts bigger than 25 cm.
 All part files are uploaded to the GitHub repository \url{https://github.com/tarragoesteve/TFM} under the hardware folder.
 
-You can see the main views on Figure \ref{fig:Isometric render view}, \ref{fig:Front render view}, \ref{fig:Top render view} and \ref{fig:Side render view}.
+You can see the main of an initial design views on Figure \ref{fig:Isometric render view}, \ref{fig:Front render view}, \ref{fig:Top render view} and \ref{fig:Side render view}.
 
 \begin{figure}
 	\centering
@@ -121,7 +122,8 @@ In our case:
 \[ s = 2 \cdot r_{cylinder}\]
 
 Substituting in the circumradius equation we get n = 6, so we will use up 6 masses in our flywheel.
-We will have a variable number of masses $N$ that we will be able to add to the flywheel as shown in the following table.
+We will have a variable number of masses $N$ that we will be able to add to
+the flywheel as shown in the following table:
 \begin{center}
 	\begin{tabular}{c | c | c | c }
 	 2 & 3 & 4 & 6 \\
