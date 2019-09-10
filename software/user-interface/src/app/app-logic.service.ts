@@ -82,7 +82,7 @@ export class AppLogicService {
         let gp = navigator.getGamepads()[gamepad.index];
         let x = gp.axes[0]
         let y = -gp.axes[1]    
-        this.references.left_motor = x + y;
+        this.references.left_motor = -(x + y);
         this.references.right_motor = -x + y;
         if (Math.abs(this.references.left_motor)>1) {
           this.references.left_motor /= Math.abs(this.references.left_motor);
