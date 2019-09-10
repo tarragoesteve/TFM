@@ -1,30 +1,30 @@
 \section{Optimization}
 In this section we select which parameters are going to be used when building our robot.
 
-\subsection{Minimum section in the section of the flywheel}
-We wil place our flywheel in a hole on our robot. We will now compute the minimum section in hole so it doesn't bend. See figure \ref{fig:Flywheel hole diagram}.
+%\subsection{Minimum section in the section of the flywheel}
+%We wil place our flywheel in a hole on our robot. We will now compute the minimum section in hole so it doesn't bend. See figure \ref{fig:Flywheel hole diagram}.
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=10cm]{img/Shear_Moment_Diagram.png}
-	\caption{Bendig moment diagram}
-	\label{fig:Bendig moment diagram}
-\end{figure}
-The maximum bending moment is at the flywheel section:
-\[M_y = \frac{P * L}{4}\]
-Where P is the weight of the robot and L is the distance between the two wheels.
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[width=10cm]{img/Shear_Moment_Diagram.png}
+%	\caption{Bendig moment diagram}
+%	\label{fig:Bendig moment diagram}
+%\end{figure}
+%The maximum bending moment is at the flywheel section:
+%\[M_y = \frac{P * L}{4}\]
+%Where P is the weight of the robot and L is the distance between the two wheels.
 
-\[I_y = \frac{2*b*h^3}{12}=\frac{b*h^3}{6}\]
-\[\sigma=\frac{M_y}{I_y}*\frac{h}{2} = \frac{P*L}{48*b*h^2}\]
-We are planning to build our body structure with plastic:
-\[\sigma_{plastic} = 4MPa = 4E6Pa\]
-We will impose the relation:
-\[b = h\]
-And set a target P of $2000N$ and a maximum length of $0.5m$
-\[\sigma_{plastic} = 4E6Pa = \frac{P*L}{48*b*h^2} = \frac{1000}{48*b^3} \]
-Therefore:
-\[b = \sqrt[3]{\frac{1000}{48*4E6}} = 1,277182 m\]
-We will use b=10mm and h=10mm from now on. Which is far more than what we need.
+%\[I_y = \frac{2*b*h^3}{12}=\frac{b*h^3}{6}\]
+%\[\sigma=\frac{M_y}{I_y}*\frac{h}{2} = \frac{P*L}{48*b*h^2}\]
+%We are planning to build our body structure with plastic:
+%\[\sigma_{plastic} = 4MPa = 4E6Pa\]
+%We will impose the relation:
+%\[b = h\]
+%And set a target P of $2000N$ and a maximum length of $0.5m$
+%\[\sigma_{plastic} = 4E6Pa = \frac{P*L}{48*b*h^2} = \frac{1000}{48*b^3} \]
+%Therefore:
+%\[b = \sqrt[3]{\frac{1000}{48*4E6}} = 1,277182 m\]
+%We will use b=10mm and h=10mm from now on. Which is far more than what we need.
 
 
 \subsection{Restrictions}

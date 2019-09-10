@@ -59,9 +59,23 @@
 
 \paraulesclau{Dynamic, System, Control, Design}
 \agraiments{
-Thanks to Patrick Grosch for helping me in the construction of the robot,
-Llu\'is Ros, Enric Celaya, I\~nigo Moreno,
-Sergi Hernandez for helping me with the electronics.}
+I would first like to thank my thesis advisor Prof. Enric Celaya. Enric was always 
+open whenever I ran into a trouble spot or had a question about my research or 
+writing. He consistently allowed this thesis to be my own work, but steered me in 
+the right the direction whenever he thought I needed it.
+
+I would also like to thank Llu\'is Ros who was also advising me through
+the first steps of the design and always gave constructive feedback.
+
+Also this project wouldn't have been possible without my lab co-workers. I would
+like to highlight three of them: I\~nigo Moreno, Sergi Hernandez and Patrick Grosch.
+They teached my all kind of stuff and I am very grateful for their time.
+
+This research opportunity was possible thanks to IRI (Institut de Robòtica i Informàtica
+Industrial). They facilited my a workstation, material and a fantastic
+workshop where to build my robot.
+
+}
 
 
 \abstracteng{
@@ -71,40 +85,33 @@ Sergi Hernandez for helping me with the electronics.}
 
     Nowadays segways are a popular way of human transportation and there also exist segway robots. 
     Both, human-driven and autonomus segway robots have their speed determined by their inclination.
-    (e.i. If you wish to go forward in a segway you should put your weight in the same forward).
-    So in this systems the inclination is not a degree of freedom but a necessary consequence from moving.
+    (e.i. If you wish to go forward in a segway you should put your weight in the same direction).
+    So in this systems the inclination is not a degree of freedom but a compulsary consequence from moving.
     Unblocking this degree of freedom may help two-wheel robots perform new task as mesurments, taking images 
     or samples from other inclinations, avoiding obstacles, etc.
 
     We have studied diferrent mechanisms to control the leaning while allowing the movement of the robot.
-    Then whe studied the dynamics of our system to deterimine it's dimensions and create and optimal design
-    accordingly.
+    Then we studied the dynamics of our system to deterimine it's dimensions and create an optimal design
+    accordingly. We have also run simulations with different policies to see how our system would evolve.
     
-    This project also aims to provide a benchmark and an easy to build robot that help experiment with non-linear control methods.
+    Finally we builded and programmed our robot so it can be remotely controlled from anywhere.
 }
 
 %%%%%%%%%
 \begin{document}
-
 \maketitle
-
 \newpage
 \tableofcontents
 
 \include{purpose}
 \include{design}
 \include{mechanical_study}
+\include{optimization}
 \include{flywheel_study}
 \include{dynamic_study}
-\include{optimization}
 \include{components}
 \include{control}
 \include{software}
 \include{conclusion}
-
-
-
-
-
 
 \end{document}
