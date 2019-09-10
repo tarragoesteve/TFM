@@ -38,18 +38,14 @@
             "name": "platform_motor",
             "class": "Stabilizer",
             "parameters": {
-                "k_p": 10,
-                "k_i": 0,
+                "k_p": 1,
+                "k_i": 0.01,
                 "k_d": 0,
                 "pins": {
-                    "PWM": 12,
-                    "IN1": 25,
-                    "IN2": 8,
-                    "Encoder_A": 0,
-                    "Encoder_B": 5,
                     "SDA": 2,
                     "SDL": 3
                 },
+                "pendulum" : true, 
                 "motor_parameters": {
                     "k_p": 10,
                     "k_i": 0,
@@ -59,9 +55,7 @@
                         "IN1": 25,
                         "IN2": 8,
                         "Encoder_A": 0,
-                        "Encoder_B": 5,
-                        "SDA": 2,
-                        "SDL": 3
+                        "Encoder_B": 5
                     }
                 }
             }
