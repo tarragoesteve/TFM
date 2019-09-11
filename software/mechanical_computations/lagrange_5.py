@@ -11,23 +11,25 @@ from PID import PID
 
 
 class Experiment(Enum):
-    Horizontal = 1
+    Pendulum = 1
     Waitress_Old = 2
     Free = 3
     Compose = 4
     Waitress = 5
-    Double = 6
+    Double_Flywheel = 6
+    Flywheel = 7
 
 
-experiment = Experiment.Free
+experiment = Experiment.Compose
 
 time_to_stop = {
-    Experiment.Horizontal: 2.59,
+    Experiment.Pendulum: 2.69,
     Experiment.Waitress_Old: 2.59,
     Experiment.Free: 4.35,
-    Experiment.Double: 3.56,
-    Experiment.Compose: 3.54,
-    Experiment.Waitress: 4.1,
+    Experiment.Double_Flywheel: 3.63,
+    Experiment.Compose: 3.6,
+    Experiment.Waitress: 4.12,
+    Experiment.Flywheel: 12.3,
 }
 
 integration_time = 1
@@ -37,19 +39,26 @@ waitress_angle = 0
 
 
 my_robot = Robot()
-my_robot.set_r_flywheel_r_wheel_w_N(.086, .10, .04, 2)
+my_robot.set_r_flywheel_r_wheel_w_N(.08, .10, .05, 2)
 
 flywheel_controller = PID(0.5, 0.3, 0.05)
 platform_controller = PID(20, 1, 1)
 
 def external_torque(robot, t, q, dot_q, ddot_q):
-    if experiment == Experiment.Horizontal:
+    if experiment == Experiment.Pendulum:
         if t < time_to_stop[experiment]:
             flywheel_signal = flywheel_controller.control_variable(
             -math.pi/2 - (q[0]+q[1]+q[2]), t)
         else:
             flywheel_signal = flywheel_controller.control_variable(
                 +math.pi/2 - (q[0]+q[1]+q[2]), t)
+        wheel_signal = +flywheel_signal
+
+    elif experiment == Experiment.Flywheel:
+        if t < time_to_stop[experiment]:
+            flywheel_signal = min(-robot.max_torque(-q[2]),0)
+        else:
+            flywheel_signal = +robot.max_torque(0)
         wheel_signal = +flywheel_signal
 
     elif experiment == Experiment.Free:
@@ -60,7 +69,7 @@ def external_torque(robot, t, q, dot_q, ddot_q):
             wheel_signal = -2*robot.max_torque(0)
         else:
             wheel_signal = +2*robot.max_torque(0)
-    elif experiment == Experiment.Double:
+    elif experiment == Experiment.Double_Flywheel:
         if t < time_to_stop[experiment]:
             wheel_signal = -2*robot.max_torque(0)
             flywheel_signal = -robot.max_torque(0)
@@ -107,7 +116,7 @@ def external_torque(robot, t, q, dot_q, ddot_q):
         flywheel_signal = max(min(robot.max_torque(
             0), flywheel_signal), -robot.max_torque(-dot_q[2]))
 
-    if experiment == Experiment.Horizontal:
+    if experiment == Experiment.Pendulum or experiment == Experiment.Flywheel:
         wheel_signal = +flywheel_signal
 
     if (dot_q[1] > 0):
@@ -119,7 +128,7 @@ def external_torque(robot, t, q, dot_q, ddot_q):
         wheel_signal = max(
             min(2*robot.max_torque(0), wheel_signal), -2*robot.max_torque(-dot_q[1]))
 
-    if experiment == Experiment.Horizontal:
+    if experiment == Experiment.Pendulum:
         flywheel_signal = +wheel_signal
     
 
@@ -132,7 +141,7 @@ t_hist = []
 
 
 def system_function(robot: Robot):
-    if experiment == Experiment.Free or experiment == Experiment.Double :
+    if experiment == Experiment.Free or experiment == Experiment.Double_Flywheel or experiment == Experiment.Flywheel:
         M = numpy.matrix([[robot.I_wheel()+robot.I_platform() + robot.I_flywheel(robot.r_max()) + robot.m_total() * robot.r_wheel**2,
                        robot.I_platform() + robot.I_flywheel(robot.r_max()),
                        robot.I_flywheel(robot.r_max())],
@@ -246,8 +255,8 @@ if experiment == Experiment.Waitress_Old or experiment == Experiment.Waitress:
 # plt.plot(t_hist, [float(q_ddot[0]) for q_ddot in q_ddot_hist ])
 # plt.plot(t_hist, [math.atan2(float(q_ddot[0])* my_robot.r_wheel,my_robot.g) for q_ddot in q_ddot_hist ])
 
-plt.legend(['q[0]', 'q[1]', 'q[2]', 'ground-platform',
-           'ground-flywheel', 'waitress_angle'])
+plt.legend(['$\phi$ground-wheel', '$\phi$wheel-platform', '$\phi$platform-flywheel',
+'$\phi$ground-platform','$\phi$ground-flywheel', '$\phi$waitress_angle'])
 
 
 plt.figure()
@@ -258,7 +267,6 @@ for i in [3,4,5]:
     plt.plot(result['t'], result['y'][i])
 plt.plot(result['t'], result['y'][3]+result['y'][4])
 plt.plot(result['t'], result['y'][3]+result['y'][4]+result['y'][5])
-plt.legend(['dot_q[0]', 'dot_q[1]', 'dot_q[2]',
-            'ground-platform', 'ground-flywheel'])
-
+plt.legend(['$\dot{\phi}$ground-wheel', '$\dot{\phi}$wheel-platform', '$\dot{\phi}$platform-flywheel',
+'$\dot{\phi}$ground-platform','$\dot{\phi}$ground-flywheel', '$\phi$waitress_angle'])
 plt.show()
