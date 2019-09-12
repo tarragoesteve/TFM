@@ -3,6 +3,8 @@ import { PID } from "./utils/PID";
 import { Motor, ReferenceParameter } from "./motor";
 import { Accelerometer } from "./accelerometer";
 import { isNumber } from "util";
+import { Filter } from "./utils/Filter";
+
 
 export class Stabilizer extends Component {
     inclination: number = 0;
@@ -15,11 +17,14 @@ export class Stabilizer extends Component {
 
     accelerometer: Accelerometer;
     PID: PID;
+    filter :Filter;
 
 
 
     constructor(name: string, planner_uri: string, is_simulation: boolean, parameters: any) {
         super(name, planner_uri, is_simulation, parameters);
+
+        this.filter = new Filter(5)
 
         //Initialize subcomponents
         this.stabilizer_motor = new Motor('stabilizer_motor', planner_uri, is_simulation, parameters.motor_parameters);
@@ -32,16 +37,16 @@ export class Stabilizer extends Component {
         //Configure the socket the reference when we get a msg
         this.socket.on('message', (msg: any) => {
             if (isNumber(msg.PWM_reference)) {
-                this.reference_parameter = ReferenceParameter.PWM;
-                this.PWM_reference = msg.PWM_reference;
-            }
-            if (isNumber(msg.inclination_reference)) {
-                this.reference_parameter = ReferenceParameter.Inclination;
-                this.inclination_reference = msg.inclination_reference;
+                this.stabilizer_motor.reference_parameter = this.reference_parameter = ReferenceParameter.PWM;
+                this.stabilizer_motor.PWM_reference = this.PWM_reference = msg.PWM_reference;
             }
             if (isNumber(msg.position_reference)) {
                 this.reference_parameter = ReferenceParameter.Position;
                 this.position_reference = msg.position_reference;
+            }
+            if (isNumber(msg.inclination_reference)) {
+                this.stabilizer_motor.reference_parameter = this.reference_parameter = ReferenceParameter.Inclination;
+                this.inclination_reference = msg.inclination_reference;
             }
         })
     }
@@ -51,34 +56,33 @@ export class Stabilizer extends Component {
             let i = 0;
             setInterval(() => {
                 let data = this.accelerometer.sensor.readSync();
-                this.inclination = Math.atan2(data.accel.z, data.accel.x) - Math.PI / 2;
+                this.inclination = this.filter.addSample(Math.atan2(data.accel.z, data.accel.x) - Math.PI / 2);
                 //Compute output
-                let output;
-                if (this.reference_parameter == ReferenceParameter.PWM) {
-                    output = this.PWM_reference;
-                    this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
-                    this.stabilizer_motor.PWM_reference = output;
-                } else if (this.reference_parameter == ReferenceParameter.Inclination) {
-                    let error = this.compute_error();
-                    output = this.PID.output(error);
-                    if (this.parameters.pendulum) {
-                        output = Math.min(1, Math.max(-1, output)) * Math.PI / 4;
+                let output = 0;
+                switch (this.reference_parameter) {
+                    case ReferenceParameter.PWM:
+                        break;
+                    case ReferenceParameter.Position:
                         this.stabilizer_motor.reference_parameter = ReferenceParameter.Position;
-                        this.stabilizer_motor.position_reference = output - this.inclination;
-                    } else {
+                        this.stabilizer_motor.position_reference = this.position_reference;
+                        break;
+                    case ReferenceParameter.Inclination:
+                            let error = this.compute_error();
+                            output = this.PID.output(error);
+                            if (this.parameters.pendulum) {
+                                output = Math.min(1, Math.max(-1, output)) * Math.PI / 4;
+                                this.stabilizer_motor.reference_parameter = ReferenceParameter.Position;
+                                this.stabilizer_motor.position_reference = output - this.inclination;
+                            } else {
+                                this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
+                                this.stabilizer_motor.PWM_reference = output;
+                            }                
+                        break;
+                
+                    default:
                         this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
-                        this.stabilizer_motor.PWM_reference = output;
-                    }
-                } else if (this.reference_parameter == ReferenceParameter.Position) {
-                    output = this.position_reference;
-                    this.stabilizer_motor.reference_parameter = ReferenceParameter.Position;
-                    this.stabilizer_motor.position_reference = this.position_reference;
-
-                } else {
-                    console.log("Stopping motor");
-                    output = 0;
-                    this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
-                    this.stabilizer_motor.position_reference = output;
+                        this.stabilizer_motor.position_reference = 0;        
+                        break;
                 }
                 this.stabilizer_motor.loop_iteration();
                 //Send state to the UI

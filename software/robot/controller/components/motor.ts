@@ -1,6 +1,5 @@
 import { Component } from "../component";
 import { PID } from "./utils/PID";
-import { Filter } from "./utils/Filter";
 import { Gpio } from "pigpio";
 import { isNumber } from "util";
 
