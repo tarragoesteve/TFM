@@ -57,6 +57,8 @@ export class Stabilizer extends Component {
             setInterval(() => {
                 let data = this.accelerometer.sensor.readSync();
                 this.inclination = this.filter.addSample(Math.atan2(data.accel.z, data.accel.x) - Math.PI / 2);
+                if (this.inclination>Math.PI) this.inclination -= 2 * Math.PI 
+                if (this.inclination<-Math.PI) this.inclination += 2 * Math.PI
                 //Compute output
                 let output = 0;
                 switch (this.reference_parameter) {
