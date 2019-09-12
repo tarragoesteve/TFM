@@ -52,7 +52,7 @@
                 },
                 "pendulum" : true, 
                 "motor_parameters": {
-                    "k_p": 5,
+                    "k_p": 3,
                     "k_i": 0,
                     "k_d": 0,
                     "pins": {

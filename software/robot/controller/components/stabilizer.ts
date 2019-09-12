@@ -45,7 +45,7 @@ export class Stabilizer extends Component {
                 this.position_reference = msg.position_reference;
             }
             if (isNumber(msg.inclination_reference)) {
-                this.stabilizer_motor.reference_parameter = this.reference_parameter = ReferenceParameter.Inclination;
+                this.reference_parameter = ReferenceParameter.Inclination;
                 this.inclination_reference = msg.inclination_reference;
             }
         })
