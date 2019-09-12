@@ -130,8 +130,33 @@ speed as you may see in Figure \ref{fig: Motor torque}.
 \end{equation}
 
 In order to compare the different policies all of them have the same target.
-The robot must travel 30 radiants and stop at the end. All the parameters from 
-the simulation are set equal to the values found in section \ref{}.
+The robot must travel 30 radiants (3 meters) and stop at the end. All the parameters from 
+the simulation are set equal to the values found in section \ref{sec: parameters results}.
+Keep in mind that the wheel radius is 10 cm.
+
+Here you can see a table that summarize the results:
+\begin{center}
+	\begin{tabular}{ |c|c|c|c|c|c|c| } 
+	 \hline
+	 \textbf{Experiment} & \textbf{Total time(s)} & \textbf{Time to max speed(s)} 
+	 & \textbf{Max speed(rad/s)} & \textbf{Time to brake(s)}\\
+	 \hline
+	 \textbf{Controlling inclination} \\
+	 \hline
+	 Flywheel & 12,45 & 0,7 & 2,45 & 0,15\\
+	 \hline
+	 Pendulum & 5,59 & 2,69 & 10,36 & 2,90\\
+	 \hline
+	 Waitress & 8,24 & 4,12 & 5,49 & 4,12\\
+	 \hline
+	 \textbf{Free inclination} \\
+	 \hline
+	 Double flywheel & 3,9 & 1 & 8,51 & 0.27\\
+	 \hline
+	 Compose mechanism & 3,82 & 2,3 & 10,2 & 2,04\\
+	 \hline
+	\end{tabular}
+\end{center}
 
 \subsubsection{Controlling the platform inclination}
 In the first two experiments we want to keep the platform in an horizontal position.
@@ -141,7 +166,7 @@ $\tau_{platform-flywheel}$ in the experiments flywheel and pendulum.
 \begin{enumerate}
 	\item Flywheel
 	
-		In this experiment we consign the platform-flywheel motor to 
+		The movable weight is fixed at $r_{max}$. In this experiment we consign the platform-flywheel motor to 
 		output the maximum possible torque. Then the platform-wheels motors deliver
 		the same torque. The platform-flywheel motor reaches in less than one second
 		the maximum speed. This then limits the wheel-platform speed because no
@@ -162,11 +187,12 @@ $\tau_{platform-flywheel}$ in the experiments flywheel and pendulum.
 	      \end{figure}
 	\item Pendulum
 	
-		In this experiment we consign the platform-flywheel motor to 
+		The movable weight is fixed at $r_{min}$. In this experiment we consign the platform-flywheel motor to 
 		get to 90º with a PID controller. Then the platform-wheels motors deliver
 		the same torque. The robot does not accelerate as fast as in the flywheel
 		experiment but reaches a higher speed that allows it to travel the distance
-		in less time.
+		in less time. Note that the robot could have kept accelerating but had to
+		brake before reaching the maximum speed. 
 	      \
 	      \begin{figure}[H]
 		      \centering
@@ -184,7 +210,7 @@ $\tau_{platform-flywheel}$ in the experiments flywheel and pendulum.
 	      \end{figure}
 	\item Waitress
 	
-		  This experiment is different that the previous two and it's aim is to illustrate
+	The movable weight is fixed at $r_{min}$. This experiment is different that the previous two and it's aim is to illustrate
 		  how the robot could follow and inclination consign. The experiment is designed
 		  the following way. A consign torque is given to the wheel-platform and the
 		  flywheel-motor PID has an inclination consign too. The inclination consign is such
@@ -211,9 +237,13 @@ $\tau_{platform-flywheel}$ in the experiments flywheel and pendulum.
 \end{enumerate}
 \subsubsection{Letting the platform turn}
 In this experiment we take advantage of the fact that the platform may not be needed
-to stay horizontal
+to stay horizontal in some displacement. The robot uses the platform as an
+additional flywheel to help the robot accelerate and brake.
 \begin{enumerate}
 	\item Double Flywheel
+	
+	The movable weight is fixed at $r_{max}$. In this experiment we add the flywheel turn over the platform turn to 
+		create more torque to accelerate our wheels. We always do the maximum possible torque with all the motors.
 	      \begin{figure}[H]
 		      \centering
 		      \includegraphics[width=10cm]{img/lagrange_5/double_q.png}
@@ -229,6 +259,10 @@ to stay horizontal
 		      \label{fig:Simulation double q dot}
 	      \end{figure}
 	\item Compose
+		  
+	The movable weight is fixed at $r_{min}$. In this experiment we add the pendulum effect to the flywheel effect produced
+		  by the flywheel. We do so with a PID controller for the angle ground-flywheel and making the maximum possible torque
+		  with the platform-wheel motors. 
 	      \begin{figure}[H]
 		      \centering
 		      \includegraphics[width=10cm]{img/lagrange_5/compose_q.png}
