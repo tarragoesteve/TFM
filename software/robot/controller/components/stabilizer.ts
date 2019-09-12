@@ -24,7 +24,7 @@ export class Stabilizer extends Component {
     constructor(name: string, planner_uri: string, is_simulation: boolean, parameters: any) {
         super(name, planner_uri, is_simulation, parameters);
 
-        this.filter = new Filter(5)
+        this.filter = new Filter(10)
 
         //Initialize subcomponents
         this.stabilizer_motor = new Motor('stabilizer_motor', planner_uri, is_simulation, parameters.motor_parameters);
