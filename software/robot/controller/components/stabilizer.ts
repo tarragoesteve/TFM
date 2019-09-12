@@ -27,6 +27,7 @@ export class Stabilizer extends Component {
 
         //Load PID Configuration;
         this.PID = new PID(parameters.k_p, parameters.k_i, parameters.k_d)
+        this
 
         //Configure the socket the reference when we get a msg
         this.socket.on('message', (msg: any) => {
@@ -46,66 +47,53 @@ export class Stabilizer extends Component {
     }
 
     loop(): Promise<boolean> {
-        const results = Promise.all([
-            this.stabilizer_motor.loop(),
-            new Promise<boolean>((resolve, reject) => {
-                let i = 0;
-                setInterval(() => {
-                    let data = this.accelerometer.sensor.readSync();
-                    this.inclination = Math.atan2(data.accel.z, data.accel.x) - Math.PI / 2;
-                    //Compute output
-                    let output;
-                    if (this.reference_parameter == ReferenceParameter.PWM) {
-                        output = this.PWM_reference;
-                        this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
-                        this.stabilizer_motor.position_reference = output;
-                    } else if (this.reference_parameter == ReferenceParameter.Inclination) {
-                        let error = this.compute_error();
-                        output = this.PID.output(error);
-                        if (this.parameters.pendulum) {
-                            output = Math.min(1, Math.max(-1, output)) * Math.PI / 4;
-                            this.stabilizer_motor.reference_parameter = ReferenceParameter.Position;
-                            this.stabilizer_motor.position_reference = output - this.inclination;
-                        } else {
-                            this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
-                            this.stabilizer_motor.position_reference = output;
-                        }
-                    } else if (this.reference_parameter == ReferenceParameter.Position) {
-                        output = this.position_reference;
+        return new Promise<boolean>((resolve, reject) => {
+            this.stabilizer_motor.loop();
+            let i = 0;
+            setInterval(() => {
+                let data = this.accelerometer.sensor.readSync();
+                this.inclination = Math.atan2(data.accel.z, data.accel.x) - Math.PI / 2;
+                //Compute output
+                let output;
+                if (this.reference_parameter == ReferenceParameter.PWM) {
+                    output = this.PWM_reference;
+                    this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
+                    this.stabilizer_motor.position_reference = output;
+                } else if (this.reference_parameter == ReferenceParameter.Inclination) {
+                    let error = this.compute_error();
+                    output = this.PID.output(error);
+                    if (this.parameters.pendulum) {
+                        output = Math.min(1, Math.max(-1, output)) * Math.PI / 4;
                         this.stabilizer_motor.reference_parameter = ReferenceParameter.Position;
-                        this.stabilizer_motor.position_reference = this.position_reference;
-
+                        this.stabilizer_motor.position_reference = output - this.inclination;
                     } else {
-                        console.log("Stopping motor");
-                        
-                        output = 0;
                         this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
                         this.stabilizer_motor.position_reference = output;
                     }
-                    //Send state to the UI
-                    if (i >= 5) {
-                        console.log(this.inclination);
-                        this.socket.emit('state', {
-                            "motor": this.name, "data": data,
-                            "inclination": this.inclination,
-                            "inclination_reference": this.inclination_reference,
-                            "PWM": output, time: Date.now()
-                        })
-                        i = 0;
-                    }
-                    i++;
-                }, 20);
-            })
-        ]);
+                } else if (this.reference_parameter == ReferenceParameter.Position) {
+                    output = this.position_reference;
+                    this.stabilizer_motor.reference_parameter = ReferenceParameter.Position;
+                    this.stabilizer_motor.position_reference = this.position_reference;
 
-        return new Promise((resolve, reject) => {
-            results.then((result) => {
-                let aux = true;
-                for (const iterator of result) {
-                    aux = aux && iterator
+                } else {
+                    console.log("Stopping motor");
+                    output = 0;
+                    this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
+                    this.stabilizer_motor.position_reference = output;
                 }
-                resolve(aux)
-            })
+                //Send state to the UI
+                if (i >= 5) {
+                    console.log(this.inclination);
+                    this.socket.emit('state', {
+                        "motor": this.name, "data": data,
+                        "inclination": this.inclination,
+                        "inclination_reference": this.inclination_reference,
+                        "PWM": output, time: Date.now()
+                    })
+                    i = 0;
+                }
+                i++;
+            }, 20);
         })
     }
 
