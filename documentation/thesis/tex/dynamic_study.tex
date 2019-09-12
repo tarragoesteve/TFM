@@ -130,14 +130,22 @@ speed as you may see in Figure \ref{fig: Motor torque}.
 \end{equation}
 
 In order to compare the different policies all of them have the same target.
-The robot must travel 30 radiants and stop at the end.
+The robot must travel 30 radiants and stop at the end. All the parameters from 
+the simulation are set equal to the values found in section \ref{}.
 
 \subsubsection{Controlling the platform inclination}
 In the first two experiments we want to keep the platform in an horizontal position.
-That's the reason why we force 
+That's the reason why we force the $ \tau_{wheel-platform}$ equal to
+$\tau_{platform-flywheel}$ in the experiments flywheel and pendulum.
 
 \begin{enumerate}
 	\item Flywheel
+	
+		In this experiment we consign the platform-flywheel motor to 
+		output the maximum possible torque. Then the platform-wheels motors deliver
+		the same torque. The platform-flywheel motor reaches in less than one second
+		the maximum speed. This then limits the wheel-platform speed because no
+		more torque can by applied one that point is reached.
 	      \begin{figure}[H]
 		      \centering
 		      \includegraphics[width=10cm]{img/lagrange_5/flywheel_q.png}
@@ -153,6 +161,13 @@ That's the reason why we force
 		      \label{fig:Simulation flywheel q dot}
 	      \end{figure}
 	\item Pendulum
+	
+		In this experiment we consign the platform-flywheel motor to 
+		get to 90º with a PID controller. Then the platform-wheels motors deliver
+		the same torque. The robot does not accelerate as fast as in the flywheel
+		experiment but reaches a higher speed that allows it to travel the distance
+		in less time.
+	      \
 	      \begin{figure}[H]
 		      \centering
 		      \includegraphics[width=10cm]{img/lagrange_5/pendulum_q.png}
@@ -168,6 +183,16 @@ That's the reason why we force
 		      \label{fig:Simulation pendulum q dot}
 	      \end{figure}
 	\item Waitress
+	
+		  This experiment is different that the previous two and it's aim is to illustrate
+		  how the robot could follow and inclination consign. The experiment is designed
+		  the following way. A consign torque is given to the wheel-platform and the
+		  flywheel-motor PID has an inclination consign too. The inclination consign is such
+		  that the sum of accelerations received from and object in the platform is perpendicular
+		  to the platform. 
+
+
+
 	      \begin{figure}[H]
 		      \centering
 		      \includegraphics[width=10cm]{img/lagrange_5/waitress_q_zoom.png}
@@ -184,8 +209,9 @@ That's the reason why we force
 	      \end{figure}
 
 \end{enumerate}
-\subsubsection{Letting the platform turn inclination}
-
+\subsubsection{Letting the platform turn}
+In this experiment we take advantage of the fact that the platform may not be needed
+to stay horizontal
 \begin{enumerate}
 	\item Double Flywheel
 	      \begin{figure}[H]

@@ -2,7 +2,7 @@
 The first thing we decided is the number of actuators.
 Most of segway robot include two motors for the motion control but
 we added a third on in order to control the inclination.
-We included three motors in total because we want to control
+So we ended up with three motors in total because we want to control
 three degrees of freedom (inclination and speed of both wheels).
 
 In order to control the inclination of the platform we needed to produce
@@ -14,7 +14,6 @@ a reasonable torque on the platform.
 Both methods have strengths in different situations so we decided to build a mixed
 piece that could combine both. 
 
-
 We took two more restriction in our design. The first one symmetry along the 
 inclination axis in order to have an equilibrium in all possible inclinations
 without the need of external forces. 
@@ -23,11 +22,11 @@ the configurations should touch the ground to avoid crashes. Figure \ref{fig:Sid
 illustrates this last restriction.   
 
 The design of the robot is done with the 3D design software 
-\href{https://www.freecadweb.org/}{Free-cad} and most of parts where 3D printed. 3D printing has
+\href{https://www.freecadweb.org/}{Free-cad} and most of parts were 3D printed. 3D printing has
 also it's own restrictions, for example not being able to print parts bigger than 25 cm.
 All part files are uploaded to the GitHub repository \url{https://github.com/tarragoesteve/TFM} under the hardware folder.
 
-You can see the main of an initial design views on Figure \ref{fig:Isometric render view}, \ref{fig:Front render view}, \ref{fig:Top render view} and \ref{fig:Side render view}.
+You can see the main views of an initial design on Figure \ref{fig:Isometric render view}, \ref{fig:Front render view}, \ref{fig:Top render view} and \ref{fig:Side render view}.
 
 \begin{figure}
 	\centering
@@ -70,15 +69,15 @@ In order to experiment with both of them we designed a part to allow
 
 In order to create a configuration with maximum gravitational torque
 we have done the following computation. We denote the torque pendulum
-torque $\tau$, consider the masses are cylinders of mass $m_{cylinder}$
+torque by $\tau$, consider the masses are cylinders of mass $m_{cylinder}$
 with radius $r_{cylinder}$ and width $w$ and the radius of the flywheel is $r_{flywheel}$.
 
 Each mass weights:
 \[ m_{cylinder} = \rho \cdot w \cdot \pi \cdot r_{cylinder}^2 \]
 
-We neglect the mass of the flywheel structure versus the mass of the cylinders so
-all the gravitational torque created by the masses will be compensated with the
-opposite weight except for the two masses with different radius.
+We neglect the mass of the flywheel structure versus the mass of the cylinders. All
+the gravitational torque is created by the cylinder masses and all of them are compensated
+with the opposite weight except for the two masses with different radius.
 
 One of the weight can be placed along a rail. The distance to the center will
 vary from $r_{min} = r_{cylinder} + r_{motor-axis} \approx r_{cylinder} $ to $r_{max} = r_{flywheel} - r_{cylinder}$. 
