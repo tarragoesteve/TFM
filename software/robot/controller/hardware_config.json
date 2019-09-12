@@ -43,7 +43,12 @@
                 "k_d": 0,
                 "pins": {
                     "SDA": 2,
-                    "SDL": 3
+                    "SDL": 3,
+                    "PWM": 12,
+                    "IN1": 25,
+                    "IN2": 8,
+                    "Encoder_A": 0,
+                    "Encoder_B": 5
                 },
                 "pendulum" : true, 
                 "motor_parameters": {

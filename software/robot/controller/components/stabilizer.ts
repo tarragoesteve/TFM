@@ -70,12 +70,14 @@ export class Stabilizer extends Component {
                             this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
                             this.stabilizer_motor.position_reference = output;
                         }
-                    } else if (this.reference_parameter = ReferenceParameter.Position) {
+                    } else if (this.reference_parameter == ReferenceParameter.Position) {
                         output = this.position_reference;
                         this.stabilizer_motor.reference_parameter = ReferenceParameter.Position;
                         this.stabilizer_motor.position_reference = this.position_reference;
 
                     } else {
+                        console.log("Stopping motor");
+                        
                         output = 0;
                         this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
                         this.stabilizer_motor.position_reference = output;
@@ -100,7 +102,7 @@ export class Stabilizer extends Component {
             results.then((result) => {
                 let aux = true;
                 for (const iterator of result) {
-                    aux = aux &&  iterator              
+                    aux = aux && iterator
                 }
                 resolve(aux)
             })
