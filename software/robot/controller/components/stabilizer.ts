@@ -47,9 +47,7 @@ export class Stabilizer extends Component {
 
     loop(): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            if (this.parameters.pendulum) {
-                this.stabilizer_motor.loop()
-            }
+            this.stabilizer_motor.loop()
             let i = 0;
             setInterval(() => {
                 let data = this.accelerometer.sensor.readSync();
@@ -58,23 +56,28 @@ export class Stabilizer extends Component {
                 let output;
                 if (this.reference_parameter == ReferenceParameter.PWM) {
                     output = this.PWM_reference;
-                    //Apply output to the motor
-                    this.stabilizer_motor.apply_output(output)
-                } else if (this.parameters.pendulum) {
-                    if(this.reference_parameter == ReferenceParameter.Inclination){
-                        let error = this.compute_error();
-                        output = this.PID.output(error);
-                        output = Math.min(1,Math.max(-1,output)) * Math.PI/4;
-                    } else {
-                        output = this.position_reference;
-                    }
-                    this.stabilizer_motor.reference_parameter = ReferenceParameter.Position;
-                    this.stabilizer_motor.position_reference = output - this.inclination;
-                } else {
+                    this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
+                    this.stabilizer_motor.position_reference = output;
+                } else if (this.reference_parameter == ReferenceParameter.Inclination) {
                     let error = this.compute_error();
                     output = this.PID.output(error);
-                    //Apply output to the motor
-                    this.stabilizer_motor.apply_output(output)
+                    if(this.parameters.pendulum){
+                        output = Math.min(1, Math.max(-1, output)) * Math.PI / 4;
+                        this.stabilizer_motor.reference_parameter = ReferenceParameter.Position;
+                        this.stabilizer_motor.position_reference = output - this.inclination; 
+                    } else {
+                        this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
+                        this.stabilizer_motor.position_reference = output;
+                    }
+                } else if (this.reference_parameter = ReferenceParameter.Position) {
+                    output = this.position_reference;
+                    this.stabilizer_motor.reference_parameter = ReferenceParameter.Position;
+                    this.stabilizer_motor.position_reference = this.position_reference;
+                    
+                } else {
+                    output = 0;
+                    this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
+                    this.stabilizer_motor.position_reference = output;
                 }
                 //Send state to the UI
                 if (i >= 5) {
