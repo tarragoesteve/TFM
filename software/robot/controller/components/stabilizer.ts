@@ -57,7 +57,7 @@ export class Stabilizer extends Component {
                 if (this.reference_parameter == ReferenceParameter.PWM) {
                     output = this.PWM_reference;
                     this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
-                    this.stabilizer_motor.position_reference = output;
+                    this.stabilizer_motor.PWM_reference = output;
                 } else if (this.reference_parameter == ReferenceParameter.Inclination) {
                     let error = this.compute_error();
                     output = this.PID.output(error);
@@ -67,7 +67,7 @@ export class Stabilizer extends Component {
                         this.stabilizer_motor.position_reference = output - this.inclination;
                     } else {
                         this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
-                        this.stabilizer_motor.position_reference = output;
+                        this.stabilizer_motor.PWM_reference = output;
                     }
                 } else if (this.reference_parameter == ReferenceParameter.Position) {
                     output = this.position_reference;
