@@ -48,7 +48,6 @@ export class Stabilizer extends Component {
 
     loop(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            this.stabilizer_motor.loop();
             let i = 0;
             setInterval(() => {
                 let data = this.accelerometer.sensor.readSync();
@@ -81,6 +80,7 @@ export class Stabilizer extends Component {
                     this.stabilizer_motor.reference_parameter = ReferenceParameter.PWM;
                     this.stabilizer_motor.position_reference = output;
                 }
+                this.stabilizer_motor.loop_iteration();
                 //Send state to the UI
                 if (i >= 5) {
                     console.log(this.inclination);

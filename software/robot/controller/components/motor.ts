@@ -20,10 +20,10 @@ export enum ReferenceParameter {
 
 export class Motor extends Component {
     //State
-    previous_position_counter :number = 0;
+    previous_position_counter: number = 0;
     position_counter: number = 0;
     direction: Direction = Direction.Stop;
-    
+
     //Reference
     reference_parameter: ReferenceParameter = ReferenceParameter.PWM;
     position_reference: number = 0;
@@ -44,9 +44,9 @@ export class Motor extends Component {
     static readonly PWM_limit = 1;
     static readonly motor_reduction = 34;
     static readonly pulse_per_revolution = 341.2;
-    static readonly counts_per_revolution = 4* Motor.pulse_per_revolution;
+    static readonly counts_per_revolution = 4 * Motor.pulse_per_revolution;
     static readonly corrector = 1.4511;
-    static readonly elapsed_radians = Motor.corrector* Math.PI * 2/Motor.counts_per_revolution;
+    static readonly elapsed_radians = Motor.corrector * Math.PI * 2 / Motor.counts_per_revolution;
     static readonly loop_ms = 20;
 
     static getReferenceDirection(output: number) {
@@ -91,11 +91,11 @@ export class Motor extends Component {
                 clockwise = (this.encoder_flags['A'].level != this.encoder_flags['B'].level)
             } else {
                 clockwise = (this.encoder_flags['A'].level == this.encoder_flags['B'].level)
-            }            
+            }
             if (!clockwise) {
-                this.position_counter --;
+                this.position_counter--;
             } else {
-                this.position_counter ++;
+                this.position_counter++;
             }
         }
     }
@@ -140,11 +140,11 @@ export class Motor extends Component {
         this.socket.on('message', (msg: any) => {
             if (isNumber(msg.position_reference)) {
                 this.reference_parameter = ReferenceParameter.Position;
-                this.position_reference =2*Math.PI* msg.position_reference;
+                this.position_reference = 2 * Math.PI * msg.position_reference;
             }
             if (isNumber(msg.speed_reference)) {
                 this.reference_parameter = ReferenceParameter.Speed;
-                this.speed_reference =25* msg.speed_reference;
+                this.speed_reference = 25 * msg.speed_reference;
             }
             if (isNumber(msg.PWM_reference)) {
                 this.reference_parameter = ReferenceParameter.PWM;
@@ -159,7 +159,7 @@ export class Motor extends Component {
             setInterval(() => {
                 let output: number;
                 //Compute new speed and acceleration
-                if(this.reference_parameter == ReferenceParameter.PWM){
+                if (this.reference_parameter == ReferenceParameter.PWM) {
                     output = this.PWM_reference;
                 } else {
                     let error = this.compute_error();
@@ -172,7 +172,7 @@ export class Motor extends Component {
                 if (i >= 5) {
                     this.socket.emit('state', {
                         "motor": this.name, "position": this.position_counter * Motor.elapsed_radians,
-                        "speed": (this.position_counter - this.previous_position_counter)*Motor.elapsed_radians*1000.0/Motor.loop_ms,
+                        "speed": (this.position_counter - this.previous_position_counter) * Motor.elapsed_radians * 1000.0 / Motor.loop_ms,
                         PWM: output, reference_parameter: this.reference_parameter,
                         position_reference: this.position_reference, speed_reference: this.speed_reference,
                         PWM_reference: this.PWM_reference, time: Date.now()
@@ -184,6 +184,19 @@ export class Motor extends Component {
 
             }, Motor.loop_ms);
         });
+    }
+
+    loop_iteration() {
+        let output: number;
+        if (this.reference_parameter == ReferenceParameter.PWM) {
+            output = this.PWM_reference;
+        } else {
+            let error = this.compute_error();
+            output = this.PID.output(error);
+        }
+        //Apply output to the motor
+        this.apply_output(output);
+        this.previous_position_counter = this.position_counter
     }
 
     apply_output(output: number) {
@@ -199,7 +212,7 @@ export class Motor extends Component {
             case ReferenceParameter.Position:
                 return this.position_reference - this.position_counter * Motor.elapsed_radians;
             case ReferenceParameter.Speed:
-                return this.speed_reference - (this.position_counter - this.previous_position_counter)*Motor.elapsed_radians*1000.0/Motor.loop_ms;
+                return this.speed_reference - (this.position_counter - this.previous_position_counter) * Motor.elapsed_radians * 1000.0 / Motor.loop_ms;
             default:
                 console.log("Error computing error");
                 return 0;
