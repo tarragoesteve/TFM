@@ -58,6 +58,8 @@ export class Stabilizer extends Component {
                 let data = this.accelerometer.sensor.readSync();
                 this.inclination = this.filter.addSample(Math.atan2(data.accel.z, data.accel.x) - Math.PI / 2);
                 //Compute output
+                if(this.inclination>Math.PI) this.inclination -= 2 * Math.PI
+                if (this.inclination<-Math.PI) this.inclination += 2 * Math.PI
                 let output = 0;
                 switch (this.reference_parameter) {
                     case ReferenceParameter.PWM:
