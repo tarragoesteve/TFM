@@ -1,5 +1,6 @@
 \section{Optimization}
-In this section we select which parameters are going to be used when building our robot.
+In this section we select which parameters are going to be used during the construction 
+and simulations of our robot.
 
 %\subsection{Minimum section in the section of the flywheel}
 %We wil place our flywheel in a hole on our robot. We will now compute the minimum section in hole so it doesn't bend. See figure \ref{fig:Flywheel hole diagram}.
@@ -28,9 +29,11 @@ In this section we select which parameters are going to be used when building ou
 
 
 \subsection{Restrictions}
-The first restrictions is due to the initial design requirements. The other three are somehow arbitrary but will help us to reduce the size of the robot.
+The first restrictions is due to the initial design requirements. The other three are 
+somehow arbitrary but will help us to reduce the size of the robot.
 \begin{enumerate}
-\item We wil place our flywheel in a hole on our robot. We don't want to touch the ground in any configuration so:
+\item We wil place our flywheel in a hole on our robot. We don't want to touch the ground
+in any configuration so:
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5cm]{img/flywheel_hole.jpg}
@@ -52,7 +55,8 @@ The first restrictions is due to the initial design requirements. The other thre
 \end{enumerate}
 
 \subsection{Requirements}
-Based on the mechanical analysis we have set some requirements that we would like our robot to fullfil:
+Based on the mechanical analysis we have set some requirements that we would like our robot to
+fulfill:
 \textbf{Flywheel mode}
 \begin{enumerate}
 	\item $\dot{y}_{max}$ (equation \ref{Maximum speed flywheel}) $> 0.1m/s$
@@ -69,7 +73,7 @@ Based on the mechanical analysis we have set some requirements that we would lik
 
 
 \subsection{Cost function}
-Apparat from fulfilling the requirements we will try to minimize a cost function.
+In addition to fulfilling the requirements we will try to minimize a cost function.
 
 We will maximize the maximum sinus in the pendulum mode 
 (equation \ref{Maximum angle using pendulum system}) because
@@ -94,10 +98,11 @@ proportional to the energy the robot can deliver using the flywheel at a certain
     {r_{wheel}^2\cdot (m_{rest} + N \cdot m_{cylinder}) +  2\cdot I_{wheel}} \cdot  \dot{\theta}_{max}
 \end{equation*}
 
-\subsection{Results}
+\subsection{Results} \label{sec: parameters results}
 Our procedure has been making a grid with the four parameters of the robot 
 design: $w$ (width of the cylinders), $N$(number of cylinders), $r_{wheel}$ and $r_{flywheel}$.
-We have fixed $r_{flywheel}$, iterated over the other three variables and keeped the best parameters to reduce our cost function.
+We have fixed $r_{flywheel}$, iterated over the other three variables and kept the best
+parameters to reduce our cost function.
 
 
 \begin{figure}[H]

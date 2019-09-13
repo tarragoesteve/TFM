@@ -60,6 +60,8 @@ export class Stabilizer extends Component {
                 if (this.inclination>Math.PI) this.inclination -= 2 * Math.PI 
                 if (this.inclination<-Math.PI) this.inclination += 2 * Math.PI
                 //Compute output
+                if(this.inclination>Math.PI) this.inclination -= 2 * Math.PI
+                if (this.inclination<-Math.PI) this.inclination += 2 * Math.PI
                 let output = 0;
                 switch (this.reference_parameter) {
                     case ReferenceParameter.PWM:
