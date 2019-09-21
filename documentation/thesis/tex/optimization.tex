@@ -1,32 +1,5 @@
-\section{Optimization}
-In this section we select which parameters are going to be used during the construction 
-and simulations of our robot.
-
-%\subsection{Minimum section in the section of the flywheel}
-%We wil place our flywheel in a hole on our robot. We will now compute the minimum section in hole so it doesn't bend. See figure \ref{fig:Flywheel hole diagram}.
-
-%\begin{figure}[ht]
-%	\centering
-%	\includegraphics[width=10cm]{img/Shear_Moment_Diagram.png}
-%	\caption{Bendig moment diagram}
-%	\label{fig:Bendig moment diagram}
-%\end{figure}
-%The maximum bending moment is at the flywheel section:
-%\[M_y = \frac{P * L}{4}\]
-%Where P is the weight of the robot and L is the distance between the two wheels.
-
-%\[I_y = \frac{2*b*h^3}{12}=\frac{b*h^3}{6}\]
-%\[\sigma=\frac{M_y}{I_y}*\frac{h}{2} = \frac{P*L}{48*b*h^2}\]
-%We are planning to build our body structure with plastic:
-%\[\sigma_{plastic} = 4MPa = 4E6Pa\]
-%We will impose the relation:
-%\[b = h\]
-%And set a target P of $2000N$ and a maximum length of $0.5m$
-%\[\sigma_{plastic} = 4E6Pa = \frac{P*L}{48*b*h^2} = \frac{1000}{48*b^3} \]
-%Therefore:
-%\[b = \sqrt[3]{\frac{1000}{48*4E6}} = 1,277182 m\]
-%We will use b=10mm and h=10mm from now on. Which is far more than what we need.
-
+\section{Optimization Setup}
+In this section we will set up the requirements and the cost function we want to optimize.
 
 \subsection{Restrictions}
 The first restrictions is due to the initial design requirements. The other three are 
@@ -55,17 +28,19 @@ in any configuration so:
 \end{enumerate}
 
 \subsection{Requirements}
-Based on the mechanical analysis we have set some requirements that we would like our robot to
-fulfill:
+We would like out robot to fulfill some requirements. This specifications are related to mechanical equations
+that we will develop in the next section.
+
 \textbf{Flywheel mode}
 \begin{enumerate}
 	\item $\dot{y}_{max}$ (equation \ref{Maximum speed flywheel}) $> 0.1m/s$
 	\item $\ddot{y}_{max}$ (equation \ref{maximum acceleration flywheel}) $> 1m/s^2$
-	\item $sin(\alpha_{max})$ (equation \ref{Maximum angle using flywheel system}) $> 0.2$
+	\item $sin(\alpha_{max})$ (equation \ref{Maximum angle using flywheel system}) $>0.2$
 \end{enumerate}
+
 \textbf{Pendulum mode}
 \begin{enumerate}
-	\item $\dot{y}_{max}$ (equation \ref{maximum speed pendulum}) $> 1m/s$
+	\item $\dot{y}_{max}$ (equation \ref{maximum speed pendulum}) $>1m/s$
 	\item $\ddot{y}_{max}$ (equation \ref{maximum acceleration pendulum}) $>0.1m/s^2$
 	\item $sin(\alpha_{max})$ (equation \ref{Maximum angle using pendulum system}) $> 0.02$
 \end{enumerate}
@@ -97,102 +72,3 @@ proportional to the energy the robot can deliver using the flywheel at a certain
 	\dot{y}_{max} = r_{wheel} \cdot  R \cdot  \dot{\theta}_{max} =r_{wheel} \cdot  \frac{ N \cdot  m_{cylinder} \cdot  (\frac{2\cdot r_{flywheel}}{3})^2}
     {r_{wheel}^2\cdot (m_{rest} + N \cdot m_{cylinder}) +  2\cdot I_{wheel}} \cdot  \dot{\theta}_{max}
 \end{equation*}
-
-\subsection{Results} \label{sec: parameters results}
-Our procedure has been making a grid with the four parameters of the robot 
-design: $w$ (width of the cylinders), $N$(number of cylinders), $r_{wheel}$ and $r_{flywheel}$.
-We have fixed $r_{flywheel}$, iterated over the other three variables and kept the best
-parameters to reduce our cost function.
-
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{img/optimization/speed.png}
-	\caption{Plot of the equations \ref{Maximum speed flywheel} and \ref{maximum speed pendulum} at the parameters that minimize the cost function and fullfil the requirements and restrictions}
-	\label{fig:Speed plot}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{img/optimization/acceleration.png}
-	\caption{Plot of the equations \ref{maximum acceleration flywheel} and \ref{maximum acceleration pendulum} at the parameters that minimize the cost and fullfil the requirements and restrictions}
-	\label{fig:Speed plot}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{img/optimization/sin.png}
-	\caption{Plot of the equations \ref{Maximum angle using flywheel system} and \ref{Maximum angle using pendulum system} at the parameters that minimize the cost and fullfil the requirements and restrictions}
-	\label{fig:Sinus plot}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{img/optimization/parameters.png}
-	\caption{Plot of the parameters that minimize the cost function.}
-	\label{fig:Parameters plot}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{img/optimization/N.png}
-	\caption{Plot of the N that minimize the cost function.}
-	\label{fig:Parameters plot}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{img/optimization/mass.png}
-	\caption{Plot of the mass for each configuration.}
-	\label{fig:Mass plot}
-\end{figure}
-
-%\begin{figure}[H]
-%	\centering
-%	\includegraphics[width=10cm]{img/optimization/height.png}
-%	\caption{Plot of the equation \ref{Maximum height} for each configuration.}
-%	\label{fig:Mass plot}
-%\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{img/optimization/cost.png}
-	\caption{Plot of the equation \ref{eq: cost} for each configuration.}
-	\label{fig:Mass plot}
-\end{figure}
-
-Our selected parameters are:
-\begin{center}
-	\begin{tabular}{ |c|c|c|c| } 
-	 \hline
-	 $r_{flywheel}$ & $r_{wheel}$ & $w$ & $N$\\
-	 \hline 
-	 8cm & 10cm & 5cm & 2 \\ 
-	 \hline
-	\end{tabular}
-\end{center}
-
-With this parameters we get the following specifications:
-\begin{center}
-	\begin{tabular}{ |c|c| } 
-	 \hline
-	 Total mass & 2,91kg\\
-	 \hline
-	 \textbf{Pendulum} \\
-	 \hline
-	 Maximum sinus & 0,042\\
-	 \hline
-	 Maximum speed horizontal & 1,84 $m/s$\\
-	 \hline
-	 Maximum acceleration horizontal & 0,38 $m/s^2$\\
-	 \hline
-	 \textbf{Flywheel} \\
-	 \hline
-	 Maximum sinus & 0,171\\
-	 \hline
-	 Maximum speed horizontal & 0,24 $m/s$\\
-	 \hline
-	 Maximum acceleration horizontal & 1.52 $m/s^2$\\
-	 \hline
-	\end{tabular}
-\end{center}
