@@ -2,6 +2,7 @@
 In this section we will set up the requirements and the cost function we want to optimize.
 
 \subsection{Restrictions}
+The restrictions are a list of inequetions that our system has to fulfill.
 The first restrictions is due to the initial design requirements. The other three are 
 somehow arbitrary but will help us to reduce the size of the robot.
 \begin{enumerate}
@@ -28,8 +29,10 @@ in any configuration so:
 \end{enumerate}
 
 \subsection{Requirements}
-We would like out robot to fulfill some requirements. This specifications are related to mechanical equations
-that we will develop in the next section.
+We would like our robot to reach some mechanical specifications. This ones are related to mechanical equations
+that we will develop in the next section. They refer to the max speed, acceleration and inclination the robot may achieve
+while controlling it's inclination. We have divided our specifications in two blocks
+according to the two mechanisms.
 
 \textbf{Flywheel mode}
 \begin{enumerate}
@@ -48,13 +51,14 @@ that we will develop in the next section.
 
 
 \subsection{Cost function}
-In addition to fulfilling the requirements we will try to minimize a cost function.
+In addition to fulfilling the previous inequetions we will
+minimize a cost function.
 
 We will maximize the maximum sinus in the pendulum mode 
 (equation \ref{Maximum angle using pendulum system}) because
 it give the robot the capacity to deliver force in a permanent state.
 
-We will also maximize the square of the max speed the robot can achieve
+And we will also maximize the square of the max speed the robot can achieve
 in flywheel mode (equation \ref{Maximum speed flywheel}) because it is
 proportional to the energy the robot can deliver using the flywheel at a certain moment.
 
@@ -62,6 +66,9 @@ proportional to the energy the robot can deliver using the flywheel at a certain
 	cost(r_{flywheel},r_{wheel},w,N) = - sin(\alpha_{max})_{pendulum} -\dot{y}^2_{max-flywheel}
 	\label{eq: cost}
 \end{equation}
+In the next section we will find out what are the values 
+of this equations with the construction parameters. 
+For reference this terms are equal to:
 \begin{equation*}
 	m_{cylinder} = \rho * w * \pi * (\frac{r_{flywheel}}{3})^2
 \end{equation*}

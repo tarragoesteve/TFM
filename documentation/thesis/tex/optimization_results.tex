@@ -2,8 +2,27 @@
 
 Our procedure has been making a grid with the four parameters of the robot 
 design: $w$ (width of the cylinders), $N$(number of cylinders), $r_{wheel}$ and $r_{flywheel}$.
-We have fixed $r_{flywheel}$, iterated over the other three variables and kept the best
-parameters to reduce our cost function \ref{}.
+We have fixed $r_{flywheel}$, iterated over the other three
+parameters and kept the best configuration in therms of our cost function (eq. \ref{eq: cost})
+that fullfiled the requirements and restrictions.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{img/optimization/parameters.png}
+	\caption{Plot of the wheel radius and the width of the cylinder that waas optimal for each flywheel radius.}
+	\label{fig:Parameters plot}
+\end{figure}
+
+We can observe that the relation between the flywheel radius and 
+the wheel radius is linear. This is becouse we are always on the
+edge of the restriction number one.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{img/optimization/N.png}
+	\caption{Plot of the N that minimize the cost function.}
+	\label{fig:Parameters plot}
+\end{figure}
 
 
 \begin{figure}[H]
@@ -12,6 +31,10 @@ parameters to reduce our cost function \ref{}.
 	\caption{Plot of the equations \ref{Maximum speed flywheel} and \ref{maximum speed pendulum} at the parameters that minimize the cost function and fullfil the requirements and restrictions}
 	\label{fig:Speed plot}
 \end{figure}
+
+In this figure we can observe that the speed of in the pendulum mode increases
+linearly with the flywheel radius. This is becouse it is linearly related with
+the wheel radius.
 
 \begin{figure}[H]
 	\centering
@@ -27,19 +50,10 @@ parameters to reduce our cost function \ref{}.
 	\label{fig:Sinus plot}
 \end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{img/optimization/parameters.png}
-	\caption{Plot of the parameters that minimize the cost function.}
-	\label{fig:Parameters plot}
-\end{figure}
+We can see in figure \ref{fig:Sinus plot} that when the flywheel radius 
+exceeds 0.07 m the requirement of the flywheel sinus becomes active.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{img/optimization/N.png}
-	\caption{Plot of the N that minimize the cost function.}
-	\label{fig:Parameters plot}
-\end{figure}
+
 
 \begin{figure}[H]
 	\centering
@@ -47,6 +61,9 @@ parameters to reduce our cost function \ref{}.
 	\caption{Plot of the mass for each configuration.}
 	\label{fig:Mass plot}
 \end{figure}
+
+We can see in figure \ref{fig:Mass plot} that the total mass never exceeds the
+5 kg limit.
 
 %\begin{figure}[H]
 %	\centering
@@ -59,10 +76,10 @@ parameters to reduce our cost function \ref{}.
 	\centering
 	\includegraphics[width=10cm]{img/optimization/cost.png}
 	\caption{Plot of the equation \ref{eq: cost} for each configuration.}
-	\label{fig:Mass plot}
+	\label{fig:Cost plot}
 \end{figure}
 
-Our selected parameters are:
+Our selected parameters are then:
 \begin{center}
 	\begin{tabular}{ |c|c|c|c| } 
 	 \hline

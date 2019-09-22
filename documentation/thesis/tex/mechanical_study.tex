@@ -1,6 +1,7 @@
 \section{Mechanical analysis}
 In this section we will analyze and understand the key dynamics of our robot so we can choose
-the design parameters based on performance indicators. As parameters we have the with of the
+the design parameters based on performance indicators. All the analysis is made
+supposing the inclination is fixed. As parameters we have the with of the
 flywheel masses $w$, the number of masses $N$, the radius of the flywheel $r_{flywheel}$, and
 the radius of the wheels $r_{wheel}$
 
@@ -187,7 +188,7 @@ Using equation \ref{eq:control equation}:
 
 
 We will now study different cases to better understand this equation.
-\subsubsection{No terrain inclination ($\alpha = 0$)}
+\subsubsection{Speed and acceleration with no inclination ($\alpha = 0$)}
 The objective here is to obtain the maximum speed and acceleration we can get starting from rest in a plain surface.
 
 The equation we get by substituting $\alpha = 0$ in equation \ref{eq of acceleration}:
@@ -320,7 +321,7 @@ We will now split the study in two cases:
 
 
 \end{enumerate}
-\subsubsection{No acceleration, just inclination ($\alpha > 0$)}
+\subsubsection{Inclination ($\alpha > 0$)}
 The goal of this subsubsection is to study which is the maximum inclination $\alpha_{max}$ the robot can overpass.
 
 Substituting $\ddot{y}=0$ and $\dot{\omega}_{wheel} = 0$ in equation \ref{eq of acceleration}
