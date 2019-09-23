@@ -2,17 +2,17 @@
 In the IRI lab we have two segway robots, Tibi and Dabo show in figure
 \ref{fig:Picture of Tibi and Dabo}. Both of them move the same way.
 They must incline their body to compensate the wheel reaction torque. We will get deeper
-in why this phenomena happens in section \ref{}.
+in why these phenomena happens in section \ref{sec: mechanical analysis}.
 
 This movement restriction may cause some problems when trying to avoid obstacles,
 as for example going through low roof path. Another limitation is the
 acceleration that the robot can achieve which is directly related with the inclination
-that it's limited to 90 degrees in the best case. Also the amount of uphill
+that it's limited to 90 degrees in the best case. Also, the amount of uphill
 is limited with an additional problem: the safety system stops the robot if 
 it detects something near it (in this case the ground).
 
 So we decided to build a prototype of segway robot that could solve this problem by 
-controlling it's inclination independently. The chosen robot is inspired in a
+controlling its inclination independently. The chosen robot is inspired in a
 \textit{segway hover-board}, similar to the one appearing in Figure \ref{fig:Picture of a commercial 
 segway hover-board}. The two wheels are controlled with classic control algorithms and the
 inclination of the central body is controlled with a flywheel mechanism that we will

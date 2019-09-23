@@ -1,9 +1,9 @@
-\section{Mechanical analysis}
-In this section we will analyze and understand the key dynamics of our robot so we can choose
+\section{Mechanical analysis} \label{sec: mechanical analysis}
+In this section we will analyze and understand the key dynamics of our robot, so we can choose
 the design parameters based on performance indicators. All the analysis is made
-supposing the inclination is fixed. As parameters we have the with of the
+supposing the inclination is fixed. As parameters, we have the with of the
 flywheel masses $w$, the number of masses $N$, the radius of the flywheel $r_{flywheel}$, and
-the radius of the wheels $r_{wheel}$
+the radius of the wheels $r_{wheel}$.
 
 \subsection{Inclination control}
 In order to keep the inclination of the platform at a certain angle $\phi$ 
@@ -11,7 +11,7 @@ we must be able to compensate all the torque being applied to the platform.
 
 \[\ddot{\phi}\cdot I_{platform} = \tau_{platform} \]
 
-Assuming that the platform is well balanced (the center of masses is located
+Assuming that the platform is well-balanced (the center of masses is located
 at the rotation axis by our design restriction) and neglecting the torque generated
 by the friction
 with air, the sum of all the torques in the motor axis applied to the platform
@@ -53,17 +53,16 @@ Note that the maximum torque of the motor is a function of velocity and in parti
             \node (maximum) at (3,0) [below]{maximum speed};
             \draw[-] (0,3) -- (3,0);
         \end{tikzpicture}
-    \caption{Motor torque}
+    \caption{Motor torque.}
 	\label{fig: Motor torque}
 \end{figure}
 
 We assume that the wheels just roll and do no slip.
 The robot is pushed by the wheels that make a force $F_{friction}$ against the ground in the contact point. See figure \ref{fig:Wheel force diagram}.
 
-We can express the torque at the center of the of the wheel as:
+We can express the torque at the center of the wheel as:
 \[\tau_{motor-wheel} + F_{friction} \cdot r_{wheel} = I_{wheel} 
 \cdot \dot{\omega}_{wheel} \]
-
 \begin{equation} \label{wheel torque equation}
 \tau_{motor-wheel} = I_{wheel} \cdot \dot{w}_{wheel} - F_{friction} \cdot r_{wheel}
 \end{equation}
@@ -89,7 +88,7 @@ We can express the torque at the center of the of the wheel as:
         \draw[->,thick] (center.center) -- (below.center) node[below]{$m\cdot g$};
         \draw[rotate=30,->,thick] (center.center) -- (1,2) node[below]{$F_{platform}$};
     \end{tikzpicture}
-	\caption{Wheel force diagram}
+	\caption{Wheel force diagram.}
 	\label{fig:Wheel force diagram}
 \end{figure}
 
@@ -134,7 +133,6 @@ Assuming a general configuration of the flywheel where the moving mass is at dis
 \begin{equation}\label{eq: flywheel torque equation}    
     \tau_{motor-flywheel} = \ddot{\theta}\cdot I_{flywheel}(r) + m_{cylinder} \cdot g \cdot (r_{max} - r) \cdot \sin{\theta}  
 \end{equation}
-
 Note that in equation \ref{eq: flywheel torque equation} the two terms correspond to the two methods: accelerating and non vertical position.
 
 \subsection{Maximum speed, acceleration and inclination}
@@ -142,7 +140,6 @@ In this subsection we would like to study the maximum speed and acceleration the
 
 We will assume both wheels turn at the same speed, have the same $F_{friction}$ and the same $\tau_{wheel}$:
 \[ \omega_{wheel-left} = \omega_{wheel-right} = \omega_{wheel} \]
-
 \begin{figure}
 	\centering
 	\begin{tikzpicture}
@@ -171,23 +168,20 @@ We will assume both wheels turn at the same speed, have the same $F_{friction}$ 
         \draw[dashed][rotate=30] (center.center) -- (2,1);
 
     \end{tikzpicture}
-    \caption{Wheel forward force diagram}
+    \caption{Wheel forward force diagram.}
     \label{fig:Wheel forward force diagram}
 \end{figure}
 
-Applying Newton's first law in the y axis of figure \ref{fig:Wheel forward force diagram}:
+Applying Newton's first law in the y-axis of figure \ref{fig:Wheel forward force diagram}:
 \[\ddot{y}\cdot m_{total} = 2 \cdot F_{friction} - m_{total} \cdot g \cdot sin(\alpha)\]
-
 Substituting $F_{friction}$ taking in to account equation \ref{wheel torque equation}:
 \[\ddot{y}\cdot m_{total} = 2 \cdot \frac{I_{wheel} \cdot \dot{w}_{wheel}-\tau_{motor-wheel}}{r_{wheel}} - m_{total} \cdot g \cdot sin(\alpha)\]
-
 Using equation \ref{eq:control equation}:
 \begin{equation}\label{eq of acceleration}
     \Rightarrow  \ddot{y}\cdot m_{total} = \frac{2\cdot I_{wheel} \cdot \dot{w}_{wheel}}{r_{wheel}} + \frac{\tau_{motor-flywheel}}{r_{wheel}} - m_{total} \cdot g \cdot sin(\alpha)
 \end{equation}
-
-
 We will now study different cases to better understand this equation.
+
 \subsubsection{Speed and acceleration with no inclination ($\alpha = 0$)}
 The objective here is to obtain the maximum speed and acceleration we can get starting from rest in a plain surface.
 
@@ -222,7 +216,7 @@ We will now split the study in two cases:
     \frac{\ddot{\theta}\cdot I_{flywheel}}{r_{wheel}}\]
 
 
-    We now define R as a non dimensional constant beeing the the quotient between $\dot{w}_{wheel}$ and $-\ddot{\theta}$.
+    We now define R as a non dimensional constant being the quotient between $\dot{w}_{wheel}$ and $-\ddot{\theta}$.
 
     \begin{equation}\label{eq: R definition}
         R = \frac{\dot{\omega}_{wheel}}{-\ddot{\theta}} = 
@@ -245,7 +239,6 @@ We will now split the study in two cases:
 
     In  order to get the forward acceleration we can use equation \ref{eq: angular velocity}
     \[\ddot{y} = -\dot{\omega}_{wheel} \cdot  r_{wheel} = R \cdot  \ddot{\theta} \cdot  r_{wheel}\]
-
     And using equation \ref{eq: flywheel torque equation} we get that the maximum is:
 
     \[\tau_{motor} (\omega) = \ddot{\theta}\cdot I_{flywheel}(r) \Rightarrow \ddot{\theta} = \frac{\tau_{motor} (\dot{\theta})}{I_{flywheel}(r)} \]
@@ -312,7 +305,7 @@ We will now split the study in two cases:
 
     We will pick $C_D=1$, $\rho=1.2 kg/m^3$ and $A=0.01 m^2$ for our computations.
 
-    Also note that the speed is also limited by maximum speed a motor can get
+    Also, note that the speed is also limited by maximum speed a motor can get
     $\dot{\theta}_{max}$.
     \begin{equation}
         \boxed{\dot{y}_{max} = min(\dot{\theta}_{max}\cdot r_{wheel}, \sqrt{\frac{2\cdot m_{cylinder} \cdot  g \cdot  (r_{max} - r_{min})}{\rho\cdot C_D \cdot  A \cdot  r_{wheel}} })}
@@ -322,7 +315,7 @@ We will now split the study in two cases:
 
 \end{enumerate}
 \subsubsection{Inclination ($\alpha > 0$)}
-The goal of this subsubsection is to study which is the maximum inclination $\alpha_{max}$ the robot can overpass.
+The goal of this subsection is to study which is the maximum inclination $\alpha_{max}$ the robot can overpass.
 
 Substituting $\ddot{y}=0$ and $\dot{\omega}_{wheel} = 0$ in equation \ref{eq of acceleration}
 \[0 = \frac{\tau_{motor-flywheel}}{r_{wheel}} - m_{total} \cdot  g \cdot  sin(\alpha)\]
