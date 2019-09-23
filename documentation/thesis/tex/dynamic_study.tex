@@ -1,10 +1,10 @@
 \section{Rectilinear movement dynamics with $r_{flywheel}$ fixed}
 
 In order to study the dynamics of the robot we will use Lagrange mechanics.
-To reduce the number of variables we wil study the case of rectilinear
+To reduce the number of variables we will study the case of rectilinear
 movement by imposing that both wheels turn at the same speed. We will also set
 the radius of the free weight to $r_{flywheel}$. Note that with
-this equations the platform can rotate.
+these equations the platform can rotate.
 
 The generalized coordinates ($q$) will be:
 \begin{enumerate}
@@ -23,8 +23,6 @@ The total potential energy:
 \begin{equation}
 	V = m_{cylinder}\cdot (r_{flywheel}-r_{flywheel-max}) \cdot cos(\phi_{ground-flywheel}) \cdot g
 \end{equation}
-
-
 The total kinetic energy:
 \begin{equation}
 	T = \frac{1}{2}\cdot[\dot{\phi}_{ground-wheel}^2\cdot I_{wheel}
@@ -32,18 +30,15 @@ The total kinetic energy:
 		+ \dot{\phi}_{ground-flywheel}^2\cdot I_{flywheel}
 		+ \dot{\phi}_{ground-wheel}^2\cdot r_{wheel}^2\cdot m_{total}]
 \end{equation}
-
 The Lagrangian is defined as:
 \begin{equation}
 	L=T-V
 \end{equation}
-
 Lagrange's equation is:
 \begin{equation}
 	\frac{d}{dt}(\frac{\partial L}{\partial \dot{q}_j})=
 	\frac{\partial L}{\partial q_j}	+ F_{j}
 \end{equation}
-
 So in our case:
 \begin{equation}
 	\frac{\partial L}{\partial \dot{\phi}_{ground-wheel}}=
@@ -52,18 +47,15 @@ So in our case:
 	+ \dot{\phi}_{ground-flywheel}\cdot I_{flywheel}
 	+ \dot{\phi}_{ground-wheel}\cdot r_{wheel}^2\cdot m_{total}
 \end{equation}
-
 \begin{equation}
 	\frac{\partial L}{\partial \dot{\phi}_{wheel-platform}}=
 	\dot{\phi}_{ground-platform} \cdot I_{platform}
 	+ \dot{\phi}_{ground-flywheel}\cdot I_{flywheel}
 \end{equation}
-
 \begin{equation}
 	\frac{\partial L}{\partial \dot{\phi}_{platform-flywheel}}=
 	\dot{\phi}_{ground-flywheel}\cdot I_{flywheel}
 \end{equation}
-
 We define M as the following matrix:
 \begin{equation}
 	\begin{pmatrix}
@@ -78,29 +70,24 @@ We define M as the following matrix:
 		I_{flywheel}                                                            \\
 	\end{pmatrix}
 \end{equation}
-
 In matrix form and with our generalized coordinates:
 \begin{equation}
 	\frac{\partial L}{\partial \dot{q}} =
 	M \cdot \dot{q}
 \end{equation}
-
 \begin{equation}
 	\frac{d}{dt}(\frac{\partial L}{\partial \dot{q}}) = 	M \cdot \ddot{q}
 \end{equation}
-
-Let a be a constant:
+Let $a$ be a constant:
 \begin{equation}
 	a = m_{cylinder}\cdot (r_{flywheel}-r_{flywheel-max}) \cdot g
 \end{equation}
-
 \begin{equation}
 	\frac{\partial L}{\partial q} = a \cdot sin(\phi_{ground-flywheel}) \cdot
 	\begin{pmatrix}
 		1 \\ 1 \\ 1
 	\end{pmatrix}
 \end{equation}
-
 So using Lagrange's equation we get:
 \begin{equation}
 	\boxed{
@@ -110,8 +97,6 @@ So using Lagrange's equation we get:
 		\end{pmatrix} + F
 	}
 \end{equation}
-
-
 \subsection{Simulations}
 In this subsection we study different policies for the external forces
 ($F$) applied to the robot in rectilinear movement case.
@@ -131,7 +116,7 @@ speed as you may see in Figure \ref{fig: Motor torque}.
 \end{equation}
 
 In order to compare the different policies all of them have the same target.
-The robot must travel 30 radiants (3 meters) and stop at the end. All the parameters from 
+The robot must travel 30 radians (3 meters) and stop at the end. All the parameters from 
 the simulation are set equal to the values found in section \ref{sec: parameters results}.
 Keep in mind that the wheel radius is 10 cm.
 
@@ -160,7 +145,7 @@ Here you can see a table that summarize the results:
 \end{center}
 
 \subsubsection{Controlling the platform inclination}
-In the first two experiments we want to keep the platform in an horizontal position.
+In the first two experiments we want to keep the platform in a horizontal position.
 That's the reason why we force the $ \tau_{wheel-platform}$ equal to
 $\tau_{platform-flywheel}$ in the experiments flywheel and pendulum.
 
@@ -171,7 +156,7 @@ $\tau_{platform-flywheel}$ in the experiments flywheel and pendulum.
 		output the maximum possible torque. Then the platform-wheels motors deliver
 		the same torque. The platform-flywheel motor reaches in less than one second
 		the maximum speed. This then limits the wheel-platform speed because no
-		more torque can by applied one that point is reached.
+		more torque can be applied one that point is reached.
 	      \begin{figure}[H]
 		      \centering
 		      \includegraphics[width=10cm]{img/lagrange_5/flywheel_q.png}
@@ -213,7 +198,7 @@ $\tau_{platform-flywheel}$ in the experiments flywheel and pendulum.
 	
 	The movable weight is fixed at $r_{min}$. This experiment is different that the previous two and it's aim is to illustrate
 		  how the robot could follow and inclination consign. The experiment is designed
-		  the following way. A consign torque is given to the wheel-platform and the
+		  the following way. A set point torque is given to the wheel-platform and the
 		  flywheel-motor PID has an inclination consign too. The inclination consign is such
 		  that the sum of accelerations received from and object in the platform is perpendicular
 		  to the platform. 

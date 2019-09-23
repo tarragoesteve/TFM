@@ -5,9 +5,9 @@ we will leave the moving weight free.
 
 This way, when the weight is going upward will have a larger radius than when is going downward and will produce an average moment against the movement of the flywheel.
 
-From an energetic point of view we are transforming the rotation energy of the flywheel in to translation of the free cylinder and then realising it trough collisions.
+From an energetic point of view we are transforming the rotation energy of the flywheel in to translation of the free cylinder and then realizing it trough collisions.
 \subsection{System of differential equations}
-As described in figure \ref{fig:Flywheel force diagram} we will use two variables to describe the flywheel position: $r$, $\theta$ 
+As described in figure \ref{fig:Flywheel force diagram} we will use two variables to describe the flywheel position: $r$ and $\theta$.
 
 Using equation \ref{eq: flywheel torque equation}:
 \[\tau_{motor-flywheel} = \ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * 
@@ -32,7 +32,7 @@ Using equation \ref{eq: flywheel torque equation}:
             \draw[->,thin] (center.center) -- (0,3.5) node[above] {$z$};
             \draw[->,thin] (center.center) -- (3.5,0) node[right] {$y$};
     \end{tikzpicture}
-	\caption{Cylinder force diagram}
+	\caption{Cylinder force diagram.}
 	\label{fig:Cylinder force diagram}
 \end{figure}
 
@@ -64,7 +64,7 @@ Our initial conditions will be the free cylinder mass lying on the bottom of the
     \end{cases}
 \]
 
-We will use a poincare map to simulate the bounce with the end of the guides at $r=r_{min}$ and $r=r_{max}$. At each bounce we will reduce its kinetic energy by a percentage $bounce\_percentage$ .
+We will use a Poincaré map to simulate the bounce with the end of the guides at $r=r_{min}$ and $r=r_{max}$. At each bounce we will reduce its kinetic energy by a percentage $bounce\_percentage$.
 
 \subsection{Results}
 The parameters of the simulation where:

@@ -1,6 +1,6 @@
 \section{Initial design considerations}
 The first thing we decided was the number of actuators.
-Most of segway robot include two motors for the motion control but
+Most of segway robot include two motors for the motion control, but
 we added a third on in order to control the inclination.
 So we ended up with three motors in total because we want to control
 three degrees of freedom (inclination and speed of both wheels).
@@ -11,7 +11,7 @@ a flywheel, holding a pendulum in a non-vertical position and air friction
 with a fan. We discarded the last one due to the high speeds we needed to obtain
 a reasonable torque on the platform.
 
-Both methods have strengths in different situations so we decided to build a mixed
+Both methods have strengths in different situations, so we decided to build a mixed
 piece that could combine both. The flywheel mode allows to deliver the maximum torque from
 the beginning but fails to deliver a continuous torque due to the motor achieving max speed.
 In the other hand the pendulum allows the system to apply an amount of torque over time.
@@ -22,7 +22,7 @@ We also took in consideration that some experiments may start clumsy so none of 
 touch the ground to avoid crashes. Figure \ref{fig:Side render view} illustrates this last restriction.
 
 The design of the robot was done with the 3D design software \href{https://www.freecadweb.org/}{Free-cad} and 
-most of parts were 3D printed. 3D printing has also it's own restrictions, for example not being able to print
+most of the parts were 3D printed. 3D printing has also its own restrictions, for example not being able to print
 parts bigger than 25 cm. All part files are uploaded to the GitHub repository \url{https://github.com/tarragoesteve/TFM}
 under the hardware folder. So anyone can build this robot.
 
@@ -44,13 +44,13 @@ You can see the main views of an initial design on Figure \ref{fig:Isometric ren
 \begin{figure}
 	\centering
 	\includegraphics[width=10cm]{img/top_view.png}
-	\caption{Top render view}
+	\caption{Top render view.}
 	\label{fig:Top render view}
 \end{figure}
 \begin{figure}
 	\centering
 	\includegraphics[width=4cm]{img/side_view.png}
-	\caption{Side render view}
+	\caption{Side render view.}
 	\label{fig:Side render view}
 \end{figure}
 
@@ -58,7 +58,7 @@ You can see the main views of an initial design on Figure \ref{fig:Isometric ren
 \begin{figure}
 	\centering
 	\includegraphics[width=5cm]{img/fly_wheel_side.png}
-	\caption{Fly wheel side render view}
+	\caption{Flywheel side render view.}
 	\label{fig:Fly wheel side render view}
 \end{figure}
 
@@ -73,7 +73,7 @@ we have done the following computation. We denote the torque pendulum
 torque by $\tau$, consider the masses are cylinders of mass $m_{cylinder}$
 with radius $r_{cylinder}$ and width $w$ and the radius of the flywheel is $r_{flywheel}$.
 We want to place all $N$ masses at the same distance of the center of the flywheel ($r_{max}$) in
-a regular polygon except for one mass that will be at $r_{min}$. See figure \ref{}.
+a regular polygon except for one mass that will be at $r_{min}$. See figure \ref{fig:Fly wheel side render view}.
 
 Each mass weights:
 \[ m_{cylinder} = \rho \cdot w \cdot \pi \cdot r_{cylinder}^2 \]
@@ -95,7 +95,7 @@ In order to maximize $\tau$ it we first compute the derivative:
 
 \[ \frac{\partial  m_{cylinder}}{\partial r_{cylinder}} = 2 \cdot \rho \cdot w \cdot \pi \cdot  r_{cylinder}\]
 
-An make it zero to find the maximum:
+And make it zero to find the maximum:
 
 \[\frac{\partial \tau _{max} (r_{cylinder})}{\partial r_{cylinder}} = 0\]
 
