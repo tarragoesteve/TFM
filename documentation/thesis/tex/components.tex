@@ -3,14 +3,14 @@ In this section we will explain all the components
 used during the building of the robot and how to get them.
 
 \subsection{Mechanical components}
-This components do not have any electronics and the important
+These components do not have any electronics and the important
 thing about them is their mechanical function.
 \subsubsection{Central Body}
 
 Used to host the flywheel, a motor and a bearing. It also has lateral
-tabs so it can easly be joined with the lateral body part.
+tabs so it can easily be joined with the lateral body part.
 It's 3D printed and in the same orientation you see in figure
-\ref{fig: central body}
+\ref{fig: central body}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=10cm]{img/components/central_body.png}
@@ -19,11 +19,10 @@ It's 3D printed and in the same orientation you see in figure
 \end{figure}
 
 \subsubsection{Lateral Body}
-
-Used to host the the wheel motor and the rest of the electronic components. 
-It also has lateral tabs so it can easly be joined with the central body part.
+Used to host the wheel motor and the rest of the electronic components. 
+It also has lateral tabs so it can easily be joined with the central body part.
 It's 3D printed and in the same orientation you see in figure
-\ref{fig: lateral body}
+\ref{fig: lateral body}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=10cm]{img/components/lateral_body.png}
@@ -33,18 +32,52 @@ It's 3D printed and in the same orientation you see in figure
 \subsubsection{Wheels}
 The wheels are 3D printed. The orientation we used to print them
 is putting the motor axis vertical. Each wheel is produced by two
-symetric parts that are glued toghether arround the motor.
+symmetric parts that are glued together around the motor.
 \begin{figure}[H]
     \centering
     \includegraphics[width=10cm]{img/components/wheel.png}
     \caption{3D Model of a wheel.}
-    \label{fig:}
+    \label{fig: 3D wheel}
 \end{figure}
 \subsubsection{Flywheel}
+The flywheel is composed by 3 parts:
+\begin{enumerate}
+    \item 3D printed wheels very similar to the one in figure \ref{fig: 3D wheel}
+    \item Steel bolts, washers and nuts.
+    \item Metallic axis.
+\end{enumerate}
 \subsubsection{Bearings}
+We are using angular balls bearing as the one seen in the figure 
+\ref{fig: photo bearing} to surround the flywheel axis. This bearing is
+tight fit in to the 3D printed central body. The main purpose of the bearing
+is to support the flywheel metal axis and help the motor with the flywheel weight
+stress.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6cm]{img/bearing.jpg}
+    \caption{3D Model of a wheel.}
+    \label{fig: photo bearing}
+\end{figure}
+\subsubsection{Reinforcements}
+After we built the first prototype, we saw that the robot was suffering
+from bending. So we decided to reinforce the structure with additional 3D
+printed tabs and two aluminum 'U' profiles to solve the problem.
+
 \subsection{Electronic components}
 \subsubsection{Raspberry Pi}
-The Raspberry Pi is a small single-board computer. We are using Raspberry Pi 3 Model B. It has GPIO pins.
+The Raspberry Pi is a small single-board computer. 
+We are using Raspberry Pi 3 Model B. It has some features that we will use:
+\begin{itemize}
+    \item GPIO pins: General Purpose Input/Output pins are used 
+    \item Ethernet connection
+    \item Wifi connection
+    \item 5V and 3V lines
+    \item DC hardware power: So we can power the Raspberry the same way as the
+     other
+    \item I2C: I2C is a serial protocol for two-wire interface to
+    connect low-speed devices like microcontrollers. We use it to communicate
+    the Raspberry Pi 
+\end{itemize}
 \begin{figure}[H]
     \centering
     \includegraphics[width=10cm]{img/components/raspberry_pi.png}
