@@ -1,4 +1,14 @@
 \section{Control}
+So far we have analyzed our system as a continuous system.
+However, we are using the Raspberry Pi to control the robot, so we will
+be using digital control. It's a branch of control theory that uses
+digital computers to act as system controllers.
+
+In order to sample the position and the speed we use the rotatory encoders.
+They count the number of flags so there is a constant to convert them in to radiants.
+
+All our digital control was made in periodical loops. To get the speed we
+divided the incremental position by the period of the loop.
 
 \subsection{Position control}
 

@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+PRODID:Calendar
+VERSION:2.0
+BEGIN:VEVENT
+UID:0@default
+CLASS:PUBLIC
+DESCRIPTION:Draft Weekend Throne of Eldraine at Mana Infinito. The start and end times are estimates please confirm with the tournament organizer.
+DTSTAMP;VALUE=DATE-TIME:20190929T113420
+DTSTART;VALUE=DATE-TIME:20191006T000000
+DTEND;VALUE=DATE-TIME:00001231T234516
+LOCATION:Mana Infinito C/ Pintor Murillo, nº 75 Rubí, B 08191  Spain 
+SUMMARY;LANGUAGE=en-us:Draft Weekend Throne of Eldraine @ Mana Infinito
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR

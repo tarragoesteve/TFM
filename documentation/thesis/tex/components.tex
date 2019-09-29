@@ -68,14 +68,15 @@ printed tabs and two aluminum 'U' profiles to solve the problem.
 The Raspberry Pi is a small single-board computer.
 We are using Raspberry Pi 3 Model B. It has some features that we will use:
 \begin{itemize}
-    \item GPIO pins: General Purpose Input/Output pins are used
-    \item Ethernet connection
-    \item Wifi connection
-    \item 5V and 3V lines
-    \item DC hardware power: So we can power the Raspberry the same way as the
+    \item GPIO pins: General Purpose Input/ Output pins are used to
+    communicate with the motors and other peripherals.
+    \item Ethernet connection: We used to be able to set up the Wi-Fi's connection.
+    \item Wi-Fi's connection: We used to be able to control the robot without cables.
+    \item 5V and 3V lines: It's useful to get the 3V to power the encoders.
+    \item DC's hardware power: So we can power the Raspberry the same way as the
           other
     \item I2C: I2C is a serial protocol for two-wire interface to
-          connect low-speed devices like microcontrollers. We use it to communicate
+          connect low-speed devices like micro-controllers. We use it to communicate
           the Raspberry Pi
 \end{itemize}
 \begin{figure}[H]
@@ -100,9 +101,9 @@ We are using four identical batteries to power our system. They are
 commercial external power supplies for smartphones. They can be recharged
 via a micro-USB. We use USB cables to transmit the power to an outlet
 that connects two batteries in serial that power the DC Bridges.
-This bridges are powering the motors and the Raspberry.
+These bridges are powering the motors and the Raspberry.
 
-This batteries do not work always as expected because they have
+These batteries do not always work as expected because they have
 integrated security measures that disconnect them when they detect
 that not power is being used.
 
@@ -122,7 +123,7 @@ indicator, incorporated recharge mechanisms and on/off buttons.
 \subsubsection{Printed Circuit Board}
 In this project we tested the basic electronic with a breadboard, once we knew
 the electrical components where working we decided to transfer our circuit to
-a Printed Circuit Board (PCB). In particular we used a Double Sided PCB that
+a Printed Circuit Board (PCB). In particular, we used a Double Sided PCB that
 allows routing traces in both sides.
 \begin{figure}[H]
     \centering
@@ -176,14 +177,14 @@ An H bridge is an electronic circuit that switches the polarity of a
 voltage applied to a load (in our case DC motors). This allows the motor to
 go forwards and reverse.
 
-Also it has the possibility to modulate the output power through a PWM signal.
+Also, it has the possibility to modulate the output power through a PWM signal.
 
 Our particular H Bridge (L298N) is capable of supporting two motors at the same time.
 This means that it has 6 input signals, 2 PWM (one for each motor) and 4 enable signals
 (2 for each motor).
 
-The input power for the H bridge is 10V but it has lost and it arrive to the motor
-at around 8,5 V. Also it has a 5V power output that we use to feed the Raspberry
+The input power for the H bridge is 10V but it has lost and it arrives to the motor
+at around 8,5 V. Also it has a 5V power output that we used to feed the Raspberry
 Pi.
 
 
@@ -199,9 +200,32 @@ Pi.
 A rotary encoder, also called a shaft encoder, is an electro-mechanical device that converts the
 angular position or motion of a shaft or axle to analog or digital output signals.
 
-We programed an interruption to increment a counter to now how in what incremental position we are
-and in what direction is it turning.
+Our encoder has two signals, channel A and channel B offset by 90
+degrees (in quadrature). The direction of rotation can be determined
+by which channel is leading. If channel A is leading, the
+direction is taken to be clockwise, and if channel B is
+leading, the direction is counterclockwise. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=14cm]{img/X4-Encoding.jpg}
+    \caption{Encoder Signals. Image credit: National Instruments Corporation.}
+    \label{fig: Encoder}
+\end{figure}
+
+
+We programmed an interruption that fires every time a channel changes the state.
+It increments (or decrements) a counter, so we can then compute the position and
+the speed of each motor.
+
 \subsubsection{Accelerometer}
-An accelerometer is a device that measures proper acceleration. The one we are using is MPU5060.
+An accelerometer is a device that measures proper acceleration. The one we are using is MPU-6050.
 We use the acceleration measured by the accelerometer to know in which inclination
 is the platform. The accelerometer is connected to the Raspberry Pi via I2C.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6cm]{img/components/mpu-6050.jpg}
+    \caption{Pictures of a MPU-6050}
+    \label{fig: MPU-6050}
+\end{figure}
