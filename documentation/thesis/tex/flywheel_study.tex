@@ -1,13 +1,20 @@
 \section{Flywheel brake study}
 
-This section aims to study a possible way to break the flywheel without applying torque to the platform. The idea is combining both methods:
-we will leave the moving weight free.
+The problem with the flywheel method is that, when it reaches the maximum speed, the motor cannot apply torque. 
+This section aims to study a possible way to break the flywheel without applying torque to the platform.
+The idea is combining both methods: we will leave the moving weight free.
 
-This way, when the weight is going upward will have a larger radius than when is going downward and will produce an average moment against the movement of the flywheel.
+The initial hypothesis was: If we let weight move, when it is going upward will have a larger radius than 
+when is going downward and will produce an average external torque against 
+the movement of the flywheel. From an energetic point of view we are transforming the rotation energy of
+the flywheel in to translation of the free cylinder and then releasing it trough collisions.
 
-From an energetic point of view we are transforming the rotation energy of the flywheel in to translation of the free cylinder and then realizing it trough collisions.
 \subsection{System of differential equations}
-As described in figure \ref{fig:Flywheel force diagram} we will use two variables to describe the flywheel position: $r$ and $\theta$.
+To simplify the experiment we will assume that the platform inclination is constant and that the motor is not
+producing any torque to the platform.
+
+As described in figure \ref{fig:Flywheel force diagram} we will use two variables to describe
+the flywheel position: $r$ and $\theta$.
 
 Using equation \ref{eq: flywheel torque equation}:
 \[\tau_{motor-flywheel} = \ddot{\theta}*I_{flywheel}(r) + m_{cylinder} * g * 
@@ -36,11 +43,10 @@ Using equation \ref{eq: flywheel torque equation}:
 	\label{fig:Cylinder force diagram}
 \end{figure}
 
-As seen in figure \ref{fig:Cylinder force diagram}, we can deduce newtons equation for the distance from the cylinder to the center $r$. Note that we are adding the centrifugal force term due to the non-inertial frame.
+As seen in figure \ref{fig:Cylinder force diagram}, we can deduce Newton's equation for the distance from the cylinder to the center $r$. Note that we are adding the centrifugal force term due to the non-inertial frame.
 \[\ddot{r} * m = -m * g * cos(\theta) + m * r * \dot{\theta}^2 \]
 \[\ddot{r} = -g * cos(\theta) + r * \dot{\theta}^2 \]
-
-The variables we will be using for our ODE system are: $r$,$\dot{r}$,$\theta$,$\dot{\theta}$
+The variables we will be using for our ODE system are: $r$,$\dot{r}$,$\theta$,$\dot{\theta}$.
 
 Note that we impose $\tau_{flywheel} = 0$ so the motor is not applying any torque.
 
@@ -63,8 +69,7 @@ Our initial conditions will be the free cylinder mass lying on the bottom of the
         \dot{\theta} = \theta_0\\
     \end{cases}
 \]
-
-We will use a Poincaré map to simulate the bounce with the end of the guides at $r=r_{min}$ and $r=r_{max}$. At each bounce we will reduce its kinetic energy by a percentage $bounce\_percentage$.
+We will use a Poincar\'e map to simulate the bounce with the end of the guides at $r=r_{min}$ and $r=r_{max}$. At each bounce we will reduce its kinetic energy by a percentage $bounce\_percentage$.
 
 \subsection{Results}
 The parameters of the simulation where:
@@ -74,10 +79,9 @@ The parameters of the simulation where:
 	r_{wheel} = 9cm \\
 	w = 7 cm \\
 	\dot{\theta}_0 = 4.2 \pi rad/s \\
-	bounce\_percentage = 0.0 (totally inelastic) \\	
+	bounce\_percentage = 0.0 (totally\_inelastic) \\	
 \end{cases}	
 \]
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=10cm]{img/simulation/d_theta_t.png}
@@ -93,8 +97,8 @@ As we can see in figure \ref{fig:d theta t diagram} the flywheel is braking unti
 	\label{fig:r t diagram}
 \end{figure}
 In the first laps the cylinder is almost always at the maximum value of r, but as the
-speed decrease each lap the value of $r$ decrease until it hits the $r_{min}$.
-In other words, at the begining is operating as a flywheel but then thanks to the
+speed decreases each lap the value of $r$ decreases until it hits the $r_{min}$.
+In other words, at the beginning is operating as a flywheel but then thanks to the
 collisions it becomes a pendulum.
 
 \begin{figure}[H]
@@ -103,20 +107,20 @@ collisions it becomes a pendulum.
 	\caption{How the variable $r$ evolve over $\theta$ zoomed}
 	\label{fig:r theta zoom}
 \end{figure}
-In image \ref{fig:r theta zoom} we can appreciate that the r decrease slower that what it increase.
+In image \ref{fig:r theta zoom} we can appreciate that the r decreases slower than what it increases.
 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=10cm]{img/simulation/theta_t.png}
-	\caption{How the variable $\theta$ evolves over time}
+	\caption{How the variable $\theta$ evolves over time.}
 	\label{fig:theta t diagram}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=10cm]{img/simulation/r_theta_t.png}
-	\caption{How the variable $r$ evolves over $\theta$}
+	\caption{How the variable $r$ evolves over $\theta$.}
 	\label{fig:r theta}
 \end{figure}
 

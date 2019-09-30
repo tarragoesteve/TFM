@@ -74,7 +74,7 @@ We are using Raspberry Pi 3 Model B. It has some features that we will use:
     \item Wi-Fi's connection: We used to be able to control the robot without cables.
     \item 5V and 3V lines: It's useful to get the 3V to power the encoders.
     \item DC's hardware power: So we can power the Raspberry the same way as the
-          other
+          other electronic components.
     \item I2C: I2C is a serial protocol for two-wire interface to
           connect low-speed devices like micro-controllers. We use it to communicate
           the Raspberry Pi
@@ -100,7 +100,7 @@ We are using Raspberry Pi 3 Model B. It has some features that we will use:
 We are using four identical batteries to power our system. They are
 commercial external power supplies for smartphones. They can be recharged
 via a micro-USB. We use USB cables to transmit the power to an outlet
-that connects two batteries in serial that power the DC Bridges.
+that connects two batteries in series that power the DC Bridges.
 These bridges are powering the motors and the Raspberry.
 
 These batteries do not always work as expected because they have
@@ -122,7 +122,7 @@ indicator, incorporated recharge mechanisms and on/off buttons.
 \end{center}
 \subsubsection{Printed Circuit Board}
 In this project we tested the basic electronic with a breadboard, once we knew
-the electrical components where working we decided to transfer our circuit to
+the electronic components where working we decided to transfer our circuit to
 a Printed Circuit Board (PCB). In particular, we used a Double Sided PCB that
 allows routing traces in both sides.
 \begin{figure}[H]
@@ -150,7 +150,7 @@ Here are the specifications of our three motors:
         \hline
         Stall current at 6V     & 900 mA              \\
         \hline
-        Stall current at 6V     & 5 kg·cm             \\
+        Stall torque at 6V     & 5 kg·cm             \\
         \hline
         Gear ratio              & 1:35                \\
         \hline
@@ -183,9 +183,8 @@ Our particular H Bridge (L298N) is capable of supporting two motors at the same 
 This means that it has 6 input signals, 2 PWM (one for each motor) and 4 enable signals
 (2 for each motor).
 
-The input power for the H bridge is 10V but it has lost and it arrives to the motor
-at around 8,5 V. Also it has a 5V power output that we used to feed the Raspberry
-Pi.
+The input power for the H bridge is 10V but it has losses and it delivers around 8,5 V to the motors.
+Also, it has a 5V power output that we used to feed the Raspberry Pi.
 
 
 \begin{figure}[H]
