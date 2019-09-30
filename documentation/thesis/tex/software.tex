@@ -1,5 +1,5 @@
 \section{Software Design}
-We designed the software as modular an reusable as we could having in mind
+We designed the software as modular as reusable as we could have in mind
 possible future expansions of the project.
 The code is divided in three main blocks: user interface (UI), planner and controller.
 
@@ -10,7 +10,7 @@ and reports back the sensors measurements.
 The reality is that the planner workload now is low but in the future it may need to compute harder problems,
 as image processing, artificial intelligence or multi-robot coordination.
 
-This three blocks are know running in three different computers but can run in different ones if needed.
+This three blocks are now running in three different computers but can run in different ones if needed.
 
 You can find all the code in the GitHub repository \url{https://github.com/tarragoesteve/TFM} under the 
 software folder.
@@ -29,8 +29,8 @@ of the sensor readings.
 The user interface can be controlled by the keyboard or by a joy-stick connected to the computer. In our case
 we used a PS4 remote controller connected via bluetooth to the computer.
 
-The interface whole interface was programed with Angular, a TypeScript framework designed to code user interfaces.
-It is organaized in modulus and packages that one can install, as the round progress bar. An Angular Server is 
+The interface whole interface was programmed with Angular, a TypeScript framework designed to code user interfaces.
+It is organized in modulus and packages that one can install, as the round progress bar. An Angular Server is 
 running in the client machine that can connect to the interface via website.
 
 \subsection{Planner}
@@ -39,10 +39,10 @@ different process across the internet with very low latency. The planner is work
 so the other computers know where they have to exchange the information even if the UI or the Controller changes its IP.
 
 \subsection{Controller}
-The controller is running on the Raspberry Pi. The controller has a main file (controller.js) that reads
+The controller is running on the Raspberry Pi. It has a main file (controller.js) that reads
 a configuration file (config.json) and creates instances of the components described on the configuration file.
 Once all components are created, it starts different threads for each of the components.
 
-The different components we have are: accelerometer, led, motor and stabilizer. Also we have two auxiliary classes that are
+The different components we have: accelerometer, led, motor and stabilizer. Also, we have two auxiliary classes that are
 not components: PID and average filter. All the components that rely on hardware are using C++ code to optimize
 the code. This code is wrapped in TypeScript classes to make an easier integration of sockets and JSON files.

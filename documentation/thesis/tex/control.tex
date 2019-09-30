@@ -48,11 +48,11 @@ we proceed the same way with the flywheel position.
 
 \subsection{Speed control}
 The input variable is the desired speed. We get the real speed by dividing the incremental angle
-by the period. This leaded to noisy measurements so we decided to apply an average filter to
+by the period. This leaded to noisy measurements, so we decided to apply an average filter to
 the result.
 
 We use the motor speed control to be able to control the direction in which the robot is moving.
-We transform a two-axis joystick signal (x,y) in two two speed set points for the PID of the wheels
+We transform a two-axis joystick signal (x,y) into speed set points for the PID of the wheels
  with the following formula:
 \begin{equation}
     \begin{split}
@@ -63,7 +63,7 @@ We transform a two-axis joystick signal (x,y) in two two speed set points for th
 
 \subsection{Inclination control}
 In order to control the inclination of the platform we also used a PID controller.
-We sense the inclination of the platform with the accelerometer and then we compute the error.
+We sense the inclination of the platform with the accelerometer, and then we compute the error.
 \begin{itemize}
     \item In the flywheel case we simply output this error to the flywheel PWM motor signal.
     \item In the pendulum case this output is mapped to domain from -90 degrees to 90 degrees.
