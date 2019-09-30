@@ -2,9 +2,8 @@
 
 Our procedure has been making a grid with the four parameters of the robot 
 design: $w$ (width of the cylinders), $N$(number of cylinders), $r_{wheel}$ and $r_{flywheel}$.
-We have fixed $r_{flywheel}$, iterated over the other three
-parameters and kept the best configuration in therms of our cost function (eq. \ref{eq: cost})
-that fulfilled the requirements and restrictions.
+We have fixed $r_{flywheel}$ to a number of discrete values between 0.05 and 0.125 and, for each one, we evaluate the cost for each point of the grid,
+remove those which do not fulfill the restrictions, and keep the configuration providing the minimum cost. 
 
 \begin{figure}[H]
 	\centering
@@ -79,7 +78,8 @@ We can see in figure \ref{fig:Mass plot} that the total mass never exceeds the
 	\label{fig:Cost plot}
 \end{figure}
 
-Our selected parameters are then:
+Seeing the parameters that minimize cost and the material that we had available
+our selected parameters were:
 \begin{center}
 	\begin{tabular}{ |c|c|c|c| } 
 	 \hline

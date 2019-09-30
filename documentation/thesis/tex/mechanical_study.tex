@@ -1,7 +1,7 @@
 \section{Mechanical analysis} \label{sec: mechanical analysis}
 In this section we will analyze and understand the key dynamics of our robot, so we can choose
 the design parameters based on performance indicators. All the analysis is made
-supposing the inclination is fixed. As parameters, we have the with of the
+supposing the inclination of the platform is maintained fixed. As parameters, we have the width of the
 flywheel masses $w$, the number of masses $N$, the radius of the flywheel $r_{flywheel}$, and
 the radius of the wheels $r_{wheel}$.
 
@@ -38,7 +38,8 @@ if we want to control the inclination.
 
 \subsection{Wheels torque}
 The wheel torque we can induce is limited by the motor specifications.
-Note that the maximum torque of the motor is a function of velocity and in particular at max speed the torque is zero.
+Note that the maximum torque of the motor is a function of velocity and in particular 
+at max speed the torque is zero. See figure \ref{fig: Motor torque} to see the plot of this function.
 
 \[\tau_{motor-wheel} (\omega_{wheel}) \]
 
@@ -126,17 +127,20 @@ We can express the torque at the center of the wheel as:
 
 The flywheel torque we can induce is also limited by the motor specifications. 
 
-Assuming a general configuration of the flywheel where the moving mass is at distance $r$ from the axis and angle $\theta$, see figure \ref{fig:Flywheel force diagram}. We formulate its torque the following way:
+Assuming a general configuration of the flywheel where the moving mass is at distance $r$ from 
+the axis and angle $\theta$, see figure \ref{fig:Flywheel force diagram}, we formulate its torque the following way:
 \[
     \tau_{motor-flywheel} + m_{cylinder} \cdot g \cdot (r - r_{max}) \cdot \sin{\theta} = \ddot{\theta}\cdot I_{flywheel}(r)  
 \]
 \begin{equation}\label{eq: flywheel torque equation}    
     \tau_{motor-flywheel} = \ddot{\theta}\cdot I_{flywheel}(r) + m_{cylinder} \cdot g \cdot (r_{max} - r) \cdot \sin{\theta}  
 \end{equation}
-Note that in equation \ref{eq: flywheel torque equation} the two terms correspond to the two methods: accelerating and non vertical position.
+Note that in equation \ref{eq: flywheel torque equation} the two terms correspond to the two 
+two mechanisms: acceleration of the flywheel and position of the pendulum.
 
-\subsection{Maximum speed, acceleration and inclination}
-In this subsection we would like to study the maximum speed and acceleration the robot may obtain in straight direction facing and inclination $\alpha$.
+\subsection{Maximum speed, acceleration and terrain inclination}
+In this subsection we would like to study the maximum speed and acceleration the robot may
+obtain in straight direction and the maximum terrain inclination it can stand on $\alpha$.
 
 We will assume both wheels turn at the same speed, have the same $F_{friction}$ and the same $\tau_{wheel}$:
 \[ \omega_{wheel-left} = \omega_{wheel-right} = \omega_{wheel} \]
@@ -182,7 +186,7 @@ Using equation \ref{eq:control equation}:
 \end{equation}
 We will now study different cases to better understand this equation.
 
-\subsubsection{Speed and acceleration with no inclination ($\alpha = 0$)}
+\subsubsection{Speed and acceleration with no terrain inclination ($\alpha = 0$)}
 The objective here is to obtain the maximum speed and acceleration we can get starting from rest in a plain surface.
 
 The equation we get by substituting $\alpha = 0$ in equation \ref{eq of acceleration}:
@@ -197,7 +201,7 @@ Substituting equation \ref{eq: flywheel torque equation}:
 
 We will now split the study in two cases:
 \begin{enumerate}
-    \item Flywheel case: $r$ is fixed to $r = r_{max}$ 
+    \item \textbf{Flywheel case:} $r$ is fixed to $r = r_{max}$ 
     
     Then:  
     \[\ddot{y}\cdot m_{total} = - \frac{\ddot{\theta}\cdot I_{flywheel}(r_{max})}
@@ -235,7 +239,7 @@ We will now split the study in two cases:
 
     We can see that R will always be smaller than 1 because $N \cdot  m_{cylinder} < m_{total} $ and $r_{max} < r_{wheel}$.
     
-    This means that we will the maximum acceleration of the wheels will be limited by the acceleration of the flywheel. The same is true for the speed.
+    This means that the maximum acceleration of the wheels will be limited by the acceleration of the flywheel. The same is true for the speed.
 
     In  order to get the forward acceleration we can use equation \ref{eq: angular velocity}
     \[\ddot{y} = -\dot{\omega}_{wheel} \cdot  r_{wheel} = R \cdot  \ddot{\theta} \cdot  r_{wheel}\]
@@ -263,7 +267,7 @@ We will now split the study in two cases:
     \frac{\partial \dot{\theta}}{\partial t} = \ddot{\theta} \Rightarrow dt = \frac{d\dot{\theta}}{\ddot{\theta}}
     \]
     
-    \[\omega_{wheel-max} = \int_{\dot{\theta}=0}^{\dot{\theta}=\dot{\theta}_{max}} \frac{\dot{w}_{wheel}}{\ddot{\theta}} \cdot  d\dot{\theta} = 
+    \[\omega_{wheel-max} = \int_{\dot{\theta}=0}^{\dot{\theta}=\dot{\theta}_{max}} \frac{\dot{\omega}_{wheel}}{\ddot{\theta}} \cdot  d\dot{\theta} = 
     \int_{\dot{\theta}=0}^{\dot{\theta}=\dot{\theta}_{max}} -R \cdot  d\dot{\theta} = - R \cdot  \dot{\theta}_{max}
     \]
     \begin{equation}
@@ -274,7 +278,7 @@ We will now split the study in two cases:
     we can get using the flywheel system starting from rest.
 
 
-    \item Pendulum: $\dot{\theta} = 0$, and $r$ is fixed to $r = r_{min}$
+    \item \textbf{Pendulum:} $\dot{\theta} = 0$, and $r$ is fixed to $r = r_{min}$
     
     Using equation \ref{eq: no inclintation} and $\ddot{\theta} = 0$
     \[\ddot{y}\cdot m_{total} = \frac{m_{cylinder} \cdot  g \cdot  (r_{max} - r_{min}) \cdot  \sin{\theta}}{r_{wheel}} +\frac{2\cdot I_{wheel} \cdot  \dot{w}_{wheel}}{r_{wheel}}\]
@@ -289,7 +293,9 @@ We will now split the study in two cases:
         \boxed{ \ddot{y}_{max}  = \frac{m_{cylinder} \cdot  g \cdot  (r_{max}-r_{min}) \cdot}{m_{total} \cdot  r_{wheel} + \frac{2\cdot I_{wheel}}{r_{wheel}} } }
         \label{maximum acceleration pendulum}
     \end{equation}
-    We need to take into consideration air friction to see the speed limitation in the pendulum case.
+    Since the maximum acceleration obtained is constant, the speed could increase without limit. To get a meaningful estimation of the maximum speed,
+    we will take into account the air friction that becomes more and more important as the speed increases.
+    
     \[F_{drag} = \frac{1}{2}\cdot \rho\cdot C_D \cdot  A \cdot  \dot{y}^2 \]
 
     Adding this term to equation \ref{eq of acceleration} we get:
@@ -314,8 +320,9 @@ We will now split the study in two cases:
 
 
 \end{enumerate}
-\subsubsection{Inclination ($\alpha > 0$)}
-The goal of this subsection is to study which is the maximum inclination $\alpha_{max}$ the robot can overpass.
+\subsubsection{Terrain inclination ($\alpha > 0$)}
+The goal of this subsection is to study which is the maximum terrain inclination $\alpha_{max}$ 
+on which the robot can stay, standing still without rolling down.
 
 Substituting $\ddot{y}=0$ and $\dot{\omega}_{wheel} = 0$ in equation \ref{eq of acceleration}
 \[0 = \frac{\tau_{motor-flywheel}}{r_{wheel}} - m_{total} \cdot  g \cdot  sin(\alpha)\]
@@ -336,8 +343,8 @@ We are going to distinguish the same two cases as in the previous section:
 
 
     This angle doesn't give us a lot of information because it may not be fulfilled in a 
-    permanent state. That's why in addition we would like to compute the maximum height
-    our robot can achieve start from rest position.
+    permanent state.
+    
     \item Pendulum: $\dot{\theta} = 0$, and $r$ is fixed to $r = r_{min}$
     \[sin(\alpha) = \frac{min(\tau_{motor-flywheel},m_{cylinder} \cdot  g \cdot  (r_{max} - r_{min}) \cdot  \sin{\theta})}{m_{total} \cdot  g \cdot  r_{wheel}} \]
     Which is maximum when $\sin{\theta} = 1$

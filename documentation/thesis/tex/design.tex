@@ -1,6 +1,6 @@
 \section{Initial design considerations}
 The first thing we decided was the number of actuators.
-Most of segway robot include two motors for the motion control, but
+Most of segway robots include two motors for the motion control, but
 we added a third on in order to control the inclination.
 So we ended up with three motors in total because we want to control
 three degrees of freedom (inclination and speed of both wheels).
@@ -14,12 +14,12 @@ a reasonable torque on the platform.
 Both methods have strengths in different situations, so we decided to build a mixed
 piece that could combine both. The flywheel mode allows to deliver the maximum torque from
 the beginning but fails to deliver a continuous torque due to the motor achieving max speed.
-In the other hand the pendulum allows the system to apply an amount of torque over time.
+In the other hand the pendulum allows the system to apply a constant amount of torque over time.
 
 We took two more restriction in our design. The first one symmetry along the motors/inclination
 axis in order to have an equilibrium in all possible inclinations without the need of external forces.
-We also took in consideration that some experiments may start clumsy so none of the configurations should
-touch the ground to avoid crashes. Figure \ref{fig:Side render view} illustrates this last restriction.
+We also took in consideration that some experiments may start produce arbitrary rotations of the platform,
+so none of the configurations should touch the ground to avoid crashes. Figure \ref{fig:Side render view} illustrates this last restriction.
 
 The design of the robot was done with the 3D design software \href{https://www.freecadweb.org/}{Free-cad} and 
 most of the parts were 3D printed. 3D printing has also its own restrictions, for example not being able to print
@@ -62,14 +62,14 @@ You can see the main views of an initial design on Figure \ref{fig:Isometric ren
 	\label{fig:Fly wheel side render view}
 \end{figure}
 
-To control the inclination of the body two strategies are taken in to account.
+To control the inclination of the body two strategies are taken into account.
 Creating torque by a pendulum or accelerating the flywheel.
 In order to experiment with both of them we designed a part to allow
-both configuration by placing weights in different spots, see figure
+both configurations by placing weights in different spots, see figure
 \ref{fig:Fly wheel side render view}.
 
 In order to create a configuration with maximum pendulum torque
-we have done the following computation. We denote the torque pendulum
+we have done the following computation. We denote the pendulum
 torque by $\tau$, consider the masses are cylinders of mass $m_{cylinder}$
 with radius $r_{cylinder}$ and width $w$ and the radius of the flywheel is $r_{flywheel}$.
 We want to place all $N$ masses at the same distance of the center of the flywheel ($r_{max}$) in
@@ -82,15 +82,15 @@ We neglect the mass of the flywheel structure versus the mass of the cylinders. 
 the gravitational torque is created by the cylinder masses and all of them are compensated
 with the opposite weight except for the two masses with different radius.
 
-One of the weight can be placed along a rail. The distance to the center will
+One of the weights can be placed along a track. The distance to the center will
 vary from $r_{min} = r_{cylinder} + r_{motor-axis} \approx r_{cylinder} $ to $r_{max} = r_{flywheel} - r_{cylinder}$.
 
-The maximum torque takes place when these two masses are aligned horizontal with respect the ground and the movable weight is at distance $r_{min}$ from the center.
+The maximum torque takes place when these two masses are aligned horizontal with respect to the ground and the movable weight is at distance $r_{min}$ from the center.
 
 \[ \tau _{max} (r_{cylinder}) =  m_{cylinder} \cdot g \cdot r_{max} -  m_{cylinder} \cdot g \cdot r_{min} =
 	m_{cylinder}\cdot g \cdot (r_{flywheel} - 2 \cdot r_{cylinder}) \]
 
-In order to maximize $\tau$ it we first compute the derivative:
+In order find the radius $r_c$ that maximizes $\tau$ we first compute the derivative:
 \[\frac{\partial \tau _{max} (r_{cylinder})}{\partial r_c} = g \cdot(\frac{\partial m}{\partial r_c} \cdot (r_f - 2 \cdot r_c) -  m_{cylinder} \cdot 2)\]
 
 \[ \frac{\partial  m_{cylinder}}{\partial r_{cylinder}} = 2 \cdot \rho \cdot w \cdot \pi \cdot  r_{cylinder}\]
@@ -123,7 +123,7 @@ In our case:
 \[ R = r_{flywheel} - r_{cylinder}; \]
 \[ s = 2 \cdot r_{cylinder}\]
 
-Substituting in the circumradius equation we get n = 6, so we will use up 6 masses in our flywheel.
+Substituting in the circumradius equation we get n = 6, so we will use up to 6 masses in our flywheel.
 We will have a variable number of masses $N$ that we will be able to add to
 the flywheel as shown in the following table:
 \begin{center}

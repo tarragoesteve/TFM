@@ -3,14 +3,14 @@ In this section we will set up the requirements and the cost function we want to
 
 \subsection{Restrictions}
 The restrictions are a list of inequalities that our system has to fulfill.
-The first restrictions is due to the initial design requirements. Finally, the other three are 
+The first restriction is due to the initial design requirements. Finally, the other three are 
 somehow arbitrary but will help us to reduce the size of the robot.
 \begin{enumerate}
 \item We will place our flywheel in a hole on our robot. We don't want to touch the ground
 in any configuration so:
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=5cm]{img/flywheel_hole.jpg}
+	\includegraphics[width=7cm]{img/flywheel_hole.jpg}
 	\caption{Flywheel hole diagram}
 	\label{fig:Flywheel hole diagram}
 \end{figure}
@@ -18,7 +18,7 @@ in any configuration so:
 \item Being able  to insert the robot in to a wheel of diameter 0.5 m so:
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=5cm]{img/external_diameter.jpg}
+	\includegraphics[width=7cm]{img/external_diameter.jpg}
 	\caption{External diameter diagram}
 	\label{fig:External diameter diagram}
 \end{figure}
@@ -30,15 +30,15 @@ in any configuration so:
 
 \subsection{Requirements}
 We would like our robot to reach some mechanical specifications. These are related to mechanical equations
-that we will develop in the next section. They refer to the max speed, acceleration and inclination the robot may achieve
-while controlling its inclination. We have divided our specifications in two blocks
+that we will develop in the next section. They refer to the max speed, acceleration and terrain inclination the robot may achieve
+while controlling its platform inclination. We have divided our specifications in two blocks
 according to the two mechanisms.
 
 \textbf{Flywheel mode}
 \begin{enumerate}
 	\item $\dot{y}_{max}$ (equation \ref{Maximum speed flywheel}) $> 0.1m/s$.
 	\item $\ddot{y}_{max}$ (equation \ref{maximum acceleration flywheel}) $> 1m/s^2$.
-	\item $sin(\alpha_{max})$ (equation \ref{Maximum angle using flywheel system}) $>0.2$.
+	\item $sin(\alpha_{max})$ (equation \ref{Maximum angle using flywheel system}) $>0.16$.
 \end{enumerate}
 
 \textbf{Pendulum mode}
@@ -51,8 +51,9 @@ according to the two mechanisms.
 
 
 \subsection{Cost function}
-In addition to fulfilling the previous inequalities we will
-minimize a cost function.
+In addition to fulfilling the previous inequalities, we will adjust our design parameters [w (width of the
+cylinders), N(number of cylinders), r wheel and r flywheel] to
+minimize a cost function. 
 
 We will maximize the maximum sinus in the pendulum mode 
 (equation \ref{Maximum angle using pendulum system}) because
@@ -62,20 +63,22 @@ And we will also maximize the square of the max speed the robot can achieve
 in flywheel mode (equation \ref{Maximum speed flywheel}) because it is
 proportional to the energy the robot can deliver using the flywheel at a certain moment.
 
+Both equations try to maximize different modes so the robot we have a compromise between the two of them. 
+
 \begin{equation}
 	cost(r_{flywheel},r_{wheel},w,N) = - sin(\alpha_{max})_{pendulum} -\dot{y}^2_{max-flywheel}
 	\label{eq: cost}
 \end{equation}
 In the next section we will find out what are the values 
 of these equations with the construction parameters. 
-For reference these terms are equal to:
-\begin{equation*}
-	m_{cylinder} = \rho * w * \pi * (\frac{r_{flywheel}}{3})^2
-\end{equation*}
-\begin{equation*}
-	sin(\alpha_{max})_{pendulum} = \frac{m_{cylinder} \cdot  (r_{max} - r_{min})}{m_{total} \cdot r_{wheel}} = \frac{m_{cylinder} \cdot  (\frac{r_{flywheel}}{3})}{(m_{rest} + N \cdot m_{cylinder})\cdot r_{wheel}} 	
-\end{equation*}
-\begin{equation*}
-	\dot{y}_{max} = r_{wheel} \cdot  R \cdot  \dot{\theta}_{max} =r_{wheel} \cdot  \frac{ N \cdot  m_{cylinder} \cdot  (\frac{2\cdot r_{flywheel}}{3})^2}
-    {r_{wheel}^2\cdot (m_{rest} + N \cdot m_{cylinder}) +  2\cdot I_{wheel}} \cdot  \dot{\theta}_{max}
-\end{equation*}
+%For reference these terms are equal to:
+%\begin{equation*}
+%	m_{cylinder} = \rho * w * \pi * (\frac{r_{flywheel}}{3})^2
+%\end{equation*}
+%\begin{equation*}
+%	sin(\alpha_{max})_{pendulum} = \frac{m_{cylinder} \cdot  (r_{max} - r_{min})}{m_{total} \cdot r_{wheel}} = \frac{m_{cylinder} \cdot  (\frac{r_{flywheel}}{3})}{(m_{rest} + N \cdot m_{cylinder})\cdot r_{wheel}} 	
+%\end{equation*}
+%\begin{equation*}
+%	\dot{y}_{max} = r_{wheel} \cdot  R \cdot  \dot{\theta}_{max} =r_{wheel} \cdot  \frac{ N \cdot  m_{cylinder} \cdot  (\frac{2\cdot r_{flywheel}}{3})^2}
+%    {r_{wheel}^2\cdot (m_{rest} + N \cdot m_{cylinder}) +  2\cdot I_{wheel}} \cdot  \dot{\theta}_{max}
+%\end{equation*}

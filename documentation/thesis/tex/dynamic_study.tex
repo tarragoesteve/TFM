@@ -3,8 +3,8 @@
 In order to study the dynamics of the robot we will use Lagrange mechanics.
 To reduce the number of variables we will study the case of rectilinear
 movement by imposing that both wheels turn at the same speed. We will also set
-the radius of the free weight to $r_{flywheel}$. Note that with
-these equations the platform can rotate.
+the radius of the free weight to $r_{flywheel}$. Note that in this analysis the
+platform is not assumed to keep a fixed inclination as before, but it is allowed to rotate.
 
 The generalized coordinates ($q$) will be:
 \begin{enumerate}
@@ -98,7 +98,7 @@ So using Lagrange's equation we get:
 	}
 \end{equation}
 \subsection{Simulations}
-In this subsection we study different policies for the external forces
+In this subsection we study different policies for the generalized forces
 ($F$) applied to the robot in rectilinear movement case.
 
 The robot has 2 actuators, the motors between the wheel and the platform
@@ -115,7 +115,7 @@ speed as you may see in Figure \ref{fig: Motor torque}.
 	}
 \end{equation}
 
-In order to compare the different policies all of them have the same target.
+In order to compare the different policies we compare their efficiency in performing the same task:
 The robot must travel 30 radians (3 meters) and stop at the end. All the parameters from 
 the simulation are set equal to the values found in section \ref{sec: parameters results}.
 Keep in mind that the wheel radius is 10 cm.
@@ -196,7 +196,8 @@ $\tau_{platform-flywheel}$ in the experiments flywheel and pendulum.
 	      \end{figure}
 	\item Waitress
 	
-	The movable weight is fixed at $r_{min}$. This experiment is different that the previous two and it's aim is to illustrate
+	The movable weight is fixed at $r_{min}$. This experiment is different from the previous two and its
+	aim is to illustrate
 		  how the robot could follow and inclination consign. The experiment is designed
 		  the following way. A set point torque is given to the wheel-platform and the
 		  flywheel-motor PID has an inclination consign too. The inclination consign is such

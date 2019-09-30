@@ -1,7 +1,7 @@
 \section{Introduction}
-In the IRI lab we have two segway robots, Tibi and Dabo show in figure
+In the IRI lab we have two segway robots, Tibi and Dabo shown in figure
 \ref{fig:Picture of Tibi and Dabo}. Both of them move the same way.
-They must incline their body to compensate the wheel reaction torque. We will get deeper
+They must incline their body to command the wheels' rotation. We will get deeper
 in why these phenomena happens in section \ref{sec: mechanical analysis}.
 
 This movement restriction may cause some problems when trying to avoid obstacles,
@@ -13,7 +13,7 @@ it detects something near it (in this case the ground).
 
 So we decided to build a prototype of segway robot that could solve this problem by 
 controlling its inclination independently. The chosen robot is inspired in a
-\textit{segway hover-board}, similar to the one appearing in Figure \ref{fig:Picture of a commercial 
+\textit{segway hoverboard}, similar to the one appearing in Figure \ref{fig:Picture of a commercial 
 segway hover-board}. The two wheels are controlled with classic control algorithms and the
 inclination of the central body is controlled with a flywheel mechanism that we will
 discuss in section \ref{sec: flywheel design}.
@@ -27,6 +27,6 @@ discuss in section \ref{sec: flywheel design}.
 \begin{figure}
 	\centering
 	\includegraphics[width=8cm]{img/segway_hoverboard_picture.png}
-	\caption{Picture of a commercial \textit{segway hover-board} }
+	\caption{Picture of a commercial \textit{segway hoverboard} }
 	\label{fig:Picture of a commercial segway hover-board}
 \end{figure}
