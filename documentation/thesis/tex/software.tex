@@ -44,7 +44,7 @@ any algorithm.
 \subsection{Controller}
 The controller is running on the Raspberry Pi. It has a main file (controller.js) that reads
 a configuration file (config.json) and creates instances of the components described on the configuration file.
-Once all components are created, it starts different threads for each of the components.
+Once all components are created, it starts different threads for each of the components to run their loops.
 
 The different components we have: accelerometer, led, motor and stabilizer. Also, we have two auxiliary classes that are
 not components: PID and average filter. All the components that rely on hardware are using C++ code to optimize
@@ -53,7 +53,14 @@ the code. This code is wrapped in TypeScript classes to make an easier integrati
 \subsubsection{LED}
 This was the first components that we made to test the software.
 It has a GPIO pin as a parameter that it's where we connect the LED.
-Then the main loop changes 
+Then the main loop changes the state of the LED each 500 ms making it blink.
 \subsubsection{Motor}
+The motor class has the encoder code incorporated. The encoder uses the interruptions to update the position of the motor.
+And the loop of this component is using the PID controller to generate an output based on the reference and the position readings.
+It then applies this output value to the 3 output pins of the motor (1 PWM and 2 for direction of the H Bridge).
 \subsubsection{Accelerometer}
+The accelerometer component provides a method to get the inclination of the platform via an I2C communication with
+the MPU-6050.
 \subsubsection{Stabilizer}
+The stabilizer component is made up of two other components: a motor and an accelerometer. In its loop it calculates
+the inclination error and uses the motor to send a pendulum consign or a PWM signal (depending on the mode).
